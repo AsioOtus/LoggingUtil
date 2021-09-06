@@ -8,24 +8,42 @@ public extension MultilineStringLogExporterAdapter {
 			return formatter
 		}
 		
-		public var metaInfoEnabling: MetaInfo.Enabling
-		public var detailsEnabling: StandardLogRecordDetails.Enabling
-		public var levelPadding: Bool
-		public var componentsSeparator: String
-		public var dateFormatter: DateFormatter
+		public var metaInfoEnabling: MetaInfo.Enabling = .enabled()
+		public var detailsEnabling: StandardLogRecordDetails.Enabling = .enabled()
+		public var levelPadding: Bool = true
+		public var componentsSeparator: String = " | "
+		public var dateFormatter: DateFormatter = defaultDateFormatter
 		
-		public init (
-			metaInfoEnabling: MetaInfo.Enabling = .enabled(),
-			detailsEnabling: StandardLogRecordDetails.Enabling = .enabled(),
-			levelPadding: Bool = true,
-			componentsSeparator: String = " | ",
-			dateFormatter: DateFormatter = defaultDateFormatter
-		) {
-			self.metaInfoEnabling = metaInfoEnabling
-			self.detailsEnabling = detailsEnabling
-			self.levelPadding = levelPadding
-			self.componentsSeparator = componentsSeparator
-			self.dateFormatter = dateFormatter
+		public init () { }
+		
+		func metaInfoEnabling (_ metaInfoEnabling: MetaInfo.Enabling) -> Self {
+			var selfCopy = self
+			selfCopy.metaInfoEnabling = metaInfoEnabling
+			return self
+		}
+		
+		func detailsEnabling (_ detailsEnabling: StandardLogRecordDetails.Enabling) -> Self {
+			var selfCopy = self
+			selfCopy.detailsEnabling = detailsEnabling
+			return self
+		}
+		
+		func levelPadding (_ levelPadding: Bool) -> Self {
+			var selfCopy = self
+			selfCopy.levelPadding = levelPadding
+			return self
+		}
+		
+		func componentsSeparator (_ componentsSeparator: String) -> Self {
+			var selfCopy = self
+			selfCopy.componentsSeparator = componentsSeparator
+			return self
+		}
+		
+		func dateFormatter (_ dateFormatter: DateFormatter) -> Self {
+			var selfCopy = self
+			selfCopy.dateFormatter = dateFormatter
+			return self
 		}
 	}
 }
