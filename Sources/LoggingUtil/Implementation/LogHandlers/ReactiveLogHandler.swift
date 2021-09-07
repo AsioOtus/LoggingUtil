@@ -1,6 +1,6 @@
 #if canImport(Combine)
+
 import Combine
-#endif
 
 @available(iOS 13, macOS 15.0, *)
 public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {
@@ -59,3 +59,5 @@ extension ReactiveLogHandler {
 		return self
 	}
 }
+
+#endif
