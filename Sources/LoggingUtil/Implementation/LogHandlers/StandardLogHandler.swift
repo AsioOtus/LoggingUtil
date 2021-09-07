@@ -1,11 +1,4 @@
-public class StandardLogHandler<Connector: LogConnector>
-where
-	Connector.Message == String,
-	Connector.Details == StandardLogRecordDetails
-{
-	public typealias Message = String
-	public typealias Details = StandardLogRecordDetails
-	
+public class StandardLogHandler<Connector: LogConnector> {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
@@ -24,7 +17,7 @@ where
 }
 
 extension StandardLogHandler: LogHandler {
-	public func log (logRecord: LogRecord<Message, Details>) {
+	public func log (logRecord: LogRecord<Connector.Message, Connector.Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
 		let metaInfo = logRecord.metaInfo.add(label: label)
