@@ -3,3 +3,9 @@ public protocol LogExporter {
 	
 	func export (metaInfo: MetaInfo, message: Message)
 }
+
+extension LogExporter {
+	func eraseToAnyExporter () -> AnyExporter<Message> {
+		AnyExporter(self)
+	}
+}

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MultilineStringConverter: LogConverter {
+public struct MultilineConverter: LogConverter {
 	public static var defaultDateFormatter: DateFormatter {
 		let formatter = DateFormatter()
 		formatter.dateStyle = .short
@@ -62,7 +62,7 @@ public struct MultilineStringConverter: LogConverter {
 	}
 }
 
-extension MultilineStringConverter {
+extension MultilineConverter {
 	@discardableResult
 	public func metaInfoEnabling (_ metaInfoEnabling: MetaInfo.Enabling) -> Self {
 		var selfCopy = self

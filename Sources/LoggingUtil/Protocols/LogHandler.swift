@@ -4,3 +4,9 @@ public protocol LogHandler {
 	
 	func log (logRecord: LogRecord<Message, Details>)
 }
+
+extension LogHandler {
+	func eraseToAnyLoghandler () -> AnyLogHandler<Message, Details> {
+		AnyLogHandler(self)
+	}
+}

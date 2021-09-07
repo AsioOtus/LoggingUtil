@@ -1,17 +1,21 @@
-public class ClosureLogHandler<Message: Codable, Details: LogRecordDetails>: ConfigurableLogHandler {
+public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
+	public typealias Message = String
+	public typealias Details = StandardLogRecordDetails
+	
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var handling: (LogRecord<Message, Details>) -> ()
+	
+	public var connectors: [AnyConnector<Message, Details>]
 	public let label: String
 	
 	public init (
-		handling: @escaping (LogRecord<Message, Details>) -> () = { _ in },
+		connectors: [AnyConnector<Message, Details>] = [],
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.handling = handling
+		self.connectors = connectors
 		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 
@@ -22,14 +26,14 @@ public class ClosureLogHandler<Message: Codable, Details: LogRecordDetails>: Con
 		let details = logRecord.details?.combined(with: self.details) ?? self.details
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		handling(logRecord)
+		connectors.forEach{ $0.log(logRecord) }
 	}
 }
 
-extension ClosureLogHandler {
+extension MultiplexConnectorsLogHandler {	
 	@discardableResult
-	func handling (_ logHandler: @escaping (LogRecord<Message, Details>) -> ()) -> Self {
-		self.handling = handling
+	func connector <Connector: LogConnector> (_ connector: Connector) -> Self where Connector.Message == Message, Connector.Details == Details {
+		self.connectors.append(connector.eraseToAnyConnector())
 		return self
 	}
 }

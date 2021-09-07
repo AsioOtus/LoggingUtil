@@ -1,58 +1,38 @@
-public class MultiplexLogHandler {
+class MultiplexLogHandler: ConfigurableLogHandler {
 	public typealias Message = String
 	public typealias Details = StandardLogRecordDetails
 	
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var connectors: [AnyConnector<Message, Details>]
+	public var logHandlers: [AnyLogHandler<Message, Details>]
 	public let label: String
 	
 	public init (
-		connectors: [AnyConnector<Message, Details>] = [],
+		logHandlers: [AnyLogHandler<Message, Details>] = [],
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.connectors = connectors
+		self.logHandlers = logHandlers
 		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
-}
-
-extension MultiplexLogHandler: LogHandler {
-	public func log (logRecord: LogRecord<Message, Details>) {
+	
+	func log (logRecord: LogRecord<String, StandardLogRecordDetails>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
 		let metaInfo = logRecord.metaInfo.add(label: label)
 		let details = logRecord.details?.combined(with: self.details) ?? self.details
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		connectors.forEach{ $0.log(logRecord) }
+		logHandlers.forEach{ $0.log(logRecord: logRecord) }
 	}
 }
 
-extension MultiplexLogHandler {
+extension MultiplexLogHandler {	
 	@discardableResult
-	public func isEnabled (_ isEnabled: Bool) -> Self {
-		self.isEnabled = isEnabled
-		return self
-	}
-	
-	@discardableResult
-	public func level (_ level: LogLevel) -> Self {
-		self.level = level
-		return self
-	}
-	
-	@discardableResult
-	public func details (_ details: Details) -> Self {
-		self.details = details
-		return self
-	}
-	
-	@discardableResult
-	func connector <Connector: LogConnector> (_ connector: Connector) -> Self where Connector.Message == Message, Connector.Details == Details {
-		self.connectors.append(connector.eraseToAnyConnector())
+	func logHandlers <Handler: LogHandler> (_ logHandlers: Handler) -> Self where Handler.Message == Message, Handler.Details == Details {
+		self.logHandlers.append(logHandlers.eraseToAnyLoghandler())
 		return self
 	}
 }

@@ -36,7 +36,7 @@ final class LoggingUtilTests: XCTestCase {
 	
 	@available(macOS 12, *)
 	func testMultiplex () {
-		let logHandler = MultiplexLogHandler()
+		let logHandler = MultiplexConnectorsLogHandler()
 			.connector(
 				PlainConnector(
 					converter: SingleLineConverter(),
