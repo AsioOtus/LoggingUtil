@@ -1,15 +1,50 @@
 import XCTest
-@testable import LoggingFlowUtil
+import Combine
+@testable import LoggingUtil
 
-final class LoggingFlowUtilTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(LoggingFlowUtil().text, "Hello, World!")
-    }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
+final class LoggingUtilTests: XCTestCase {
+	func testBasic () {
+		let logHandler = StandardLogHandler(
+			connector: PlainConnector(
+				converter: SingleLineConverter(),
+				exporter: PrintExporter()
+			)
+		)
+		
+		let logger = StandardLogger(logHandler: logHandler)
+		logger.trace("Test")
+	}
+	
+	func testClosureConnector () {
+		let logHandler = ClosureLogHandler<String, StandardLogRecordDetails> { logRecord in
+			PlainConnector(
+				converter: SingleLineConverter(),
+				exporter: PrintExporter()
+			)
+			.log(logRecord)
+			
+			ErrorSuppressingConnector(
+				converter: StringToJSONDataConverter(),
+				exporter: StandardRemoteLogExporter(url: URL(string: "qweqwe")!)
+			)
+			.log(logRecord)
+		}
+		
+		let logger = StandardLogger(logHandler: logHandler)
+		logger.trace("Test")
+	}
+	
+	@available(macOS 12, *)
+	func testMultiplex () {
+		let logHandler = MultiplexLogHandler()
+			.connector(
+				PlainConnector(
+					converter: SingleLineConverter(),
+					exporter: OsLogExporter()
+				)
+			)
+		
+		let logger = StandardLogger(logHandler: logHandler)
+		logger.trace("Test")
+	}
 }

@@ -10,9 +10,14 @@ public struct StandardLogger <LogHandlerType: LogHandler> {
 	public var logHandler: LogHandlerType
 	public let label: String
 	
-	public init (logHandler: LogHandlerType, label: String = "\(Self.self):\(#file):\(#line)") {
+	public init (
+		logHandler: LogHandlerType,
+		label: String? = nil,
+		file: String = #file,
+		line: Int = #line
+	) {
 		self.logHandler = logHandler
-		self.label = label
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 }
 

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension MultilineStringLogExporterAdapter {
+public extension MultilineStringConverter {
 	struct Configuration {
 		public static var defaultDateFormatter: DateFormatter {
 			let formatter = DateFormatter()
@@ -48,16 +48,14 @@ public extension MultilineStringLogExporterAdapter {
 	}
 }
 
-public struct MultilineStringLogExporterAdapter <LogExporterType: LogExporter>: StringLogExporterAdapter where LogExporterType.Message == String {
-	public var logExporter: LogExporterType
+public struct MultilineStringConverter: LogConverter {
 	public var configuration: Configuration
 	
-	public init (_ logExporter: LogExporterType, configuration: Configuration = .init()) {
-		self.logExporter = logExporter
+	public init (configuration: Configuration = .init()) {
 		self.configuration = configuration
 	}
 	
-	public func adapt (logRecord: LogRecord<String, StandardLogRecordDetails>) {
+	public func convert (_ logRecord: LogRecord<String, StandardLogRecordDetails>) -> String {
 		let logRecordDetails = logRecord.details?.moderated(configuration.detailsEnabling)
 		
 		var messageHeaderComponents = [String]()
@@ -69,8 +67,8 @@ public struct MultilineStringLogExporterAdapter <LogExporterType: LogExporter>: 
 		
 		if case let .enabled(_, level: isLevelEnabled, _) = configuration.metaInfoEnabling, isLevelEnabled {
 			messageHeaderComponents.append(configuration.levelPadding
-				? logRecord.metaInfo.level.logDescription.padding(toLength: LogLevel.critical.logDescription.count, withPad: " ", startingAt: 0)
-				: logRecord.metaInfo.level.logDescription
+											? logRecord.metaInfo.level.logDescription.padding(toLength: LogLevel.critical.logDescription.count, withPad: " ", startingAt: 0)
+											: logRecord.metaInfo.level.logDescription
 			)
 		}
 		
@@ -100,8 +98,7 @@ public struct MultilineStringLogExporterAdapter <LogExporterType: LogExporter>: 
 		messageComponents.append("\n")
 		
 		let finalMessage = messageComponents.combine(with: "\n")
-		
-		logExporter.log(metaInfo: logRecord.metaInfo, message: finalMessage)
+		return finalMessage
 	}
 }
 

@@ -1,6 +1,6 @@
 import Foundation
 
-public class StandardRemoteLogExporter: LogExporter {
+public class StandardRemoteLogExporter: LogExporter {	
 	public var isEnabled = true
 	public var url: URL
 	public var urlSession = URLSession.shared
@@ -9,7 +9,7 @@ public class StandardRemoteLogExporter: LogExporter {
 		self.url = url
 	}
 	
-	public func log (metaInfo: MetaInfo, message: Data) {
+	public func export (metaInfo: MetaInfo, message: Data) {
 		guard isEnabled else { return }
 		
 		var urlRequest = URLRequest(url: url)

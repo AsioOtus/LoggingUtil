@@ -1,29 +1,25 @@
-public class StandardLogHandler<Connector: LogConnector>
-where
-	Connector.Message == String,
-	Connector.Details == StandardLogRecordDetails
-{
-	public typealias Message = String
-	public typealias Details = StandardLogRecordDetails
-	
+import Combine
+
+@available(macOS 15.0, *)
+public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var connector: Connector
 	public let label: String
 	
+	public let stream = PassthroughSubject<LogRecord<Message, Details>, Never>()
+	
 	public init (
-		connector: Connector,
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.connector = connector
 		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 }
 
-extension StandardLogHandler: LogHandler {
+@available(macOS 15.0, *)
+extension ReactiveLogHandler: LogHandler {	
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
@@ -31,11 +27,12 @@ extension StandardLogHandler: LogHandler {
 		let details = logRecord.details?.combined(with: self.details) ?? self.details
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		connector.log(logRecord)
+		stream.send(logRecord)
 	}
 }
 
-extension StandardLogHandler {
+@available(macOS 15.0, *)
+extension ReactiveLogHandler {
 	@discardableResult
 	public func isEnabled (_ isEnabled: Bool) -> Self {
 		self.isEnabled = isEnabled
@@ -51,6 +48,12 @@ extension StandardLogHandler {
 	@discardableResult
 	public func details (_ details: Details) -> Self {
 		self.details = details
+		return self
+	}
+	
+	@discardableResult
+	public func subscribe (_ subscription: (PassthroughSubject<LogRecord<Message, Details>, Never>) -> ()) -> Self {
+		subscription(stream)
 		return self
 	}
 }

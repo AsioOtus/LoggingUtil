@@ -1,4 +1,4 @@
-public extension SingleLineLogExporterAdapter {
+public extension SingleLineConverter {
 	struct Configuration {
 		public var metaInfoEnabling: MetaInfo.Enabling
 		public var detailsEnabling: StandardLogRecordDetails.Enabling
@@ -19,24 +19,22 @@ public extension SingleLineLogExporterAdapter {
 	}
 }
 
-public struct SingleLineLogExporterAdapter <LogExporterType: LogExporter>: StringLogExporterAdapter where LogExporterType.Message == String {
-	public var logExporter: LogExporterType
+public struct SingleLineConverter: LogConverter {
 	public var configuration: Configuration
 	
-	public init (_ logExporter: LogExporterType, configuration: Configuration = .init()) {
-		self.logExporter = logExporter
+	public init (_ configuration: Configuration = .init()) {
 		self.configuration = configuration
 	}
 	
-	public func adapt (logRecord: LogRecord<String, StandardLogRecordDetails>) {
+	public func convert (_ logRecord: LogRecord<String, StandardLogRecordDetails>) -> String {
 		let logRecordDetails = logRecord.details?.moderated(configuration.detailsEnabling)
 		
 		var messageComponents = [String]()
 		
 		if case let .enabled(_, level: isLevelEnabled, _) = configuration.metaInfoEnabling, isLevelEnabled {
 			messageComponents.append(configuration.levelPadding
-				? logRecord.metaInfo.level.logDescription.padding(toLength: LogLevel.critical.logDescription.count, withPad: " ", startingAt: 0)
-				: logRecord.metaInfo.level.logDescription
+										? logRecord.metaInfo.level.logDescription.padding(toLength: LogLevel.critical.logDescription.count, withPad: " ", startingAt: 0)
+										: logRecord.metaInfo.level.logDescription
 			)
 		}
 		
@@ -59,8 +57,16 @@ public struct SingleLineLogExporterAdapter <LogExporterType: LogExporter>: Strin
 		}
 		
 		let finalMessage = messageComponents.combine(with: configuration.componentsSeparator)
-		
-		logExporter.log(metaInfo: logRecord.metaInfo, message: finalMessage)
+		return finalMessage
+	}
+}
+
+extension SingleLineConverter {
+	@discardableResult
+	public mutating func configuration (_ configuration: Configuration) -> Self {
+		var selfCopy = self
+		selfCopy.configuration = configuration
+		return selfCopy
 	}
 }
 

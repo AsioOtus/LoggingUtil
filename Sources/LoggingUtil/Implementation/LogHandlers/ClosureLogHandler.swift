@@ -1,29 +1,22 @@
-public class StandardLogHandler<Connector: LogConnector>
-where
-	Connector.Message == String,
-	Connector.Details == StandardLogRecordDetails
-{
-	public typealias Message = String
-	public typealias Details = StandardLogRecordDetails
-	
+public class ClosureLogHandler<Message: Codable, Details: LogRecordDetails> {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var connector: Connector
+	public var handling: (LogRecord<Message, Details>) -> ()
 	public let label: String
 	
 	public init (
-		connector: Connector,
+		handling: @escaping (LogRecord<Message, Details>) -> () = { _ in },
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.connector = connector
+		self.handling = handling
 		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 }
 
-extension StandardLogHandler: LogHandler {
+extension ClosureLogHandler: LogHandler {
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
@@ -31,11 +24,11 @@ extension StandardLogHandler: LogHandler {
 		let details = logRecord.details?.combined(with: self.details) ?? self.details
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		connector.log(logRecord)
+		handling(logRecord)
 	}
 }
 
-extension StandardLogHandler {
+extension ClosureLogHandler {
 	@discardableResult
 	public func isEnabled (_ isEnabled: Bool) -> Self {
 		self.isEnabled = isEnabled
@@ -51,6 +44,12 @@ extension StandardLogHandler {
 	@discardableResult
 	public func details (_ details: Details) -> Self {
 		self.details = details
+		return self
+	}
+	
+	@discardableResult
+	func handling (_ logHandler: @escaping (LogRecord<Message, Details>) -> ()) -> Self {
+		self.handling = handling
 		return self
 	}
 }
