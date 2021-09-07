@@ -16,33 +16,44 @@ public extension MultilineStringConverter {
 		
 		public init () { }
 		
-		func metaInfoEnabling (_ metaInfoEnabling: MetaInfo.Enabling) -> Self {
+		@discardableResult
+		public func metaInfoEnabling (_ metaInfoEnabling: MetaInfo.Enabling) -> Self {
 			var selfCopy = self
 			selfCopy.metaInfoEnabling = metaInfoEnabling
 			return self
 		}
 		
-		func detailsEnabling (_ detailsEnabling: StandardLogRecordDetails.Enabling) -> Self {
+		@discardableResult
+		public func detailsEnabling (_ detailsEnabling: StandardLogRecordDetails.Enabling) -> Self {
 			var selfCopy = self
 			selfCopy.detailsEnabling = detailsEnabling
 			return self
 		}
 		
-		func levelPadding (_ levelPadding: Bool) -> Self {
+		@discardableResult
+		public func levelPadding (_ levelPadding: Bool) -> Self {
 			var selfCopy = self
 			selfCopy.levelPadding = levelPadding
 			return self
 		}
 		
-		func componentsSeparator (_ componentsSeparator: String) -> Self {
+		@discardableResult
+		public func componentsSeparator (_ componentsSeparator: String) -> Self {
 			var selfCopy = self
 			selfCopy.componentsSeparator = componentsSeparator
 			return self
 		}
 		
-		func dateFormatter (_ dateFormatter: DateFormatter) -> Self {
+		@discardableResult
+		public func dateFormatter (_ dateFormatter: DateFormatter) -> Self {
 			var selfCopy = self
 			selfCopy.dateFormatter = dateFormatter
+			return self
+		}
+		
+		@discardableResult
+		public func updateDateFormatter (_ dateFormatterUpdating: (DateFormatter) -> ()) -> Self {
+			dateFormatterUpdating(dateFormatter)
 			return self
 		}
 	}
@@ -102,13 +113,20 @@ public struct MultilineStringConverter: LogConverter {
 	}
 }
 
+extension MultilineStringConverter {
+	@discardableResult
+	public func configuration (_ configuration: Configuration) -> Self {
+		var selfCopy = self
+		selfCopy.configuration = configuration
+		return self
+	}
+}
+
 
 
 fileprivate extension LogLevel {
 	var logDescription: String { self.rawValue.uppercased() }
 }
-
-
 
 fileprivate extension Array where Element == String {
 	func combine (with separator: String) -> String {

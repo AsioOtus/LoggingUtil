@@ -1,20 +1,38 @@
 public extension SingleLineConverter {
 	struct Configuration {
-		public var metaInfoEnabling: MetaInfo.Enabling
-		public var detailsEnabling: StandardLogRecordDetails.Enabling
-		public var levelPadding: Bool
-		public var componentsSeparator: String
+		public var metaInfoEnabling = MetaInfo.Enabling.enabled()
+		public var detailsEnabling = StandardLogRecordDetails.Enabling.enabled()
+		public var levelPadding = true
+		public var componentsSeparator = " | "
 		
-		public init (
-			metaInfoEnabling: MetaInfo.Enabling = .enabled(),
-			detailsEnabling: StandardLogRecordDetails.Enabling = .enabled(),
-			levelPadding: Bool = true,
-			componentsSeparator: String = " | "
-		) {
-			self.metaInfoEnabling = metaInfoEnabling
-			self.detailsEnabling = detailsEnabling
-			self.levelPadding = levelPadding
-			self.componentsSeparator = componentsSeparator
+		public init () { }
+		
+		@discardableResult
+		public func metaInfoEnabling (_ metaInfoEnabling: MetaInfo.Enabling) -> Self {
+			var selfCopy = self
+			selfCopy.metaInfoEnabling = metaInfoEnabling
+			return self
+		}
+		
+		@discardableResult
+		public func detailsEnabling (_ detailsEnabling: StandardLogRecordDetails.Enabling) -> Self {
+			var selfCopy = self
+			selfCopy.detailsEnabling = detailsEnabling
+			return self
+		}
+		
+		@discardableResult
+		public func levelPadding (_ levelPadding: Bool) -> Self {
+			var selfCopy = self
+			selfCopy.levelPadding = levelPadding
+			return self
+		}
+		
+		@discardableResult
+		public func componentsSeparator (_ componentsSeparator: String) -> Self {
+			var selfCopy = self
+			selfCopy.componentsSeparator = componentsSeparator
+			return self
 		}
 	}
 }
@@ -63,7 +81,7 @@ public struct SingleLineConverter: LogConverter {
 
 extension SingleLineConverter {
 	@discardableResult
-	public mutating func configuration (_ configuration: Configuration) -> Self {
+	public func configuration (_ configuration: Configuration) -> Self {
 		var selfCopy = self
 		selfCopy.configuration = configuration
 		return selfCopy
