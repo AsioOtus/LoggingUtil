@@ -40,7 +40,7 @@ final class LoggingUtilTests: XCTestCase {
 			.connector(
 				PlainConnector(
 					converter: SingleLineConverter(),
-					exporter: OsLogExporter()
+					exporter: OSLogExporter()
 				)
 			)
 		

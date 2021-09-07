@@ -2,7 +2,7 @@ import os.log
 import Foundation
 
 @available(iOS 12.0, macOS 12.0, *)
-public class OsLogExporter: LogExporter {
+public class OSLogExporter: LogExporter {
 	public typealias Message = String
 	
 	public var isEnabled = true
@@ -43,7 +43,7 @@ public class OsLogExporter: LogExporter {
 }
 
 @available(iOS 12.0, macOS 12.0, *)
-extension OsLogExporter {
+extension OSLogExporter {
 	@discardableResult
 	public func isEnabled (_ isEnabled: Bool) -> Self {
 		self.isEnabled = isEnabled
