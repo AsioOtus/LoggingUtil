@@ -1,6 +1,6 @@
 import Combine
 
-@available(macOS 15.0, *)
+@available(iOS 13, macOS 15.0, *)
 public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {
 	public var isEnabled = true
 	public var level = LogLevel.trace
@@ -18,7 +18,7 @@ public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {
 	}
 }
 
-@available(macOS 15.0, *)
+@available(iOS 13, macOS 15.0, *)
 extension ReactiveLogHandler: LogHandler {	
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
@@ -31,7 +31,7 @@ extension ReactiveLogHandler: LogHandler {
 	}
 }
 
-@available(macOS 15.0, *)
+@available(iOS 13, macOS 15.0, *)
 extension ReactiveLogHandler {
 	@discardableResult
 	public func isEnabled (_ isEnabled: Bool) -> Self {
