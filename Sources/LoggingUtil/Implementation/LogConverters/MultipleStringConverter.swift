@@ -67,41 +67,41 @@ extension MultilineConverter {
 	public func metaInfoEnabling (_ metaInfoEnabling: MetaInfo.Enabling) -> Self {
 		var selfCopy = self
 		selfCopy.metaInfoEnabling = metaInfoEnabling
-		return self
+		return selfCopy
 	}
 	
 	@discardableResult
 	public func detailsEnabling (_ detailsEnabling: StandardLogRecordDetails.Enabling) -> Self {
 		var selfCopy = self
 		selfCopy.detailsEnabling = detailsEnabling
-		return self
+		return selfCopy
 	}
 	
 	@discardableResult
 	public func levelPadding (_ levelPadding: Bool) -> Self {
 		var selfCopy = self
 		selfCopy.levelPadding = levelPadding
-		return self
+		return selfCopy
 	}
 	
 	@discardableResult
 	public func componentsSeparator (_ componentsSeparator: String) -> Self {
 		var selfCopy = self
 		selfCopy.componentsSeparator = componentsSeparator
-		return self
+		return selfCopy
 	}
 	
 	@discardableResult
 	public func dateFormatter (_ dateFormatter: DateFormatter) -> Self {
 		var selfCopy = self
 		selfCopy.dateFormatter = dateFormatter
-		return self
+		return selfCopy
 	}
 	
 	@discardableResult
 	public func updateDateFormatter (_ dateFormatterUpdating: (DateFormatter) -> ()) -> Self {
 		dateFormatterUpdating(dateFormatter)
-		return self
+		return selfCopy
 	}
 }
 

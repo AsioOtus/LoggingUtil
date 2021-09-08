@@ -53,21 +53,21 @@ extension SingleLineConverter {
 	public func detailsEnabling (_ detailsEnabling: StandardLogRecordDetails.Enabling) -> Self {
 		var selfCopy = self
 		selfCopy.detailsEnabling = detailsEnabling
-		return self
+		return selfCopy
 	}
 	
 	@discardableResult
 	public func levelPadding (_ levelPadding: Bool) -> Self {
 		var selfCopy = self
 		selfCopy.levelPadding = levelPadding
-		return self
+		return selfCopy
 	}
 	
 	@discardableResult
 	public func componentsSeparator (_ componentsSeparator: String) -> Self {
 		var selfCopy = self
 		selfCopy.componentsSeparator = componentsSeparator
-		return self
+		return selfCopy
 	}
 }
 
