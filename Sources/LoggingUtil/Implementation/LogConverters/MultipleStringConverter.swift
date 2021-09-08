@@ -101,7 +101,7 @@ extension MultilineConverter {
 	@discardableResult
 	public func updateDateFormatter (_ dateFormatterUpdating: (DateFormatter) -> ()) -> Self {
 		dateFormatterUpdating(dateFormatter)
-		return selfCopy
+		return self
 	}
 }
 
