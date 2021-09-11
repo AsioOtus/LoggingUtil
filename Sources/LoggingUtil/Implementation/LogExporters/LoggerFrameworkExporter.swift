@@ -1,14 +1,15 @@
 import os.log
 
 @available(iOS 14.0, macOS 11.0, *)
-public class LoggerFrameworkExporter: LogExporter {
+public class LoggerFrameworkExporter: ConfigurableLogExporter {
 	public var isEnabled = true
+	public var level: LogLevel = .trace
 	public var logger = os.Logger()
 	
 	public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
-		guard isEnabled	else { return }
+		guard isEnabled, metaInfo.level <= level else { return }
 		
 		switch metaInfo.level {
 		case .trace:
@@ -28,14 +29,5 @@ public class LoggerFrameworkExporter: LogExporter {
 		case .fault:
 			logger.fault("\(message)")
 		}
-	}
-}
-
-@available(iOS 14.0, macOS 11.0, *)
-extension LoggerFrameworkExporter {
-	@discardableResult
-	public func isEnabled (_ isEnabled: Bool) -> Self {
-		self.isEnabled = isEnabled
-		return self
 	}
 }

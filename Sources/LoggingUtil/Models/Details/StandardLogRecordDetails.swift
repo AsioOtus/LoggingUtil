@@ -1,5 +1,5 @@
 public extension StandardLogRecordDetails {
-	enum Enabling {
+	enum Enabling: LogRecordDetailsEnabling {
 		case disable
 		case enabled(
 			source: Bool = true,
@@ -8,6 +8,8 @@ public extension StandardLogRecordDetails {
 			comment: Bool = false,
 			codeInfo: Bool = false
 		 )
+		
+		public static let defaultEnabling = enabled()
 	}
 }
 

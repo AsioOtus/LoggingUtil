@@ -2,15 +2,14 @@ import os.log
 import Foundation
 
 @available(iOS 12.0, macOS 12.0, *)
-public class OSLogExporter: LogExporter {
-	public typealias Message = String
-	
+public class OSLogExporter: ConfigurableLogExporter {
 	public var isEnabled = true
+	public var level: LogLevel = .trace
 	
 	public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
-		guard isEnabled else { return }
+		guard isEnabled, metaInfo.level <= level else { return }
 		
 		let osLogType = logLevelToOsLogType(metaInfo.level)
 		os_log(osLogType, "%@", message as NSString)
@@ -39,14 +38,5 @@ public class OSLogExporter: LogExporter {
 		}
 		
 		return osLogType
-	}
-}
-
-@available(iOS 12.0, macOS 12.0, *)
-extension OSLogExporter {
-	@discardableResult
-	public func isEnabled (_ isEnabled: Bool) -> Self {
-		self.isEnabled = isEnabled
-		return self
 	}
 }

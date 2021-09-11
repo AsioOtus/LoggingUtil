@@ -5,6 +5,7 @@ public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
+	public var detailsEnabling: Details.Enabling = .defaultEnabling
 	
 	public var connectors: [AnyConnector<Message, Details>]
 	public let label: String
@@ -23,7 +24,7 @@ public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
 		let metaInfo = logRecord.metaInfo.add(label: label)
-		let details = logRecord.details?.combined(with: self.details) ?? self.details
+		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let logRecord = logRecord.replace(metaInfo, details)
 		
 		connectors.forEach{ $0.log(logRecord) }
@@ -34,6 +35,12 @@ extension MultiplexConnectorsLogHandler {
 	@discardableResult
 	func connector <Connector: LogConnector> (_ connector: Connector) -> Self where Connector.Message == Message, Connector.Details == Details {
 		self.connectors.append(connector.eraseToAnyConnector())
+		return self
+	}
+	
+	@discardableResult
+	public func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
+		self.detailsEnabling = detailsEnabling
 		return self
 	}
 }

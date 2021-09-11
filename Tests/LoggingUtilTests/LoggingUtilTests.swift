@@ -47,4 +47,19 @@ final class LoggingUtilTests: XCTestCase {
 		let logger = StandardLogger(logHandler: logHandler)
 		logger.trace("Test")
 	}
+	
+	@available(macOS 12, *)
+	func testSingleLineTags () {
+		let logHandler = MultiplexConnectorsLogHandler()
+			.connector(
+				PlainConnector(
+					converter: SingleLineConverter()
+						.detailsEnabling(.enabled(tags: true)),
+					exporter: OSLogExporter()
+				)
+			)
+		
+		let logger = StandardLogger(logHandler: logHandler)
+		logger.trace("Test", details: .init(tags: ["qwe"]))
+	}
 }

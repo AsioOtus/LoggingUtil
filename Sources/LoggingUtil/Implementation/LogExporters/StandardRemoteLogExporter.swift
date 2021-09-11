@@ -1,7 +1,8 @@
 import Foundation
 
-public class StandardRemoteLogExporter: LogExporter {	
+public class StandardRemoteLogExporter: ConfigurableLogExporter {
 	public var isEnabled = true
+	public var level: LogLevel = .trace
 	public var url: URL
 	public var urlSession = URLSession.shared
 	
@@ -10,7 +11,7 @@ public class StandardRemoteLogExporter: LogExporter {
 	}
 	
 	public func export (metaInfo: MetaInfo, message: Data) {
-		guard isEnabled else { return }
+		guard isEnabled, metaInfo.level <= level else { return }
 		
 		var urlRequest = URLRequest(url: url)
 		urlRequest.httpMethod = "POST"
@@ -25,12 +26,6 @@ public class StandardRemoteLogExporter: LogExporter {
 }
 
 extension StandardRemoteLogExporter {
-	@discardableResult
-	public func isEnabled (_ isEnabled: Bool) -> Self {
-		self.isEnabled = isEnabled
-		return self
-	}
-	
 	@discardableResult
 	public func url (_ url: URL) -> Self {
 		self.url = url

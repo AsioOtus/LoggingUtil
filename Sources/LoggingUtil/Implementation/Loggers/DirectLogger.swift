@@ -1,27 +1,27 @@
 import Foundation
 
-public struct StandardLogger <Handler: LogHandler> {
-	public typealias Message = Handler.Message
-	public typealias Details = Handler.Details
+public struct DirectLogger <Connector: LogConnector> {
+	public typealias Message = Connector.Message
+	public typealias Details = Connector.Details
 	
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var logHandler: Handler
+	public var connector: Connector
 	public let label: String
 	
 	public init (
-		logHandler: Handler,
+		connector: Connector,
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.logHandler = logHandler
+		self.connector = connector
 		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 }
 
-extension StandardLogger: ConfigurableLogger {
+extension DirectLogger: ConfigurableLogger {
 	public func log (level: LogLevel, message: Message, details: Details? = nil) {
 		let metaInfo = MetaInfo(timestamp: Date().timeIntervalSince1970, level: level, labels: [])
 		let logRecord = LogRecord(metaInfo: metaInfo, message: message, details: details)
@@ -30,7 +30,7 @@ extension StandardLogger: ConfigurableLogger {
 	}
 }
 
-extension StandardLogger: LogHandler {
+extension DirectLogger: LogHandler {
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
@@ -38,6 +38,6 @@ extension StandardLogger: LogHandler {
 		let details = logRecord.details?.combined(with: self.details) ?? self.details
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		logHandler.log(logRecord: logRecord)
+		connector.log(logRecord)
 	}
 }

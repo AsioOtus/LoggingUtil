@@ -1,4 +1,6 @@
 struct ReducedLogRecordDetails: LogRecordDetails {
+	typealias Enabling = Bool
+	
 	let source: [String]?
 	
 	func combined (with another: Self?) -> Self {
@@ -9,4 +11,8 @@ struct ReducedLogRecordDetails: LogRecordDetails {
 		guard isEnabled else { return .init(source: []) }
 		return self
 	}
+}
+
+extension Bool: LogRecordDetailsEnabling {
+	public static let defaultEnabling = true
 }
