@@ -8,7 +8,7 @@ public class StandardLogHandler<Connector: LogConnector>: ConfigurableLogHandler
 	public var level = LogLevel.trace
 	public var details: Details? = nil
 	public var connector: Connector
-	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public var detailsEnabling: Details.Enabling = .fullEnabled
 	public let identifier: String
 	public let label: String
 	

@@ -8,7 +8,7 @@ class MultiplexLogHandler: ConfigurableLogHandler {
 	public var level = LogLevel.trace
 	public var details: Details? = nil
 	public var logHandlers: [AnyLogHandler<Message, Details>]
-	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public var detailsEnabling: Details.Enabling = .fullEnabled
 	public let identifier: String
 	public let label: String
 	

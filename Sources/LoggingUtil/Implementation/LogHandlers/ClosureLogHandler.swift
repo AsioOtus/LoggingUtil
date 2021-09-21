@@ -4,7 +4,7 @@ public class ClosureLogHandler<Message: Codable, Details: LogRecordDetails>: Con
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public var detailsEnabling: Details.Enabling = .fullEnabled
 	public var handling: (LogRecord<Message, Details>) -> ()
 	public let identifier: String
 	public let label: String

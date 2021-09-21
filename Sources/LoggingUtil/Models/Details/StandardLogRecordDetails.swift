@@ -10,6 +10,7 @@ public extension StandardLogRecordDetails {
 		 )
 		
 		public static let defaultEnabling = enabled()
+		public static let fullEnabled = enabled(source: true, tags: true, keyValue: true, comment: true, codeInfo: true)
 	}
 }
 

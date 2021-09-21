@@ -7,7 +7,7 @@ public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public var detailsEnabling: Details.Enabling = .fullEnabled
 	
 	public var connectors: [AnyConnector<Message, Details>]
 	public let label: String

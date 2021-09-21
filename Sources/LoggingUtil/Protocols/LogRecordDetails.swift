@@ -7,4 +7,5 @@ public protocol LogRecordDetails: Codable {
 
 public protocol LogRecordDetailsEnabling {
 	static var defaultEnabling: Self { get }
+	static var fullEnabled: Self { get }
 }

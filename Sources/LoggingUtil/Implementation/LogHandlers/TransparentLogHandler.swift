@@ -8,7 +8,7 @@ public class TransparentLogHandler<Handler: LogHandler>: ConfigurableLogHandler 
 	public var level = LogLevel.trace
 	public var details: Details? = nil
 	public var handler: Handler
-	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public var detailsEnabling: Details.Enabling = .fullEnabled
 	public let label: String
 	public let identifier: String
 	

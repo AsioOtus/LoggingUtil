@@ -4,6 +4,7 @@ public extension CompactLogRecordDetails {
 		case enabled(source: Bool = true, tags: Bool = true)
 		
 		public static let defaultEnabling = enabled()
+		public static let fullEnabled = enabled(source: true, tags: true)
 	}
 }
 

@@ -8,7 +8,7 @@ public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public var detailsEnabling: Details.Enabling = .fullEnabled
 	public let identifier: String
 	public let label: String
 	
