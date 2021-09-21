@@ -8,6 +8,8 @@ public struct DirectLogger <Connector: LogConnector> {
 	public var level = LogLevel.trace
 	public var details: Details? = nil
 	public var connector: Connector
+	
+	public let identifier: String
 	public let label: String
 	
 	public init (
@@ -16,8 +18,11 @@ public struct DirectLogger <Connector: LogConnector> {
 		file: String = #file,
 		line: Int = #line
 	) {
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		
 		self.connector = connector
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 }
 

@@ -1,10 +1,13 @@
+import Foundation
+
 public class ClosureLogHandler<Message: Codable, Details: LogRecordDetails>: ConfigurableLogHandler {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var handling: (LogRecord<Message, Details>) -> ()
-	public let label: String
 	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public var handling: (LogRecord<Message, Details>) -> ()
+	public let identifier: String
+	public let label: String
 	
 	public init (
 		handling: @escaping (LogRecord<Message, Details>) -> () = { _ in },
@@ -12,8 +15,11 @@ public class ClosureLogHandler<Message: Codable, Details: LogRecordDetails>: Con
 		file: String = #file,
 		line: Int = #line
 	) {
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		
 		self.handling = handling
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 
 	public func log (logRecord: LogRecord<Message, Details>) {

@@ -1,3 +1,5 @@
+import Foundation
+
 class MultiplexLogHandler: ConfigurableLogHandler {
 	public typealias Message = String
 	public typealias Details = StandardLogRecordDetails
@@ -7,6 +9,7 @@ class MultiplexLogHandler: ConfigurableLogHandler {
 	public var details: Details? = nil
 	public var logHandlers: [AnyLogHandler<Message, Details>]
 	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public let identifier: String
 	public let label: String
 	
 	public init (
@@ -15,8 +18,11 @@ class MultiplexLogHandler: ConfigurableLogHandler {
 		file: String = #file,
 		line: Int = #line
 	) {
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		
 		self.logHandlers = logHandlers
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 	
 	func log (logRecord: LogRecord<String, StandardLogRecordDetails>) {

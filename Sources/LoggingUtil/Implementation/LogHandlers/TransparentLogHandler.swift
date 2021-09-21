@@ -1,3 +1,5 @@
+import Foundation
+
 public class TransparentLogHandler<Handler: LogHandler>: ConfigurableLogHandler {
 	public typealias Message = Handler.Message
 	public typealias Details = Handler.Details
@@ -8,6 +10,7 @@ public class TransparentLogHandler<Handler: LogHandler>: ConfigurableLogHandler 
 	public var handler: Handler
 	public var detailsEnabling: Details.Enabling = .defaultEnabling
 	public let label: String
+	public let identifier: String
 	
 	public init (
 		handler: Handler,
@@ -15,8 +18,11 @@ public class TransparentLogHandler<Handler: LogHandler>: ConfigurableLogHandler 
 		file: String = #file,
 		line: Int = #line
 	) {
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		
 		self.handler = handler
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 	
 	public func log (logRecord: LogRecord<Message, Details>) {

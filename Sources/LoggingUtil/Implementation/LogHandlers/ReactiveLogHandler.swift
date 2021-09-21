@@ -1,6 +1,7 @@
 #if canImport(Combine)
 
 import Combine
+import Foundation
 
 @available(iOS 13, macOS 15.0, *)
 public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {	
@@ -8,6 +9,7 @@ public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {
 	public var level = LogLevel.trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public let identifier: String
 	public let label: String
 	
 	public let stream = PassthroughSubject<LogRecord<Message, Details>, Never>()
@@ -17,7 +19,9 @@ public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
 	}
 }
 

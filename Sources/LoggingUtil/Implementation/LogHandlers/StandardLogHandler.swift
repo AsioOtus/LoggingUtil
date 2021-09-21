@@ -1,3 +1,5 @@
+import Foundation
+
 public class StandardLogHandler<Connector: LogConnector>: ConfigurableLogHandler {
 	public typealias Message = Connector.Message
 	public typealias Details = Connector.Details
@@ -7,6 +9,7 @@ public class StandardLogHandler<Connector: LogConnector>: ConfigurableLogHandler
 	public var details: Details? = nil
 	public var connector: Connector
 	public var detailsEnabling: Details.Enabling = .defaultEnabling
+	public let identifier: String
 	public let label: String
 	
 	public init (
@@ -15,8 +18,11 @@ public class StandardLogHandler<Connector: LogConnector>: ConfigurableLogHandler
 		file: String = #file,
 		line: Int = #line
 	) {
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		
 		self.connector = connector
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 
 	public func log (logRecord: LogRecord<Message, Details>) {

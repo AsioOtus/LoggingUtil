@@ -2,6 +2,8 @@ public protocol Logger {
 	associatedtype Message: Codable
 	associatedtype Details: LogRecordDetails
 	
+	var identifier: String { get }
+	
 	func log (level: LogLevel, message: Message, details: Details?)
 	
 	func trace (_ message: Message, details: Details?)
@@ -13,8 +15,6 @@ public protocol Logger {
 	func error (_ message: Message, details: Details?)
 	func critical (_ message: Message, details: Details?)
 }
-
-
 
 public extension Logger {
 	func trace (_ message: Message, details: Details? = nil) {

@@ -8,6 +8,8 @@ public struct StandardLogger <Handler: LogHandler> {
 	public var level = LogLevel.trace
 	public var details: Details? = nil
 	public var logHandler: Handler
+	
+	public let identifier: String
 	public let label: String
 	
 	public init (
@@ -16,8 +18,11 @@ public struct StandardLogger <Handler: LogHandler> {
 		file: String = #file,
 		line: Int = #line
 	) {
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		
 		self.logHandler = logHandler
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 }
 

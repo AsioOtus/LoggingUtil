@@ -1,9 +1,12 @@
+import Foundation
+
 public class MultiplexClosuresLogHandler<Message: Codable, Details: LogRecordDetails>: ConfigurableLogHandler {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
 	
 	public var handlings: [(LogRecord<Message, Details>) -> ()]
+	public let identifier: String
 	public let label: String
 	
 	public init (
@@ -12,8 +15,11 @@ public class MultiplexClosuresLogHandler<Message: Codable, Details: LogRecordDet
 		file: String = #file,
 		line: Int = #line
 	) {
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		
 		self.handlings = handlings
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 
 	public func log (logRecord: LogRecord<Message, Details>) {

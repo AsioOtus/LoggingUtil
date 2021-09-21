@@ -1,3 +1,5 @@
+import Foundation
+
 public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
 	public typealias Message = String
 	public typealias Details = StandardLogRecordDetails
@@ -9,6 +11,7 @@ public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
 	
 	public var connectors: [AnyConnector<Message, Details>]
 	public let label: String
+	public let identifier: String
 	
 	public init (
 		connectors: [AnyConnector<Message, Details>] = [],
@@ -16,8 +19,11 @@ public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
 		file: String = #file,
 		line: Int = #line
 	) {
+		let identifier = UUID().uuidString
+		self.identifier = identifier
+		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		
 		self.connectors = connectors
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line)
 	}
 
 	public func log (logRecord: LogRecord<Message, Details>) {
