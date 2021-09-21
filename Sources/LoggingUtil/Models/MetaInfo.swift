@@ -12,9 +12,9 @@ public extension MetaInfo {
 public struct MetaInfo: Codable {
 	public let timestamp: Double
 	public let level: LogLevel
-	public let labels: [String]
+	public let stack: [IdentificationInfo]
 	
-	public func add (label: String) -> Self {
-		.init(timestamp: timestamp, level: level, labels: [label] + labels)
+	public func add (_ identificationInfo: IdentificationInfo) -> Self {
+		.init(timestamp: timestamp, level: level, stack: stack + [identificationInfo])
 	}
 }

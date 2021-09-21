@@ -1,23 +1,18 @@
-import Foundation
-
 public class MultiplexClosuresLogHandler<Message: Codable, Details: LogRecordDetails>: ConfigurableLogHandler {
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	
 	public var handlings: [(LogRecord<Message, Details>) -> ()]
-	public let identifier: String
-	public let label: String
+	
+	public let identificationInfo: IdentificationInfo
 	
 	public init (
 		handlings: [(LogRecord<Message, Details>) -> ()] = [],
-		label: String? = nil,
+		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		let identifier = UUID().uuidString
-		self.identifier = identifier
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
 		
 		self.handlings = handlings
 	}
@@ -25,7 +20,7 @@ public class MultiplexClosuresLogHandler<Message: Codable, Details: LogRecordDet
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
-		let metaInfo = logRecord.metaInfo.add(label: label)
+		let metaInfo = logRecord.metaInfo.add(identificationInfo)
 		let details = logRecord.details?.combined(with: self.details) ?? self.details
 		let logRecord = logRecord.replace(metaInfo, details)
 		

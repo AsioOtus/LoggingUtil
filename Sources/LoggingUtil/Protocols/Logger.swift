@@ -2,7 +2,7 @@ public protocol Logger {
 	associatedtype Message: Codable
 	associatedtype Details: LogRecordDetails
 	
-	var identifier: String { get }
+	var identificationInfo: IdentificationInfo { get }
 	
 	func log (level: LogLevel, message: Message, details: Details?)
 	

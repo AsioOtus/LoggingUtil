@@ -8,20 +8,17 @@ public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
 	public var level = LogLevel.trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
-	
 	public var connectors: [AnyConnector<Message, Details>]
-	public let label: String
-	public let identifier: String
+	
+	public let identificationInfo: IdentificationInfo
 	
 	public init (
 		connectors: [AnyConnector<Message, Details>] = [],
-		label: String? = nil,
+		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		let identifier = UUID().uuidString
-		self.identifier = identifier
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
 		
 		self.connectors = connectors
 	}
@@ -29,7 +26,7 @@ public class MultiplexConnectorsLogHandler: ConfigurableLogHandler {
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
-		let metaInfo = logRecord.metaInfo.add(label: label)
+		let metaInfo = logRecord.metaInfo.add(identificationInfo)
 		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let logRecord = logRecord.replace(metaInfo, details)
 		

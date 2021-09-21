@@ -1,5 +1,3 @@
-import Foundation
-
 public class TransparentLogHandler<Handler: LogHandler>: ConfigurableLogHandler {
 	public typealias Message = Handler.Message
 	public typealias Details = Handler.Details
@@ -9,18 +7,16 @@ public class TransparentLogHandler<Handler: LogHandler>: ConfigurableLogHandler 
 	public var details: Details? = nil
 	public var handler: Handler
 	public var detailsEnabling: Details.Enabling = .fullEnabled
-	public let label: String
-	public let identifier: String
+	
+	public let identificationInfo: IdentificationInfo
 	
 	public init (
 		handler: Handler,
-		label: String? = nil,
+		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		let identifier = UUID().uuidString
-		self.identifier = identifier
-		self.label = label ?? LabelBuilder.build(String(describing: Self.self), #file, #line, identifier)
+		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
 		
 		self.handler = handler
 	}
@@ -28,7 +24,7 @@ public class TransparentLogHandler<Handler: LogHandler>: ConfigurableLogHandler 
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
-		let metaInfo = logRecord.metaInfo.add(label: label)
+		let metaInfo = logRecord.metaInfo.add(identificationInfo)
 		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let logRecord = logRecord.replace(metaInfo, details)
 		
