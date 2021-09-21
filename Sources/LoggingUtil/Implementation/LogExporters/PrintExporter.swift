@@ -5,7 +5,7 @@ public class PrintExporter: ConfigurableLogExporter {
 	public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
-		guard isEnabled, metaInfo.level <= level else { return }
+		guard isEnabled, metaInfo.level >= level else { return }
 		print(message)
 	}
 }

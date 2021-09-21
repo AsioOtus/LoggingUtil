@@ -11,7 +11,7 @@ public class StandardRemoteLogExporter: ConfigurableLogExporter {
 	}
 	
 	public func export (metaInfo: MetaInfo, message: Data) {
-		guard isEnabled, metaInfo.level <= level else { return }
+		guard isEnabled, metaInfo.level >= level else { return }
 		
 		var urlRequest = URLRequest(url: url)
 		urlRequest.httpMethod = "POST"

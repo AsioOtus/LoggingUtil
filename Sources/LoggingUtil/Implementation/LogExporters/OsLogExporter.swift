@@ -9,7 +9,7 @@ public class OSLogExporter: ConfigurableLogExporter {
 	public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
-		guard isEnabled, metaInfo.level <= level else { return }
+		guard isEnabled, metaInfo.level >= level else { return }
 		
 		let osLogType = logLevelToOsLogType(metaInfo.level)
 		os_log(osLogType, "%@", message as NSString)

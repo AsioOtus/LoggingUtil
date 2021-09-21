@@ -9,7 +9,7 @@ public class LoggerFrameworkExporter: ConfigurableLogExporter {
 	public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
-		guard isEnabled, metaInfo.level <= level else { return }
+		guard isEnabled, metaInfo.level >= level else { return }
 		
 		switch metaInfo.level {
 		case .trace:
