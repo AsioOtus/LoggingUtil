@@ -1,4 +1,4 @@
-public struct SingleLineConverter: LogConverter {
+public struct SingleLineConverter: PlainLogConverter {
 	public var metaInfoEnabling = MetaInfo.Enabling.enabled()
 	public var detailsEnabling = StandardLogRecordDetails.Enabling.enabled()
 	public var levelPadding = true

@@ -1,4 +1,6 @@
-public protocol LogConverter {
+public protocol LogConverter { }
+
+public protocol PlainLogConverter: LogConverter {
 	associatedtype InputMessage: Codable
 	associatedtype InputDetails: LogRecordDetails
 	associatedtype OutputMessage
@@ -6,7 +8,7 @@ public protocol LogConverter {
 	func convert (_ logRecord: LogRecord<InputMessage, InputDetails>) -> OutputMessage
 }
 
-public protocol OptionalLogConverter {
+public protocol OptionalLogConverter: LogConverter {
 	associatedtype InputMessage: Codable
 	associatedtype InputDetails: LogRecordDetails
 	associatedtype OutputMessage
@@ -14,7 +16,7 @@ public protocol OptionalLogConverter {
 	func convert (_ logRecord: LogRecord<InputMessage, InputDetails>) -> OutputMessage?
 }
 
-public protocol ThrowableLogConverter {
+public protocol ThrowableLogConverter: LogConverter {
 	associatedtype InputMessage: Codable
 	associatedtype InputDetails: LogRecordDetails
 	associatedtype OutputMessage
