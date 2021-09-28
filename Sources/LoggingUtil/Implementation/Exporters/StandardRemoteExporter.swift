@@ -1,6 +1,6 @@
 import Foundation
 
-public class StandardRemoteLogExporter: ConfigurableLogExporter {
+public class StandardRemoteExporter: ConfigurableExporter {
 	public var isEnabled = true
 	public var level: LogLevel = .trace
 	public var url: URL
@@ -25,7 +25,7 @@ public class StandardRemoteLogExporter: ConfigurableLogExporter {
 	}
 }
 
-extension StandardRemoteLogExporter {
+extension StandardRemoteExporter {
 	@discardableResult
 	public func url (_ url: URL) -> Self {
 		self.url = url

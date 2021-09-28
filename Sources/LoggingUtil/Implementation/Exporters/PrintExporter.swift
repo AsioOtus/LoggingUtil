@@ -1,4 +1,4 @@
-public class PrintExporter: ConfigurableLogExporter {
+public class PrintExporter: ConfigurableExporter {
 	public var isEnabled = true
 	public var level: LogLevel = .trace
 	

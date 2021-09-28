@@ -1,8 +1,8 @@
-public struct ErrorSuppressingConnector <Converter: ThrowableConverter, Exporter: LogExporter>: Connector where Converter.OutputMessage == Exporter.Message {
+public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Exporter>: Connector where Converter.OutputMessage == E.Message {
 	public let converter: Converter
-	public let exporter: Exporter
+	public let exporter: E
 	
-	public init (converter: Converter, exporter: Exporter) {
+	public init (converter: Converter, exporter: E) {
 		self.converter = converter
 		self.exporter = exporter
 	}

@@ -1,9 +1,9 @@
-public protocol ConfigurableLogExporter: LogExporter, AnyObject {
+public protocol ConfigurableExporter: Exporter, AnyObject {
 	var isEnabled: Bool { get set }
 	var level: LogLevel { get set }
 }
 
-extension ConfigurableLogExporter {
+extension ConfigurableExporter {
 	@discardableResult
 	public func isEnabled (_ isEnabled: Bool) -> Self {
 		self.isEnabled = isEnabled

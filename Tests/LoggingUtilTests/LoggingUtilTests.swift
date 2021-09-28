@@ -25,7 +25,7 @@ final class LoggingUtilTests: XCTestCase {
 			
 			ErrorSuppressingConnector(
 				converter: StringToJSONDataConverter(),
-				exporter: StandardRemoteLogExporter(url: URL(string: "qweqwe")!)
+				exporter: StandardRemoteExporter(url: URL(string: "qweqwe")!)
 			)
 			.log(logRecord)
 		}
