@@ -1,18 +1,18 @@
-public class StandardHandler <Connector: LogConnector>: ConfigurableHandler {
-	public typealias Message = Connector.Message
-	public typealias Details = Connector.Details
+public class StandardHandler <C: Connector>: ConfigurableHandler {
+	public typealias Message = C.Message
+	public typealias Details = C.Details
 	
 	public var isEnabled = true
 	public var level: LogLevel = .trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
 	
-	public var connector: Connector
+	public var connector: C
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		connector: Connector,
+		connector: C,
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line

@@ -1,4 +1,4 @@
-public struct ClosureConnector<Message: Codable, Details: LogRecordDetails>: LogConnector {
+public struct ClosureConnector <Message: Codable, Details: LogRecordDetails>: Connector {
 	let connection: (LogRecord<Message, Details>) -> ()
 	
 	public init (_ connection: @escaping (LogRecord<Message, Details>) -> ()) {

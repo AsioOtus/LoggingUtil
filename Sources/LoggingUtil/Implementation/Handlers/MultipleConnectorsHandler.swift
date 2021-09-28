@@ -34,7 +34,7 @@ public class MultipleConnectorsHandler: ConfigurableHandler {
 
 extension MultipleConnectorsHandler {	
 	@discardableResult
-	func connector <Connector: LogConnector> (_ connector: Connector) -> Self where Connector.Message == Message, Connector.Details == Details {
+	func connector <C: Connector> (_ connector: C) -> Self where C.Message == Message, C.Details == Details {
 		self.connectors.append(connector.eraseToAnyConnector())
 		return self
 	}

@@ -1,4 +1,4 @@
-public struct ErrorSuppressingConnector<Converter: ThrowableLogConverter, Exporter: LogExporter>: LogConnector where Converter.OutputMessage == Exporter.Message {
+public struct ErrorSuppressingConnector <Converter: ThrowableLogConverter, Exporter: LogExporter>: Connector where Converter.OutputMessage == Exporter.Message {
 	public let converter: Converter
 	public let exporter: Exporter
 	
