@@ -1,6 +1,6 @@
 public protocol ConfigurableExporter: Exporter, AnyObject {
 	var isEnabled: Bool { get set }
-	var level: LogLevel { get set }
+	var level: Level { get set }
 }
 
 extension ConfigurableExporter {
@@ -11,7 +11,7 @@ extension ConfigurableExporter {
 	}
 	
 	@discardableResult
-	public func level (_ level: LogLevel) -> Self {
+	public func level (_ level: Level) -> Self {
 		self.level = level
 		return self
 	}

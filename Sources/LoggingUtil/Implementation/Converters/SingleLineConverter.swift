@@ -13,7 +13,7 @@ public struct SingleLineConverter: PlainConverter {
 		
 		if case let .enabled(_, level: isLevelEnabled, _) = metaInfoEnabling, isLevelEnabled {
 			messageComponents.append(levelPadding
-										? logRecord.metaInfo.level.logDescription.padding(toLength: LogLevel.critical.logDescription.count, withPad: " ", startingAt: 0)
+										? logRecord.metaInfo.level.logDescription.padding(toLength: Level.critical.logDescription.count, withPad: " ", startingAt: 0)
 										: logRecord.metaInfo.level.logDescription
 			)
 		}
@@ -73,7 +73,7 @@ extension SingleLineConverter {
 
 
 
-fileprivate extension LogLevel {
+fileprivate extension Level {
 	var logDescription: String { self.rawValue.uppercased() }
 }
 

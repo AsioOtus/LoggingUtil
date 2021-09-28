@@ -2,7 +2,7 @@ import Foundation
 
 public class StandardRemoteExporter: ConfigurableExporter {
 	public var isEnabled = true
-	public var level: LogLevel = .trace
+	public var level: Level = .trace
 	public var url: URL
 	public var urlSession = URLSession.shared
 	

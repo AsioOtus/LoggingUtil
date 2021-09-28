@@ -4,7 +4,7 @@ public protocol Logger {
 	
 	var identificationInfo: IdentificationInfo { get }
 	
-	func log (level: LogLevel, message: Message, details: Details?)
+	func log (level: Level, message: Message, details: Details?)
 	
 	func trace (_ message: Message, details: Details?)
 	func debug (_ message: Message, details: Details?)

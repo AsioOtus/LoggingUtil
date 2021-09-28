@@ -1,6 +1,6 @@
 public protocol ConfigurableLogger: Logger {
 	var isEnabled: Bool { get set }
-	var level: LogLevel { get set }
+	var level: Level { get set }
 	var details: Details? { get set }
 }
 
@@ -13,7 +13,7 @@ extension ConfigurableLogger {
 	}
 	
 	@discardableResult
-	public func level (_ level: LogLevel) -> Self {
+	public func level (_ level: Level) -> Self {
 		var selfCopy = self
 		selfCopy.level = level
 		return selfCopy

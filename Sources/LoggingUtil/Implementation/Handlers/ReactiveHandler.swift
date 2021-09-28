@@ -5,7 +5,7 @@ import Combine
 @available(iOS 13, macOS 15.0, *)
 public class ReactiveHandler <Message: Codable, Details: LogRecordDetails> {	
 	public var isEnabled = true
-	public var level: LogLevel = .trace
+	public var level: Level = .trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
 	
@@ -18,7 +18,7 @@ public class ReactiveHandler <Message: Codable, Details: LogRecordDetails> {
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
 	}
 }
 

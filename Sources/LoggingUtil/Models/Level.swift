@@ -1,4 +1,4 @@
-public enum LogLevel: String, Codable, CaseIterable {
+public enum Level: String, Codable, CaseIterable {
 	case trace
 	case debug
 	case info

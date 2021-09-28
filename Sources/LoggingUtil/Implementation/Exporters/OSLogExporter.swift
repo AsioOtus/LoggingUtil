@@ -4,18 +4,18 @@ import Foundation
 @available(iOS 12.0, macOS 12.0, *)
 public class OSLogExporter: ConfigurableExporter {
 	public var isEnabled = true
-	public var level: LogLevel = .trace
+	public var level: Level = .trace
 	
 	public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
 		guard isEnabled, metaInfo.level >= level else { return }
 		
-		let osLogType = logLevelToOsLogType(metaInfo.level)
+		let osLogType = levelToOsLogType(metaInfo.level)
 		os_log(osLogType, "%@", message as NSString)
 	}
 	
-	private func logLevelToOsLogType (_ level: LogLevel) -> OSLogType {
+	private func levelToOsLogType (_ level: Level) -> OSLogType {
 		let osLogType: OSLogType
 		
 		switch level {

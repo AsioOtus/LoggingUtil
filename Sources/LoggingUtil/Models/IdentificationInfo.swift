@@ -1,29 +1,29 @@
 import Foundation
 
 public struct IdentificationInfo: Codable, CustomStringConvertible {
-	public let moduleId: String?
-	public let typeId: String
-	public let definitionId: String
-	public let instanceId: String
+	public let module: String?
+	public let type: String
+	public let definition: String
+	public let instance: String
 	public let alias: String?
 	
 	public var description: String {
-		"\(moduleId.flatMap{ "\($0)." } ?? "")\(typeId) – \(definitionId) – alias: \(alias.flatMap{ "\($0)." } ?? "") – \(instanceId)"
+		"\(module.flatMap{ "\($0)." } ?? "")\(type) – \(definition) – alias: \(alias.flatMap{ "\($0)." } ?? "") – \(instance)"
 	}
 	
 	public var shortDescription: String {
-		"\(moduleId.flatMap{ "\($0)." } ?? "")\(typeId).\(instanceId)"
+		"\(module.flatMap{ "\($0)." } ?? "")\(type) – \(instance)"
 	}
 	
 	public var typeDescription: String {
-		"\(moduleId.flatMap{ "\($0)." } ?? "")\(typeId)"
+		"\(module.flatMap{ "\($0)." } ?? "")\(type)"
 	}
 	
-	init (_ moduleId: String? = nil, typeId: String, file: String, line: Int, alias: String? = nil) {
-		self.moduleId = Info.moduleName
-		self.typeId = typeId
-		self.definitionId = "\(file):\(line)"
-		self.instanceId = UUID().uuidString
+	init (_ module: String? = nil, type: String, file: String, line: Int, alias: String? = nil) {
+		self.module = module
+		self.type = type
+		self.definition = "\(file):\(line)"
+		self.instance = UUID().uuidString
 		self.alias = alias
 	}
 }

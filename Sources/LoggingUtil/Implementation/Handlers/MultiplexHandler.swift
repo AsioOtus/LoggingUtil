@@ -3,7 +3,7 @@ class MultiplexHandler: ConfigurableHandler {
 	public typealias Details = StandardLogRecordDetails
 	
 	public var isEnabled = true
-	public var level: LogLevel = .trace
+	public var level: Level = .trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
 	
@@ -17,7 +17,7 @@ class MultiplexHandler: ConfigurableHandler {
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
 		self.handlers = handlers
 	}
 	

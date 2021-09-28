@@ -1,6 +1,6 @@
 public class PrintExporter: ConfigurableExporter {
 	public var isEnabled = true
-	public var level: LogLevel = .trace
+	public var level: Level = .trace
 	
 	public init () { }
 	

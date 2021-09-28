@@ -27,7 +27,7 @@ public struct MultilineConverter: PlainConverter {
 		
 		if case let .enabled(_, level: isLevelEnabled, _) = metaInfoEnabling, isLevelEnabled {
 			messageHeaderComponents.append(levelPadding
-											? logRecord.metaInfo.level.logDescription.padding(toLength: LogLevel.critical.logDescription.count, withPad: " ", startingAt: 0)
+											? logRecord.metaInfo.level.logDescription.padding(toLength: Level.critical.logDescription.count, withPad: " ", startingAt: 0)
 											: logRecord.metaInfo.level.logDescription
 			)
 		}
@@ -107,7 +107,7 @@ extension MultilineConverter {
 
 
 
-fileprivate extension LogLevel {
+fileprivate extension Level {
 	var logDescription: String { self.rawValue.uppercased() }
 }
 

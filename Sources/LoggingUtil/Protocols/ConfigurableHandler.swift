@@ -1,6 +1,6 @@
 public protocol ConfigurableHandler: Handler, AnyObject {
 	var isEnabled: Bool { get set }
-	var level: LogLevel { get set }
+	var level: Level { get set }
 	var details: Details? { get set }
 }
 
@@ -12,7 +12,7 @@ extension ConfigurableHandler {
 	}
 	
 	@discardableResult
-	public func level (_ level: LogLevel) -> Self {
+	public func level (_ level: Level) -> Self {
 		self.level = level
 		return self
 	}
