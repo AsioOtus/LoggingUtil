@@ -4,19 +4,19 @@ import Combine
 
 final class LoggingUtilTests: XCTestCase {
 	func testBasic () {
-		let logHandler = StandardLogHandler(
+		let handler = StandardHandler(
 			connector: PlainConnector(
 				converter: SingleLineConverter(),
 				exporter: PrintExporter()
 			)
 		)
 		
-		let logger = StandardLogger(logHandler: logHandler)
+		let logger = StandardLogger(handler: handler)
 		logger.trace("Test")
 	}
 	
 	func testClosureConnector () {
-		let logHandler = ClosureLogHandler<String, StandardLogRecordDetails> { logRecord in
+		let handler = ClosureHandler<String, StandardLogRecordDetails> { logRecord in
 			PlainConnector(
 				converter: SingleLineConverter(),
 				exporter: PrintExporter()
@@ -30,13 +30,13 @@ final class LoggingUtilTests: XCTestCase {
 			.log(logRecord)
 		}
 		
-		let logger = StandardLogger(logHandler: logHandler)
+		let logger = StandardLogger(handler: handler)
 		logger.trace("Test")
 	}
 	
 	@available(macOS 12, *)
 	func testMultiplex () {
-		let logHandler = MultiplexConnectorsLogHandler()
+		let handler = MultipleConnectorsHandler()
 			.connector(
 				PlainConnector(
 					converter: SingleLineConverter(),
@@ -44,13 +44,13 @@ final class LoggingUtilTests: XCTestCase {
 				)
 			)
 		
-		let logger = StandardLogger(logHandler: logHandler)
+		let logger = StandardLogger(handler: handler)
 		logger.trace("Test")
 	}
 	
 	@available(macOS 12, *)
 	func testSingleLineTags () {
-		let logHandler = MultiplexConnectorsLogHandler()
+		let handler = MultipleConnectorsHandler()
 			.connector(
 				PlainConnector(
 					converter: SingleLineConverter()
@@ -59,7 +59,7 @@ final class LoggingUtilTests: XCTestCase {
 				)
 			)
 		
-		let logger = StandardLogger(logHandler: logHandler)
+		let logger = StandardLogger(handler: handler)
 		logger.trace("Test", details: .init(tags: ["qwe"]))
 	}
 }

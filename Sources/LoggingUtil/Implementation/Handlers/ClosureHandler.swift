@@ -1,8 +1,9 @@
-public class ClosureLogHandler<Message: Codable, Details: LogRecordDetails>: ConfigurableLogHandler {
+public class ClosureHandler <Message: Codable, Details: LogRecordDetails>: ConfigurableHandler {
 	public var isEnabled = true
-	public var level = LogLevel.trace
+	public var level: LogLevel = .trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
+	
 	public var handling: (LogRecord<Message, Details>) -> ()
 	
 	public let identificationInfo: IdentificationInfo
@@ -28,9 +29,9 @@ public class ClosureLogHandler<Message: Codable, Details: LogRecordDetails>: Con
 	}
 }
 
-extension ClosureLogHandler {
+extension ClosureHandler {
 	@discardableResult
-	func handling (_ logHandler: @escaping (LogRecord<Message, Details>) -> ()) -> Self {
+	func handling (_ handling: @escaping (LogRecord<Message, Details>) -> ()) -> Self {
 		self.handling = handling
 		return self
 	}

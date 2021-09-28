@@ -1,25 +1,25 @@
 import Foundation
 
-public struct StandardLogger <Handler: LogHandler> {
-	public typealias Message = Handler.Message
-	public typealias Details = Handler.Details
+public struct StandardLogger <H: Handler> {
+	public typealias Message = H.Message
+	public typealias Details = H.Details
 	
 	public var isEnabled = true
 	public var level = LogLevel.trace
 	public var details: Details? = nil
-	public var logHandler: Handler
+	public var handler: H
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		logHandler: Handler,
+		handler: H,
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
 		
-		self.logHandler = logHandler
+		self.handler = handler
 	}
 }
 
@@ -32,7 +32,7 @@ extension StandardLogger: ConfigurableLogger {
 	}
 }
 
-extension StandardLogger: LogHandler {
+extension StandardLogger: Handler {
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
@@ -40,6 +40,6 @@ extension StandardLogger: LogHandler {
 		let details = logRecord.details?.combined(with: self.details) ?? self.details
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		logHandler.log(logRecord: logRecord)
+		handler.log(logRecord: logRecord)
 	}
 }

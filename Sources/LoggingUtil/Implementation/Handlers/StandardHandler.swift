@@ -1,44 +1,38 @@
-class MultiplexLogHandler: ConfigurableLogHandler {
-	public typealias Message = String
-	public typealias Details = StandardLogRecordDetails
+public class StandardHandler <Connector: LogConnector>: ConfigurableHandler {
+	public typealias Message = Connector.Message
+	public typealias Details = Connector.Details
 	
 	public var isEnabled = true
-	public var level = LogLevel.trace
+	public var level: LogLevel = .trace
 	public var details: Details? = nil
-	public var logHandlers: [AnyLogHandler<Message, Details>]
 	public var detailsEnabling: Details.Enabling = .fullEnabled
+	
+	public var connector: Connector
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		logHandlers: [AnyLogHandler<Message, Details>] = [],
+		connector: Connector,
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
-		
-		self.logHandlers = logHandlers
+		self.connector = connector
 	}
-	
-	func log (logRecord: LogRecord<String, StandardLogRecordDetails>) {
+
+	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
 		let metaInfo = logRecord.metaInfo.add(identificationInfo)
 		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		logHandlers.forEach{ $0.log(logRecord: logRecord) }
+		connector.log(logRecord)
 	}
 }
 
-extension MultiplexLogHandler {	
-	@discardableResult
-	func logHandlers <Handler: LogHandler> (_ logHandlers: Handler) -> Self where Handler.Message == Message, Handler.Details == Details {
-		self.logHandlers.append(logHandlers.eraseToAnyLoghandler())
-		return self
-	}
-	
+extension StandardHandler {
 	@discardableResult
 	public func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
 		self.detailsEnabling = detailsEnabling

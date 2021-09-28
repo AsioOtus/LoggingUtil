@@ -1,45 +1,41 @@
-#if canImport(Combine)
-
-import Combine
-
-@available(iOS 13, macOS 15.0, *)
-public class ReactiveLogHandler<Message: Codable, Details: LogRecordDetails> {	
+public class MultipleConnectorsHandler: ConfigurableHandler {
+	public typealias Message = String
+	public typealias Details = StandardLogRecordDetails
+	
 	public var isEnabled = true
-	public var level = LogLevel.trace
+	public var level: LogLevel = .trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
 	
+	public var connectors: [AnyConnector<Message, Details>]
+	
 	public let identificationInfo: IdentificationInfo
 	
-	public let stream = PassthroughSubject<LogRecord<Message, Details>, Never>()
-	
 	public init (
+		connectors: [AnyConnector<Message, Details>] = [],
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.connectors = connectors
 	}
-}
 
-@available(iOS 13, macOS 15.0, *)
-extension ReactiveLogHandler: ConfigurableLogHandler {
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
 		let metaInfo = logRecord.metaInfo.add(identificationInfo)
-		let details = (logRecord.details?.combined(with: self.details) ?? self.details)??.moderated(detailsEnabling)
+		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		stream.send(logRecord)
+		connectors.forEach{ $0.log(logRecord) }
 	}
 }
 
-@available(iOS 13, macOS 15.0, *)
-extension ReactiveLogHandler {	
+extension MultipleConnectorsHandler {	
 	@discardableResult
-	public func subscribe (_ subscription: (PassthroughSubject<LogRecord<Message, Details>, Never>) -> ()) -> Self {
-		subscription(stream)
+	func connector <Connector: LogConnector> (_ connector: Connector) -> Self where Connector.Message == Message, Connector.Details == Details {
+		self.connectors.append(connector.eraseToAnyConnector())
 		return self
 	}
 	
@@ -49,5 +45,3 @@ extension ReactiveLogHandler {
 		return self
 	}
 }
-
-#endif

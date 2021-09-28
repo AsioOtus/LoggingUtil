@@ -1,10 +1,10 @@
-public protocol ConfigurableLogHandler: LogHandler, AnyObject {
+public protocol ConfigurableHandler: Handler, AnyObject {
 	var isEnabled: Bool { get set }
 	var level: LogLevel { get set }
 	var details: Details? { get set }
 }
 
-extension ConfigurableLogHandler {
+extension ConfigurableHandler {
 	@discardableResult
 	public func isEnabled (_ isEnabled: Bool) -> Self {
 		self.isEnabled = isEnabled

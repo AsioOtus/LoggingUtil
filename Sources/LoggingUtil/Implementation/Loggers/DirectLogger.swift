@@ -32,7 +32,7 @@ extension DirectLogger: ConfigurableLogger {
 	}
 }
 
-extension DirectLogger: LogHandler {
+extension DirectLogger: Handler {
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		

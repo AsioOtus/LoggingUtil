@@ -1,25 +1,26 @@
-public class StandardLogHandler<Connector: LogConnector>: ConfigurableLogHandler {
-	public typealias Message = Connector.Message
-	public typealias Details = Connector.Details
+public class IntermediateHandler<H: Handler>: ConfigurableHandler {
+	public typealias Message = H.Message
+	public typealias Details = H.Details
 	
 	public var isEnabled = true
-	public var level = LogLevel.trace
+	public var level: LogLevel = .trace
 	public var details: Details? = nil
-	public var connector: Connector
 	public var detailsEnabling: Details.Enabling = .fullEnabled
+	
+	public var handler: H
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		connector: Connector,
+		handler: H,
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(typeId: String(describing: Self.self), file: file, line: line, alias: alias)
-		self.connector = connector
+		self.handler = handler
 	}
-
+	
 	public func log (logRecord: LogRecord<Message, Details>) {
 		guard isEnabled, logRecord.metaInfo.level >= level else { return }
 		
@@ -27,11 +28,11 @@ public class StandardLogHandler<Connector: LogConnector>: ConfigurableLogHandler
 		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let logRecord = logRecord.replace(metaInfo, details)
 		
-		connector.log(logRecord)
+		handler.log(logRecord: logRecord)
 	}
 }
 
-extension StandardLogHandler {
+extension IntermediateHandler {
 	@discardableResult
 	public func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
 		self.detailsEnabling = detailsEnabling
