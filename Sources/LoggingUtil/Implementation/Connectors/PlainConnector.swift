@@ -7,8 +7,8 @@ public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector
 		self.exporter = exporter
 	}
 	
-	public func log (_ logRecord: LogRecord<Converter.InputMessage, Converter.InputDetails>) {
-		let message = converter.convert(logRecord)
-		exporter.export(metaInfo: logRecord.metaInfo, message: message)
+	public func log (_ record: Record<Converter.InputMessage, Converter.InputDetails>) {
+		let message = converter.convert(record)
+		exporter.export(metaInfo: record.metaInfo, message: message)
 	}
 }

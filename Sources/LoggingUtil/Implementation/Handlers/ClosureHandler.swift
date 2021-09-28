@@ -1,15 +1,15 @@
-public class ClosureHandler <Message: Codable, Details: LogRecordDetails>: ConfigurableHandler {
+public class ClosureHandler <Message: Codable, Details: RecordDetails>: ConfigurableHandler {
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
 	
-	public var handling: (LogRecord<Message, Details>) -> ()
+	public var handling: (Record<Message, Details>) -> ()
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		handling: @escaping (LogRecord<Message, Details>) -> () = { _ in },
+		handling: @escaping (Record<Message, Details>) -> () = { _ in },
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
@@ -18,20 +18,20 @@ public class ClosureHandler <Message: Codable, Details: LogRecordDetails>: Confi
 		self.handling = handling
 	}
 
-	public func log (logRecord: LogRecord<Message, Details>) {
-		guard isEnabled, logRecord.metaInfo.level >= level else { return }
+	public func log (record: Record<Message, Details>) {
+		guard isEnabled, record.metaInfo.level >= level else { return }
 		
-		let metaInfo = logRecord.metaInfo.add(identificationInfo)
-		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
-		let logRecord = logRecord.replace(metaInfo, details)
+		let metaInfo = record.metaInfo.add(identificationInfo)
+		let details = (record.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
+		let record = record.replace(metaInfo, details)
 		
-		handling(logRecord)
+		handling(record)
 	}
 }
 
 extension ClosureHandler {
 	@discardableResult
-	func handling (_ handling: @escaping (LogRecord<Message, Details>) -> ()) -> Self {
+	func handling (_ handling: @escaping (Record<Message, Details>) -> ()) -> Self {
 		self.handling = handling
 		return self
 	}

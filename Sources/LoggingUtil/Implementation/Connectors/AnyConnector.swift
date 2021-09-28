@@ -1,12 +1,12 @@
-public struct AnyConnector <Message: Codable, Details: LogRecordDetails>: Connector {
-	public let logging: (LogRecord<Message, Details>) -> Void
+public struct AnyConnector <Message: Codable, Details: RecordDetails>: Connector {
+	public let logging: (Record<Message, Details>) -> Void
 	
 	public init <C: Connector> (_ connector: C) where C.Message == Message, C.Details == Details {
 		self.logging = connector.log
 	}
 	
-	public func log (_ logRecord: LogRecord<Message, Details>) {
-		logging(logRecord)
+	public func log (_ record: Record<Message, Details>) {
+		logging(record)
 	}
 }
 

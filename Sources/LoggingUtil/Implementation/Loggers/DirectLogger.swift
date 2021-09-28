@@ -26,20 +26,20 @@ public struct DirectLogger <C: Connector> {
 extension DirectLogger: ConfigurableLogger {
 	public func log (level: Level, message: Message, details: Details? = nil) {
 		let metaInfo = MetaInfo(timestamp: Date().timeIntervalSince1970, level: level, stack: [])
-		let logRecord = LogRecord(metaInfo: metaInfo, message: message, details: details)
+		let record = Record(metaInfo: metaInfo, message: message, details: details)
 		
-		log(logRecord: logRecord)
+		log(record: record)
 	}
 }
 
 extension DirectLogger: Handler {
-	public func log (logRecord: LogRecord<Message, Details>) {
-		guard isEnabled, logRecord.metaInfo.level >= level else { return }
+	public func log (record: Record<Message, Details>) {
+		guard isEnabled, record.metaInfo.level >= level else { return }
 		
-		let metaInfo = logRecord.metaInfo.add(identificationInfo)
-		let details = logRecord.details?.combined(with: self.details) ?? self.details
-		let logRecord = logRecord.replace(metaInfo, details)
+		let metaInfo = record.metaInfo.add(identificationInfo)
+		let details = record.details?.combined(with: self.details) ?? self.details
+		let record = record.replace(metaInfo, details)
 		
-		connector.log(logRecord)
+		connector.log(record)
 	}
 }

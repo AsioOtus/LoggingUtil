@@ -1,38 +1,38 @@
 public struct SingleLineConverter: PlainConverter {
 	public var metaInfoEnabling = MetaInfo.Enabling.enabled()
-	public var detailsEnabling = StandardLogRecordDetails.Enabling.enabled()
+	public var detailsEnabling = StandardRecordDetails.Enabling.enabled()
 	public var levelPadding = true
 	public var componentsSeparator = " | "
 	
 	public init () { }
 	
-	public func convert (_ logRecord: LogRecord<String, StandardLogRecordDetails>) -> String {
-		let logRecordDetails = logRecord.details?.moderated(detailsEnabling)
+	public func convert (_ record: Record<String, StandardRecordDetails>) -> String {
+		let recordDetails = record.details?.moderated(detailsEnabling)
 		
 		var messageComponents = [String]()
 		
 		if case let .enabled(_, level: isLevelEnabled, _) = metaInfoEnabling, isLevelEnabled {
 			messageComponents.append(levelPadding
-										? logRecord.metaInfo.level.logDescription.padding(toLength: Level.critical.logDescription.count, withPad: " ", startingAt: 0)
-										: logRecord.metaInfo.level.logDescription
+										? record.metaInfo.level.logDescription.padding(toLength: Level.critical.logDescription.count, withPad: " ", startingAt: 0)
+										: record.metaInfo.level.logDescription
 			)
 		}
 		
-		if let tags = logRecordDetails?.tags, !tags.isEmpty {
+		if let tags = recordDetails?.tags, !tags.isEmpty {
 			messageComponents.append("[\(tags.sorted(by: <).joined(separator: ", "))]")
 		}
 		
-		if let source = logRecordDetails?.source, !source.isEmpty {
+		if let source = recordDetails?.source, !source.isEmpty {
 			messageComponents.append(source.combine(with: "."))
 		}
 		
-		messageComponents.append(logRecord.message)
+		messageComponents.append(record.message)
 		
-		if let keyValue = logRecordDetails?.keyValue, !keyValue.isEmpty {
+		if let keyValue = recordDetails?.keyValue, !keyValue.isEmpty {
 			messageComponents.append("\(keyValue)")
 		}
 		
-		if let comment = logRecordDetails?.comment, !comment.isEmpty {
+		if let comment = recordDetails?.comment, !comment.isEmpty {
 			messageComponents.append(comment)
 		}
 		
@@ -50,7 +50,7 @@ extension SingleLineConverter {
 	}
 	
 	@discardableResult
-	public func detailsEnabling (_ detailsEnabling: StandardLogRecordDetails.Enabling) -> Self {
+	public func detailsEnabling (_ detailsEnabling: StandardRecordDetails.Enabling) -> Self {
 		var selfCopy = self
 		selfCopy.detailsEnabling = detailsEnabling
 		return selfCopy

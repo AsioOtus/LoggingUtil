@@ -1,11 +1,11 @@
-public struct ThrowableClosureConverter <InputMessage: Codable, InputDetails: LogRecordDetails, OutputMessage>: ThrowableConverter {
-	let conversion: (LogRecord<InputMessage, InputDetails>) throws -> OutputMessage
+public struct ThrowableClosureConverter <InputMessage: Codable, InputDetails: RecordDetails, OutputMessage>: ThrowableConverter {
+	let conversion: (Record<InputMessage, InputDetails>) throws -> OutputMessage
 	
-	public init (conversion: @escaping (LogRecord<InputMessage, InputDetails>) throws -> OutputMessage) {
+	public init (conversion: @escaping (Record<InputMessage, InputDetails>) throws -> OutputMessage) {
 		self.conversion = conversion
 	}
 	
-	public func convert (_ logRecord: LogRecord<InputMessage, InputDetails>) throws -> OutputMessage {
-		try conversion(logRecord)
+	public func convert (_ record: Record<InputMessage, InputDetails>) throws -> OutputMessage {
+		try conversion(record)
 	}
 }

@@ -21,14 +21,14 @@ public class IntermediateHandler<H: Handler>: ConfigurableHandler {
 		self.handler = handler
 	}
 	
-	public func log (logRecord: LogRecord<Message, Details>) {
-		guard isEnabled, logRecord.metaInfo.level >= level else { return }
+	public func log (record: Record<Message, Details>) {
+		guard isEnabled, record.metaInfo.level >= level else { return }
 		
-		let metaInfo = logRecord.metaInfo.add(identificationInfo)
-		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
-		let logRecord = logRecord.replace(metaInfo, details)
+		let metaInfo = record.metaInfo.add(identificationInfo)
+		let details = (record.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
+		let record = record.replace(metaInfo, details)
 		
-		handler.log(logRecord: logRecord)
+		handler.log(record: record)
 	}
 }
 

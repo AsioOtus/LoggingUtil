@@ -1,6 +1,6 @@
 public class MultipleConnectorsHandler: ConfigurableHandler {
 	public typealias Message = String
-	public typealias Details = StandardLogRecordDetails
+	public typealias Details = StandardRecordDetails
 	
 	public var isEnabled = true
 	public var level: Level = .trace
@@ -21,14 +21,14 @@ public class MultipleConnectorsHandler: ConfigurableHandler {
 		self.connectors = connectors
 	}
 
-	public func log (logRecord: LogRecord<Message, Details>) {
-		guard isEnabled, logRecord.metaInfo.level >= level else { return }
+	public func log (record: Record<Message, Details>) {
+		guard isEnabled, record.metaInfo.level >= level else { return }
 		
-		let metaInfo = logRecord.metaInfo.add(identificationInfo)
-		let details = (logRecord.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
-		let logRecord = logRecord.replace(metaInfo, details)
+		let metaInfo = record.metaInfo.add(identificationInfo)
+		let details = (record.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
+		let record = record.replace(metaInfo, details)
 		
-		connectors.forEach{ $0.log(logRecord) }
+		connectors.forEach{ $0.log(record) }
 	}
 }
 

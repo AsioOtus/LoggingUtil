@@ -3,13 +3,13 @@
 import Combine
 
 @available(iOS 13, macOS 15.0, *)
-public class ReactiveHandler <Message: Codable, Details: LogRecordDetails> {	
+public class ReactiveHandler <Message: Codable, Details: RecordDetails> {	
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
 	
-	public let stream = PassthroughSubject<LogRecord<Message, Details>, Never>()
+	public let stream = PassthroughSubject<Record<Message, Details>, Never>()
 	
 	public let identificationInfo: IdentificationInfo
 	
@@ -24,21 +24,21 @@ public class ReactiveHandler <Message: Codable, Details: LogRecordDetails> {
 
 @available(iOS 13, macOS 15.0, *)
 extension ReactiveHandler: ConfigurableHandler {
-	public func log (logRecord: LogRecord<Message, Details>) {
-		guard isEnabled, logRecord.metaInfo.level >= level else { return }
+	public func log (record: Record<Message, Details>) {
+		guard isEnabled, record.metaInfo.level >= level else { return }
 		
-		let metaInfo = logRecord.metaInfo.add(identificationInfo)
-		let details = (logRecord.details?.combined(with: self.details) ?? self.details)??.moderated(detailsEnabling)
-		let logRecord = logRecord.replace(metaInfo, details)
+		let metaInfo = record.metaInfo.add(identificationInfo)
+		let details = (record.details?.combined(with: self.details) ?? self.details)??.moderated(detailsEnabling)
+		let record = record.replace(metaInfo, details)
 		
-		stream.send(logRecord)
+		stream.send(record)
 	}
 }
 
 @available(iOS 13, macOS 15.0, *)
 extension ReactiveHandler {	
 	@discardableResult
-	public func subscribe (_ subscription: (PassthroughSubject<LogRecord<Message, Details>, Never>) -> ()) -> Self {
+	public func subscribe (_ subscription: (PassthroughSubject<Record<Message, Details>, Never>) -> ()) -> Self {
 		subscription(stream)
 		return self
 	}

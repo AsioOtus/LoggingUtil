@@ -1,5 +1,5 @@
-public extension CompactLogRecordDetails {
-	enum Enabling: LogRecordDetailsEnabling {
+public extension CompactRecordDetails {
+	enum Enabling: RecordDetailsEnabling {
 		case disabled
 		case enabled(source: Bool = true, tags: Bool = true)
 		
@@ -8,7 +8,7 @@ public extension CompactLogRecordDetails {
 	}
 }
 
-public struct CompactLogRecordDetails: LogRecordDetails {
+public struct CompactRecordDetails: RecordDetails {
 	public let source: [String]?
 	public let tags: Set<String>?
 	

@@ -1,5 +1,5 @@
-public struct AnyHandler <Message: Codable, Details: LogRecordDetails>: Handler {
-	public let logging: (LogRecord<Message, Details>) -> Void
+public struct AnyHandler <Message: Codable, Details: RecordDetails>: Handler {
+	public let logging: (Record<Message, Details>) -> Void
 	
 	public let identificationInfo: IdentificationInfo
 	
@@ -8,8 +8,8 @@ public struct AnyHandler <Message: Codable, Details: LogRecordDetails>: Handler 
 		self.logging = handler.log
 	}
 	
-	public func log (logRecord: LogRecord<Message, Details>) {
-		logging(logRecord)
+	public func log (record: Record<Message, Details>) {
+		logging(record)
 	}
 }
 

@@ -1,8 +1,8 @@
 public protocol Handler {
 	associatedtype Message: Codable
-	associatedtype Details: LogRecordDetails
+	associatedtype Details: RecordDetails
 	
 	var identificationInfo: IdentificationInfo { get }
 	
-	func log (logRecord: LogRecord<Message, Details>)
+	func log (record: Record<Message, Details>)
 }

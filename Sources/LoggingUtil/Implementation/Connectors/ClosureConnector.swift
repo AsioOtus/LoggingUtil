@@ -1,11 +1,11 @@
-public struct ClosureConnector <Message: Codable, Details: LogRecordDetails>: Connector {
-	let connection: (LogRecord<Message, Details>) -> ()
+public struct ClosureConnector <Message: Codable, Details: RecordDetails>: Connector {
+	let connection: (Record<Message, Details>) -> ()
 	
-	public init (_ connection: @escaping (LogRecord<Message, Details>) -> ()) {
+	public init (_ connection: @escaping (Record<Message, Details>) -> ()) {
 		self.connection = connection
 	}
 	
-	public func log (_ logRecord: LogRecord<Message, Details>) {
-		connection(logRecord)
+	public func log (_ record: Record<Message, Details>) {
+		connection(record)
 	}
 }

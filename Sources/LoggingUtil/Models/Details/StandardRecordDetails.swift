@@ -1,5 +1,5 @@
-public extension StandardLogRecordDetails {
-	enum Enabling: LogRecordDetailsEnabling {
+public extension StandardRecordDetails {
+	enum Enabling: RecordDetailsEnabling {
 		case disable
 		case enabled(
 			source: Bool = true,
@@ -16,7 +16,7 @@ public extension StandardLogRecordDetails {
 
 
 
-public struct StandardLogRecordDetails: LogRecordDetails {
+public struct StandardRecordDetails: RecordDetails {
 	public let source: [String]?
 	public let tags: Set<String>?
 	public let keyValue: [String: String]?
@@ -48,7 +48,7 @@ public struct StandardLogRecordDetails: LogRecordDetails {
 			? self.comment
 			: nil
 		
-		let logRecord = Self(
+		let record = Self(
 			source: (another?.source ?? []) + (source ?? []),
 			tags: (another?.tags ?? []).union(tags ?? []),
 			keyValue: (another?.keyValue ?? [:]).merging(keyValue ?? [:], uniquingKeysWith: { _, detail in detail }),
@@ -58,7 +58,7 @@ public struct StandardLogRecordDetails: LogRecordDetails {
 			line: line
 		)
 		
-		return logRecord
+		return record
 	}
 	
 	public func moderated (_ enabling: Enabling) -> Self? {

@@ -7,7 +7,7 @@ public struct StringToJSONDataConverter: ThrowableConverter {
 		self.jsonEncoder = jsonEncoder
 	}
 	
-	public func convert (_ logRecord: LogRecord<String, StandardLogRecordDetails>) throws -> Data {
-		try jsonEncoder.encode(logRecord)
+	public func convert (_ record: Record<String, StandardRecordDetails>) throws -> Data {
+		try jsonEncoder.encode(record)
 	}
 }

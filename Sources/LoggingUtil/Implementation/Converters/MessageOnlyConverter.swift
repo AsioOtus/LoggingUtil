@@ -1,5 +1,5 @@
-public struct MessageOnlyConverter <Message: Codable, Details: LogRecordDetails>: PlainConverter {
+public struct MessageOnlyConverter <Message: Codable, Details: RecordDetails>: PlainConverter {
 	public init () { }
 	
-	public func convert (_ logRecord: LogRecord<Message, Details>) -> Message { logRecord.message }
+	public func convert (_ record: Record<Message, Details>) -> Message { record.message }
 }

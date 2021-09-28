@@ -7,8 +7,8 @@ public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Expor
 		self.exporter = exporter
 	}
 	
-	public func log (_ logRecord: LogRecord<Converter.InputMessage, Converter.InputDetails>) {
-		guard let message = try? converter.convert(logRecord) else { return }
-		exporter.export(metaInfo: logRecord.metaInfo, message: message)
+	public func log (_ record: Record<Converter.InputMessage, Converter.InputDetails>) {
+		guard let message = try? converter.convert(record) else { return }
+		exporter.export(metaInfo: record.metaInfo, message: message)
 	}
 }

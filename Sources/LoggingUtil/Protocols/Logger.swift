@@ -1,6 +1,6 @@
 public protocol Logger {
 	associatedtype Message: Codable
-	associatedtype Details: LogRecordDetails
+	associatedtype Details: RecordDetails
 	
 	var identificationInfo: IdentificationInfo { get }
 	

@@ -1,6 +1,6 @@
 public protocol Connector {
 	associatedtype Message: Codable
-	associatedtype Details: LogRecordDetails
+	associatedtype Details: RecordDetails
 	
-	func log (_ logRecord: LogRecord<Message, Details>)
+	func log (_ record: Record<Message, Details>)
 }

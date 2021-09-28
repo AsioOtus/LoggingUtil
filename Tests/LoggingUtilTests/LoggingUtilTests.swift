@@ -16,18 +16,18 @@ final class LoggingUtilTests: XCTestCase {
 	}
 	
 	func testClosureConnector () {
-		let handler = ClosureHandler<String, StandardLogRecordDetails> { logRecord in
+		let handler = ClosureHandler<String, StandardRecordDetails> { record in
 			PlainConnector(
 				converter: SingleLineConverter(),
 				exporter: PrintExporter()
 			)
-			.log(logRecord)
+			.log(record)
 			
 			ErrorSuppressingConnector(
 				converter: StringToJSONDataConverter(),
 				exporter: StandardRemoteExporter(url: URL(string: "qweqwe")!)
 			)
-			.log(logRecord)
+			.log(record)
 		}
 		
 		let logger = StandardLogger(handler: handler)
