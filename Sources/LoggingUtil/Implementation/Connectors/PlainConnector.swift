@@ -1,4 +1,4 @@
-public struct PlainConnector <Converter: PlainLogConverter, Exporter: LogExporter>: Connector where Converter.OutputMessage == Exporter.Message {
+public struct PlainConnector <Converter: PlainConverter, Exporter: LogExporter>: Connector where Converter.OutputMessage == Exporter.Message {
 	public let converter: Converter
 	public let exporter: Exporter
 	

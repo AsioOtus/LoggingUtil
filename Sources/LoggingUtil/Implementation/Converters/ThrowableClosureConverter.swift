@@ -1,4 +1,4 @@
-public struct ThrowableClosureConverter <InputMessage: Codable, InputDetails: LogRecordDetails, OutputMessage>: ThrowableLogConverter {
+public struct ThrowableClosureConverter <InputMessage: Codable, InputDetails: LogRecordDetails, OutputMessage>: ThrowableConverter {
 	let conversion: (LogRecord<InputMessage, InputDetails>) throws -> OutputMessage
 	
 	public init (conversion: @escaping (LogRecord<InputMessage, InputDetails>) throws -> OutputMessage) {

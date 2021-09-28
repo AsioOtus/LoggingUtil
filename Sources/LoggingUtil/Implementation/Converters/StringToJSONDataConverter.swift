@@ -1,6 +1,6 @@
 import Foundation
 
-public struct StringToJSONDataConverter: ThrowableLogConverter {	
+public struct StringToJSONDataConverter: ThrowableConverter {	
 	public var jsonEncoder: JSONEncoder
 	
 	public init (jsonEncoder: JSONEncoder = JSONEncoder()) {

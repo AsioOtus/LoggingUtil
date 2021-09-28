@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MultilineConverter: PlainLogConverter {
+public struct MultilineConverter: PlainConverter {
 	public static var defaultDateFormatter: DateFormatter {
 		let formatter = DateFormatter()
 		formatter.dateStyle = .short
