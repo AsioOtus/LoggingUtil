@@ -4,7 +4,7 @@ public extension MetaInfo {
 		case enabled(
 			timestamp: Bool = false,
 			level: Bool = true,
-			labels: Bool = false
+			stack: Bool = false
 		)
 	}
 }
