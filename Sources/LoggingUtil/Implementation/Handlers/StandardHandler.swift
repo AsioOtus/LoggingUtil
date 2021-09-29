@@ -12,7 +12,7 @@ public class StandardHandler <C: Connector>: ConfigurableHandler {
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		connector: C,
+		_ connector: C,
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line

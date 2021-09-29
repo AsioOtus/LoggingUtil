@@ -12,7 +12,7 @@ public class IntermediateHandler <H: Handler>: ConfigurableHandler {
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		handler: H,
+		_ handler: H,
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line

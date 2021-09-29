@@ -4,20 +4,20 @@ public extension StandardRecordDetails {
 		case enabled(
 			source: Bool = true,
 			tags: Bool = true,
-			keyValue: Bool = true,
-			comment: Bool = true,
-			codeInfo: Bool = true
+			keyValue: Bool = false,
+			comment: Bool = false,
+			codeInfo: Bool = false
 		 )
 		
-		public static let defaultEnabling = enabled(
+		public static let defaultEnabling = enabled()
+		
+		public static let fullEnabled = enabled(
 			source: true,
 			tags: true,
-			keyValue: false,
-			comment: false,
-			codeInfo: false
+			keyValue: true,
+			comment: true,
+			codeInfo: true
 		)
-		
-		public static let fullEnabled = enabled()
 	}
 }
 

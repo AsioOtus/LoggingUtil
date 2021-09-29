@@ -12,7 +12,7 @@ public struct DirectLogger <C: Connector> {
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		connector: C,
+		_ connector: C,
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line

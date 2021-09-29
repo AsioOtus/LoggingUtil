@@ -1,7 +1,10 @@
 public struct AnyExporter <Message>: Exporter {
 	public let exporting: (MetaInfo, Message) -> Void
 	
+	public let identificationInfo: IdentificationInfo
+	
 	public init <E: Exporter> (_ exporter: E) where E.Message == Message {
+		self.identificationInfo = exporter.identificationInfo
 		self.exporting = exporter.export
 	}
 	

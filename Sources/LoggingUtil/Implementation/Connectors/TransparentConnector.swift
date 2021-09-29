@@ -1,30 +1,25 @@
-public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector where Converter.OutputMessage == E.Message {
-	public let converter: Converter
+public struct TransparentConnector <Message: Codable, Details: RecordDetails, E: Exporter>: Connector where E.Message == Record<Message, Details> {
 	public let exporter: E
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		converter: Converter,
-		exporter: E,
+		_ exporter: E,
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
 		
-		self.converter = converter
 		self.exporter = exporter
 	}
 	
-	public func log (_ record: Record<Converter.InputMessage, Converter.InputDetails>) {
+	public func log (_ record: Record<Message, Details>) {
 		let metaInfo = record.metaInfo
 			.add(identificationInfo)
-			.add(converter.identificationInfo)
 			.add(exporter.identificationInfo)
 		let record = record.replace(metaInfo)
 		
-		let message = converter.convert(record)
-		exporter.export(metaInfo: record.metaInfo, message: message)
+		exporter.export(metaInfo: record.metaInfo, message: record)
 	}
 }

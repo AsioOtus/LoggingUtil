@@ -1,21 +1,21 @@
-public class ClosureHandler <Message: Codable, Details: RecordDetails>: ConfigurableHandler {
+public class MultiplexCustomHandler <Message: Codable, Details: RecordDetails>: ConfigurableHandler {
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
 	public var detailsEnabling: Details.Enabling = .fullEnabled
 	
-	public var handling: (Record<Message, Details>) -> ()
+	public var handlings: [(Record<Message, Details>) -> ()]
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		handling: @escaping (Record<Message, Details>) -> () = { _ in },
+		_ handlings: [(Record<Message, Details>) -> ()] = [],
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
-		self.handling = handling
+		self.handlings = handlings
 	}
 
 	public func log (record: Record<Message, Details>) {
@@ -25,14 +25,14 @@ public class ClosureHandler <Message: Codable, Details: RecordDetails>: Configur
 		let details = (record.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let record = record.replace(metaInfo, details)
 		
-		handling(record)
+		handlings.forEach{ $0(record) }
 	}
 }
 
-public extension ClosureHandler {
+public extension MultiplexCustomHandler {
 	@discardableResult
 	func handling (_ handling: @escaping (Record<Message, Details>) -> ()) -> Self {
-		self.handling = handling
+		self.handlings.append(handling)
 		return self
 	}
 	

@@ -1,15 +1,37 @@
+import Foundation
+
 public struct SingleLineConverter: PlainConverter {
+	public static var defaultDateFormatter: DateFormatter {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
+		return formatter
+	}
+	
 	public var metaInfoEnabling = MetaInfo.Enabling.enabled()
 	public var detailsEnabling = StandardRecordDetails.Enabling.defaultEnabling
 	public var levelPadding = true
 	public var componentsSeparator = " | "
+	public var dateFormatter: DateFormatter = defaultDateFormatter
 	
-	public init () { }
+	public let identificationInfo: IdentificationInfo
+	
+	public init (
+		alias: String? = nil,
+		file: String = #file,
+		line: Int = #line
+	) {
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+	}
 	
 	public func convert (_ record: Record<String, StandardRecordDetails>) -> String {
 		let recordDetails = record.details?.moderated(detailsEnabling)
 		
 		var messageComponents = [String]()
+		
+		if case let .enabled(isTimestampEnabled, _, _) = metaInfoEnabling, isTimestampEnabled {
+			let formattedDate = dateFormatter.string(from: Date(timeIntervalSince1970: record.metaInfo.timestamp))
+			messageComponents.append(formattedDate)
+		}
 		
 		if case let .enabled(_, level: isLevelEnabled, _) = metaInfoEnabling, isLevelEnabled {
 			messageComponents.append(levelPadding
@@ -18,12 +40,12 @@ public struct SingleLineConverter: PlainConverter {
 			)
 		}
 		
-		if let tags = recordDetails?.tags, !tags.isEmpty {
-			messageComponents.append("[\(tags.sorted(by: <).joined(separator: ", "))]")
-		}
-		
 		if let source = recordDetails?.source, !source.isEmpty {
 			messageComponents.append(source.combine(with: "."))
+		}
+
+		if let tags = recordDetails?.tags, !tags.isEmpty {
+			messageComponents.append("[\(tags.sorted(by: <).joined(separator: ", "))]")
 		}
 		
 		messageComponents.append(record.message)
@@ -46,7 +68,7 @@ extension SingleLineConverter {
 	public func metaInfoEnabling (_ metaInfoEnabling: MetaInfo.Enabling) -> Self {
 		var selfCopy = self
 		selfCopy.metaInfoEnabling = metaInfoEnabling
-		return self
+		return selfCopy
 	}
 	
 	@discardableResult

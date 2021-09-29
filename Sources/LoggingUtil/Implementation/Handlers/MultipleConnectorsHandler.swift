@@ -9,7 +9,7 @@ public class MultipleConnectorsHandler <Message: Codable, Details: RecordDetails
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		connectors: [AnyConnector<Message, Details>] = [],
+		_ connectors: [AnyConnector<Message, Details>] = [],
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
@@ -33,6 +33,12 @@ public extension MultipleConnectorsHandler {
 	@discardableResult
 	func connector <C: Connector> (_ connector: C) -> Self where C.Message == Message, C.Details == Details {
 		self.connectors.append(connector.eraseToAnyConnector())
+		return self
+	}
+	
+	@discardableResult
+	func connector (_ connector: AnyConnector<Message, Details>) -> Self {
+		self.connectors.append(connector)
 		return self
 	}
 	

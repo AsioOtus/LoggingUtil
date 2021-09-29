@@ -5,18 +5,18 @@ import Combine
 final class LoggingUtilTests: XCTestCase {
 	func testBasic () {
 		let handler = StandardHandler(
-			connector: PlainConnector(
+			PlainConnector(
 				converter: SingleLineConverter(),
 				exporter: PrintExporter()
 			)
 		)
 		
-		let logger = StandardLogger(handler: handler)
+		let logger = StandardLogger(handler)
 		logger.trace("Test")
 	}
 	
 	func testClosureConnector () {
-		let handler = ClosureHandler<String, StandardRecordDetails> { record in
+		let handler = CustomHandler<String, StandardRecordDetails> { record in
 			PlainConnector(
 				converter: SingleLineConverter(),
 				exporter: PrintExporter()
@@ -30,7 +30,7 @@ final class LoggingUtilTests: XCTestCase {
 			.log(record)
 		}
 		
-		let logger = StandardLogger(handler: handler)
+		let logger = StandardLogger(handler)
 		logger.trace("Test")
 	}
 	
@@ -44,7 +44,7 @@ final class LoggingUtilTests: XCTestCase {
 				)
 			)
 		
-		let logger = StandardLogger(handler: handler)
+		let logger = StandardLogger(handler)
 		logger.trace("Test")
 	}
 	
@@ -59,7 +59,7 @@ final class LoggingUtilTests: XCTestCase {
 				)
 			)
 		
-		let logger = StandardLogger(handler: handler)
+		let logger = StandardLogger(handler)
 		logger.trace("Test", details: .init(tags: ["qwe"]))
 	}
 }

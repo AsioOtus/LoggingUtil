@@ -1,12 +1,87 @@
 public struct AnyConnector <Message: Codable, Details: RecordDetails>: Connector {
 	public let logging: (Record<Message, Details>) -> Void
 	
+	public let identificationInfo: IdentificationInfo
+	
 	public init <C: Connector> (_ connector: C) where C.Message == Message, C.Details == Details {
+		self.identificationInfo = connector.identificationInfo
 		self.logging = connector.log
 	}
 	
 	public func log (_ record: Record<Message, Details>) {
 		logging(record)
+	}
+}
+
+public extension AnyConnector {
+	static func plain <Converter: PlainConverter, E: Exporter> (
+		_ converter: Converter,
+		_ exporter: E,
+		alias: String? = nil,
+		file: String = #file,
+		line: Int = #line
+	) -> AnyConnector<Converter.InputMessage, Converter.InputDetails>
+	where Converter.OutputMessage == E.Message
+	{
+		PlainConnector(
+			converter: converter,
+			exporter: exporter,
+			alias: alias,
+			file: file,
+			line: line
+		)
+		.eraseToAnyConnector()
+	}
+	
+	static func custom (
+		_ connection: @escaping (Record<Message, Details>) -> Void,
+		alias: String? = nil,
+		file: String = #file,
+		line: Int = #line
+	) -> AnyConnector<Message, Details> {
+		CustomConnector(
+			alias: alias,
+			file: file,
+			line: line,
+			connection
+		)
+		.eraseToAnyConnector()
+	}
+	
+	static func supressError <Converter: ThrowableConverter, E: Exporter> (
+		_ converter: Converter,
+		_ exporter: E,
+		alias: String? = nil,
+		file: String = #file,
+		line: Int = #line
+	) -> AnyConnector<Converter.InputMessage, Converter.InputDetails>
+	where Converter.OutputMessage == E.Message
+	{
+		ErrorSuppressingConnector(
+			converter: converter,
+			exporter: exporter,
+			alias: alias,
+			file: file,
+			line: line
+		)
+		.eraseToAnyConnector()
+	}
+	
+	static func transparent <Message: Codable, Details: RecordDetails, E: Exporter> (
+		_ exporter: E,
+		alias: String? = nil,
+		file: String = #file,
+		line: Int = #line
+	) -> AnyConnector<Message, Details>
+	where E.Message == Record<Message, Details>
+	{
+		TransparentConnector(
+			exporter,
+			alias: alias,
+			file: file,
+			line: line
+		)
+		.eraseToAnyConnector()
 	}
 }
 

@@ -6,7 +6,15 @@ public class StandardRemoteExporter: ConfigurableExporter {
 	public var url: URL
 	public var urlSession = URLSession.shared
 	
-	public init (url: URL) {
+	public let identificationInfo: IdentificationInfo
+	
+	public init (
+		url: URL,
+		alias: String? = nil,
+		file: String = #file,
+		line: Int = #line
+	) {
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
 		self.url = url
 	}
 	

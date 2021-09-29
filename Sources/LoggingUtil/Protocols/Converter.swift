@@ -1,4 +1,6 @@
-public protocol Converter { }
+public protocol Converter {
+	var identificationInfo: IdentificationInfo { get }
+}
 
 public protocol PlainConverter: Converter {
 	associatedtype InputMessage: Codable

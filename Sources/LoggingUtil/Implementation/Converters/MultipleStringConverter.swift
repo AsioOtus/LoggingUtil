@@ -3,7 +3,7 @@ import Foundation
 public struct MultilineConverter: PlainConverter {
 	public static var defaultDateFormatter: DateFormatter {
 		let formatter = DateFormatter()
-		formatter.dateStyle = .short
+		formatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
 		return formatter
 	}
 	
@@ -13,7 +13,15 @@ public struct MultilineConverter: PlainConverter {
 	public var componentsSeparator: String = " | "
 	public var dateFormatter: DateFormatter = defaultDateFormatter
 	
-	public init () { }
+	public let identificationInfo: IdentificationInfo
+	
+	public init (
+		alias: String? = nil,
+		file: String = #file,
+		line: Int = #line
+	) {
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+	}
 	
 	public func convert (_ record: Record<String, StandardRecordDetails>) -> String {
 		let recordDetails = record.details?.moderated(detailsEnabling)
@@ -32,12 +40,12 @@ public struct MultilineConverter: PlainConverter {
 			)
 		}
 		
-		if let tags = recordDetails?.tags, !tags.isEmpty {
-			messageHeaderComponents.append("[\(tags.sorted(by: <).joined(separator: ", "))]")
-		}
-		
 		if let source = recordDetails?.source, !source.isEmpty {
 			messageHeaderComponents.append(source.combine(with: "."))
+		}
+
+		if let tags = recordDetails?.tags, !tags.isEmpty {
+			messageHeaderComponents.append("[\(tags.sorted(by: <).joined(separator: ", "))]")
 		}
 		
 		let messageHeader = messageHeaderComponents.combine(with: componentsSeparator)
@@ -55,9 +63,7 @@ public struct MultilineConverter: PlainConverter {
 			messageComponents.append(comment)
 		}
 		
-		messageComponents.append("\n")
-		
-		let finalMessage = messageComponents.combine(with: "\n")
+		let finalMessage = messageComponents.combine(with: "\n") + "\n"
 		return finalMessage
 	}
 }

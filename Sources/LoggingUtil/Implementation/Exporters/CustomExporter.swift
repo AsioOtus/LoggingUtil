@@ -1,19 +1,23 @@
-public class PrintExporter: ConfigurableExporter {
+public class CustomExporter <Message: Codable>: ConfigurableExporter {
 	public var isEnabled = true
 	public var level: Level = .trace
+	
+	let exporting: (MetaInfo, Message) -> Void
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
 		alias: String? = nil,
 		file: String = #file,
-		line: Int = #line
+		line: Int = #line,
+		_ exporting: @escaping (MetaInfo, Message) -> Void
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.exporting = exporting
 	}
 	
-	public func export (metaInfo: MetaInfo, message: String) {
+	public func export (metaInfo: MetaInfo, message: Message) {
 		guard isEnabled, metaInfo.level >= level else { return }
-		print(message)
+		exporting(metaInfo, message)
 	}
 }

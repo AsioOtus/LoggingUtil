@@ -9,7 +9,7 @@ public class MultiplexHandler <Message: Codable, Details: RecordDetails>: Config
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		handlers: [AnyHandler<Message, Details>] = [],
+		_ handlers: [AnyHandler<Message, Details>] = [],
 		alias: String? = nil,
 		file: String = #file,
 		line: Int = #line
