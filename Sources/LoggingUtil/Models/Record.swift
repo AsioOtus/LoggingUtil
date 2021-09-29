@@ -3,8 +3,6 @@ public struct Record <Message: Codable, Details: RecordDetails>: Codable {
 	public let message: Message
 	public let details: Details?
 	
-	public init () { }
-	
 	public func replace (_ metaInfo: MetaInfo) -> Self {
 		.init(metaInfo: metaInfo, message: message, details: details)
 	}
