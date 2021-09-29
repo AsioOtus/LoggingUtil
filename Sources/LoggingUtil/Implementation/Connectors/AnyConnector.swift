@@ -17,6 +17,7 @@ public extension AnyConnector {
 	static func plain <Converter: PlainConverter, E: Exporter> (
 		_ converter: Converter,
 		_ exporter: E,
+		condition: @escaping (Record<Converter.InputMessage, Converter.InputDetails>) -> Bool = { _ in true },
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
@@ -26,6 +27,7 @@ public extension AnyConnector {
 		PlainConnector(
 			converter: converter,
 			exporter: exporter,
+			condition: condition,
 			label: label,
 			file: file,
 			line: line
