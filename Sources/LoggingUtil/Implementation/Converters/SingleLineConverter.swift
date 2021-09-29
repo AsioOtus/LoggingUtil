@@ -28,12 +28,12 @@ public struct SingleLineConverter: PlainConverter {
 		
 		var messageComponents = [String]()
 		
-		if case let .enabled(isTimestampEnabled, _, _, _, _, _) = metaInfoEnabling, isTimestampEnabled {
+		if case let .enabled(isTimestampEnabled, _, _, _, _, _, _) = metaInfoEnabling, isTimestampEnabled {
 			let formattedDate = dateFormatter.string(from: Date(timeIntervalSince1970: record.metaInfo.timestamp))
 			messageComponents.append(formattedDate)
 		}
 		
-		if case let .enabled(_, level: isLevelEnabled, _, _, _, _) = metaInfoEnabling, isLevelEnabled {
+		if case let .enabled(_, level: isLevelEnabled, _, _, _, _, _) = metaInfoEnabling, isLevelEnabled {
 			messageComponents.append(levelPadding
 										? record.metaInfo.level.logDescription.padding(toLength: Level.critical.logDescription.count, withPad: " ", startingAt: 0)
 										: record.metaInfo.level.logDescription
