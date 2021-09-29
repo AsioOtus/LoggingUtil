@@ -14,8 +14,8 @@ public struct CustomConnector <Message: Codable, Details: RecordDetails>: Connec
 	}
 	
 	public func log (_ record: Record<Message, Details>) {
-		let metaInfo = record.metaInfo.add(identificationInfo)
-		let record = record.replace(metaInfo)
+		let record = record
+			.add(identificationInfo)
 		
 		connection(record)
 	}

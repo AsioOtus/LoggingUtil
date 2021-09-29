@@ -42,14 +42,14 @@ public struct StandardRecordDetails: RecordDetails {
 			? self.comment
 			: nil
 		
-		let record = Self(
+		let details = Self(
 			source: (another?.source ?? []) + (source ?? []),
 			tags: (another?.tags ?? []).union(tags ?? []),
 			keyValue: (another?.keyValue ?? [:]).merging(keyValue ?? [:], uniquingKeysWith: { _, detail in detail }),
 			comment: comment ?? another?.comment
 		)
 		
-		return record
+		return details
 	}
 	
 	public func moderated (_ enabling: Enabling) -> Self? {

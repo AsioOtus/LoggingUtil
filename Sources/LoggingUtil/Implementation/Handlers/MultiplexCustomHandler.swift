@@ -2,6 +2,7 @@ public class MultiplexCustomHandler <Message: Codable, Details: RecordDetails>: 
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
+	public var configuration: Configuration?
 	public var detailsEnabling: Details.Enabling = .fullEnabled
 	public var condition: (Record<Message, Details>) -> Bool
 	
@@ -24,9 +25,11 @@ public class MultiplexCustomHandler <Message: Codable, Details: RecordDetails>: 
 	public func log (record: Record<Message, Details>) {
 		guard isEnabled, record.metaInfo.level >= level, condition(record) else { return }
 		
-		let metaInfo = record.metaInfo.add(identificationInfo)
-		let details = (record.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
-		let record = record.replace(metaInfo, details)
+		let record = record
+			.add(identificationInfo)
+			.add(details)
+			.moderateDetails(detailsEnabling)
+			.add(configuration)
 		
 		handlings.forEach{ $0(record) }
 	}

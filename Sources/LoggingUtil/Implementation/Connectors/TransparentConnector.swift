@@ -15,10 +15,8 @@ public struct TransparentConnector <Message: Codable, Details: RecordDetails, E:
 	}
 	
 	public func log (_ record: Record<Message, Details>) {
-		let metaInfo = record.metaInfo
+		let record = record
 			.add(identificationInfo)
-			.add(exporter.identificationInfo)
-		let record = record.replace(metaInfo)
 		
 		exporter.export(metaInfo: record.metaInfo, message: record)
 	}

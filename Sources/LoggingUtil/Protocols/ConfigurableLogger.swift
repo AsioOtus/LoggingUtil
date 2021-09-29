@@ -2,6 +2,7 @@ public protocol ConfigurableLogger: Logger {
 	var isEnabled: Bool { get set }
 	var level: Level { get set }
 	var details: Details? { get set }
+	var configuration: Configuration? { get set }
 }
 
 public extension ConfigurableLogger {
@@ -23,6 +24,13 @@ public extension ConfigurableLogger {
 	func details (_ details: Details) -> Self {
 		var selfCopy = self
 		selfCopy.details = details
+		return selfCopy
+	}
+	
+	@discardableResult
+	func configuration (_ configuration: Configuration) -> Self {
+		var selfCopy = self
+		selfCopy.configuration = configuration
 		return selfCopy
 	}
 }

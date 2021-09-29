@@ -7,6 +7,7 @@ public struct StandardLogger <H: Handler> {
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
+	public var configuration: Configuration?
 	public var handler: H
 	
 	public let identificationInfo: IdentificationInfo
@@ -24,9 +25,9 @@ public struct StandardLogger <H: Handler> {
 }
 
 extension StandardLogger: ConfigurableLogger {
-	public func log (level: Level, message: Message, details: Details? = nil, label: String? = nil, file: String = #fileID, line: Int = #line) {
+	public func log (level: Level, message: Message, details: Details? = nil, configuration: Configuration? = nil, label: String? = nil, file: String = #fileID, line: Int = #line) {
 		let metaInfo = MetaInfo(timestamp: Date().timeIntervalSince1970, level: level, label: label, file: file, line: line, stack: [])
-		let record = Record(metaInfo: metaInfo, message: message, details: details)
+		let record = Record(metaInfo: metaInfo, message: message, details: details, configuration: configuration)
 		
 		log(record: record)
 	}
@@ -36,9 +37,10 @@ extension StandardLogger: Handler {
 	public func log (record: Record<Message, Details>) {
 		guard isEnabled, record.metaInfo.level >= level else { return }
 		
-		let metaInfo = record.metaInfo.add(identificationInfo)
-		let details = record.details?.combined(with: self.details) ?? self.details
-		let record = record.replace(metaInfo, details)
+		let record = record
+			.add(identificationInfo)
+			.add(details)
+			.add(configuration)
 		
 		handler.log(record: record)
 	}

@@ -18,11 +18,8 @@ public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Expor
 	}
 	
 	public func log (_ record: Record<Converter.InputMessage, Converter.InputDetails>) {
-		let metaInfo = record.metaInfo
+		let record = record
 			.add(identificationInfo)
-			.add(converter.identificationInfo)
-			.add(exporter.identificationInfo)
-		let record = record.replace(metaInfo)
 		
 		guard let message = try? converter.convert(record) else { return }
 		exporter.export(metaInfo: record.metaInfo, message: message)

@@ -25,11 +25,10 @@ public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector
 	public func log (_ record: Record<Converter.InputMessage, Converter.InputDetails>) {
 		guard condition(record) else { return }
 		
-		let metaInfo = record.metaInfo
+		let record = record
 			.add(identificationInfo)
 			.add(converter.identificationInfo)
 			.add(exporter.identificationInfo)
-		let record = record.replace(metaInfo)
 		
 		let message = converter.convert(record)
 		exporter.export(metaInfo: record.metaInfo, message: message)

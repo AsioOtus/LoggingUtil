@@ -2,6 +2,7 @@ public protocol ConfigurableHandler: Handler, AnyObject {
 	var isEnabled: Bool { get set }
 	var level: Level { get set }
 	var details: Details? { get set }
+	var configuration: Configuration? { get set }
 }
 
 public extension ConfigurableHandler {
@@ -20,6 +21,12 @@ public extension ConfigurableHandler {
 	@discardableResult
 	func details (_ details: Details) -> Self {
 		self.details = details
+		return self
+	}
+	
+	@discardableResult
+	func configuration (_ configuration: Configuration) -> Self {
+		self.configuration = configuration
 		return self
 	}
 }
