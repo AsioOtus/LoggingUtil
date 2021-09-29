@@ -5,7 +5,7 @@ public struct DirectLogger <C: Connector> {
 	public typealias Details = C.Details
 	
 	public var isEnabled = true
-	public var level = Level.trace
+	public var level: Level = .trace
 	public var details: Details? = nil
 	public var connector: C
 	

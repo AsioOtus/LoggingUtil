@@ -4,23 +4,23 @@ public protocol ConfigurableLogger: Logger {
 	var details: Details? { get set }
 }
 
-extension ConfigurableLogger {
+public extension ConfigurableLogger {
 	@discardableResult
-	public func isEnabled (_ isEnabled: Bool) -> Self {
+	func isEnabled (_ isEnabled: Bool) -> Self {
 		var selfCopy = self
 		selfCopy.isEnabled = isEnabled
 		return selfCopy
 	}
 	
 	@discardableResult
-	public func level (_ level: Level) -> Self {
+	func level (_ level: Level) -> Self {
 		var selfCopy = self
 		selfCopy.level = level
 		return selfCopy
 	}
 	
 	@discardableResult
-	public func details (_ details: Details) -> Self {
+	func details (_ details: Details) -> Self {
 		var selfCopy = self
 		selfCopy.details = details
 		return selfCopy

@@ -1,4 +1,4 @@
-public class IntermediateHandler<H: Handler>: ConfigurableHandler {
+public class IntermediateHandler <H: Handler>: ConfigurableHandler {
 	public typealias Message = H.Message
 	public typealias Details = H.Details
 	

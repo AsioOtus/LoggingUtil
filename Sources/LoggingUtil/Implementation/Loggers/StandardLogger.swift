@@ -5,7 +5,7 @@ public struct StandardLogger <H: Handler> {
 	public typealias Details = H.Details
 	
 	public var isEnabled = true
-	public var level = Level.trace
+	public var level: Level = .trace
 	public var details: Details? = nil
 	public var handler: H
 	

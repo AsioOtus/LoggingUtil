@@ -1,6 +1,6 @@
 public struct SingleLineConverter: PlainConverter {
 	public var metaInfoEnabling = MetaInfo.Enabling.enabled()
-	public var detailsEnabling = StandardRecordDetails.Enabling.enabled()
+	public var detailsEnabling = StandardRecordDetails.Enabling.defaultEnabling
 	public var levelPadding = true
 	public var componentsSeparator = " | "
 	

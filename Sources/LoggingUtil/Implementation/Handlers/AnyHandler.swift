@@ -13,7 +13,7 @@ public struct AnyHandler <Message: Codable, Details: RecordDetails>: Handler {
 	}
 }
 
-extension Handler {
+public extension Handler {
 	func eraseToAnyHandler () -> AnyHandler<Message, Details> {
 		AnyHandler(self)
 	}

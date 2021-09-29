@@ -3,15 +3,15 @@ public protocol ConfigurableExporter: Exporter, AnyObject {
 	var level: Level { get set }
 }
 
-extension ConfigurableExporter {
+public extension ConfigurableExporter {
 	@discardableResult
-	public func isEnabled (_ isEnabled: Bool) -> Self {
+	func isEnabled (_ isEnabled: Bool) -> Self {
 		self.isEnabled = isEnabled
 		return self
 	}
 	
 	@discardableResult
-	public func level (_ level: Level) -> Self {
+	func level (_ level: Level) -> Self {
 		self.level = level
 		return self
 	}

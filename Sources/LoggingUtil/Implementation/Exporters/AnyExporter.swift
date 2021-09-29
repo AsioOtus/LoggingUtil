@@ -10,7 +10,7 @@ public struct AnyExporter <Message>: Exporter {
 	}
 }
 
-extension Exporter {
+public extension Exporter {
 	func eraseToAnyExporter () -> AnyExporter<Message> {
 		AnyExporter(self)
 	}

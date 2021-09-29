@@ -28,7 +28,7 @@ extension ReactiveHandler: ConfigurableHandler {
 		guard isEnabled, record.metaInfo.level >= level else { return }
 		
 		let metaInfo = record.metaInfo.add(identificationInfo)
-		let details = (record.details?.combined(with: self.details) ?? self.details)??.moderated(detailsEnabling)
+		let details = (record.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let record = record.replace(metaInfo, details)
 		
 		stream.send(record)

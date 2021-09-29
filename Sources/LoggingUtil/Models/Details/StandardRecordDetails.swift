@@ -3,18 +3,23 @@ public extension StandardRecordDetails {
 		case disable
 		case enabled(
 			source: Bool = true,
-			tags: Bool = false,
-			keyValue: Bool = false,
-			comment: Bool = false,
-			codeInfo: Bool = false
+			tags: Bool = true,
+			keyValue: Bool = true,
+			comment: Bool = true,
+			codeInfo: Bool = true
 		 )
 		
-		public static let defaultEnabling = enabled()
-		public static let fullEnabled = enabled(source: true, tags: true, keyValue: true, comment: true, codeInfo: true)
+		public static let defaultEnabling = enabled(
+			source: true,
+			tags: true,
+			keyValue: false,
+			comment: false,
+			codeInfo: false
+		)
+		
+		public static let fullEnabled = enabled()
 	}
 }
-
-
 
 public struct StandardRecordDetails: RecordDetails {
 	public let source: [String]?

@@ -32,9 +32,9 @@ public class StandardHandler <C: Connector>: ConfigurableHandler {
 	}
 }
 
-extension StandardHandler {
+public extension StandardHandler {
 	@discardableResult
-	public func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
+	func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
 		self.detailsEnabling = detailsEnabling
 		return self
 	}

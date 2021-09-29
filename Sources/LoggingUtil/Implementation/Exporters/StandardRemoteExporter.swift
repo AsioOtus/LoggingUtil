@@ -25,15 +25,15 @@ public class StandardRemoteExporter: ConfigurableExporter {
 	}
 }
 
-extension StandardRemoteExporter {
+public extension StandardRemoteExporter {
 	@discardableResult
-	public func url (_ url: URL) -> Self {
+	func url (_ url: URL) -> Self {
 		self.url = url
 		return self
 	}
 	
 	@discardableResult
-	public func urlSession (_ urlSession: URLSession) -> Self {
+	func urlSession (_ urlSession: URLSession) -> Self {
 		self.urlSession = urlSession
 		return self
 	}

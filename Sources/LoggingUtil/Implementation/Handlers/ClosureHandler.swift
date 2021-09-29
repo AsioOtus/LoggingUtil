@@ -29,7 +29,7 @@ public class ClosureHandler <Message: Codable, Details: RecordDetails>: Configur
 	}
 }
 
-extension ClosureHandler {
+public extension ClosureHandler {
 	@discardableResult
 	func handling (_ handling: @escaping (Record<Message, Details>) -> ()) -> Self {
 		self.handling = handling
@@ -37,7 +37,7 @@ extension ClosureHandler {
 	}
 	
 	@discardableResult
-	public func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
+	func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
 		self.detailsEnabling = detailsEnabling
 		return self
 	}

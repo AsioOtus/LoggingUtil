@@ -1,7 +1,4 @@
-public class MultipleConnectorsHandler: ConfigurableHandler {
-	public typealias Message = String
-	public typealias Details = StandardRecordDetails
-	
+public class MultipleConnectorsHandler <Message: Codable, Details: RecordDetails>: ConfigurableHandler {
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
@@ -32,7 +29,7 @@ public class MultipleConnectorsHandler: ConfigurableHandler {
 	}
 }
 
-extension MultipleConnectorsHandler {	
+public extension MultipleConnectorsHandler {	
 	@discardableResult
 	func connector <C: Connector> (_ connector: C) -> Self where C.Message == Message, C.Details == Details {
 		self.connectors.append(connector.eraseToAnyConnector())
@@ -40,7 +37,7 @@ extension MultipleConnectorsHandler {
 	}
 	
 	@discardableResult
-	public func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
+	func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
 		self.detailsEnabling = detailsEnabling
 		return self
 	}

@@ -1,7 +1,4 @@
-class MultiplexHandler: ConfigurableHandler {
-	public typealias Message = String
-	public typealias Details = StandardRecordDetails
-	
+public class MultiplexHandler <Message: Codable, Details: RecordDetails>: ConfigurableHandler {
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
@@ -21,7 +18,7 @@ class MultiplexHandler: ConfigurableHandler {
 		self.handlers = handlers
 	}
 	
-	func log (record: Record<String, StandardRecordDetails>) {
+	public func log (record: Record<Message, Details>) {
 		guard isEnabled, record.metaInfo.level >= level else { return }
 		
 		let metaInfo = record.metaInfo.add(identificationInfo)
@@ -32,7 +29,7 @@ class MultiplexHandler: ConfigurableHandler {
 	}
 }
 
-extension MultiplexHandler {	
+public extension MultiplexHandler {
 	@discardableResult
 	func handler <H: Handler> (_ handler: H) -> Self where H.Message == Message, H.Details == Details {
 		self.handlers.append(handler.eraseToAnyHandler())
@@ -40,7 +37,7 @@ extension MultiplexHandler {
 	}
 	
 	@discardableResult
-	public func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
+	func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
 		self.detailsEnabling = detailsEnabling
 		return self
 	}

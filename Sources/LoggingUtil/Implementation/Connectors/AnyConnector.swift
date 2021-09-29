@@ -10,7 +10,7 @@ public struct AnyConnector <Message: Codable, Details: RecordDetails>: Connector
 	}
 }
 
-extension Connector {
+public extension Connector {
 	func eraseToAnyConnector () -> AnyConnector<Message, Details> {
 		AnyConnector(self)
 	}

@@ -22,14 +22,14 @@ public class MultipleClosuresHandler <Message: Codable, Details: RecordDetails>:
 		guard isEnabled, record.metaInfo.level >= level else { return }
 		
 		let metaInfo = record.metaInfo.add(identificationInfo)
-		let details = record.details?.combined(with: self.details) ?? self.details?.moderated(detailsEnabling)
+		let details = (record.details?.combined(with: self.details) ?? self.details)?.moderated(detailsEnabling)
 		let record = record.replace(metaInfo, details)
 		
 		handlings.forEach{ $0(record) }
 	}
 }
 
-extension MultipleClosuresHandler {
+public extension MultipleClosuresHandler {
 	@discardableResult
 	func handling (_ handling: @escaping (Record<Message, Details>) -> ()) -> Self {
 		self.handlings.append(handling)
@@ -37,7 +37,7 @@ extension MultipleClosuresHandler {
 	}
 	
 	@discardableResult
-	public func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
+	func detailsEnabling (_ detailsEnabling: Details.Enabling) -> Self {
 		self.detailsEnabling = detailsEnabling
 		return self
 	}

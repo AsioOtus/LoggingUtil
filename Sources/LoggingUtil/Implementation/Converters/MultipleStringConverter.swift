@@ -8,7 +8,7 @@ public struct MultilineConverter: PlainConverter {
 	}
 	
 	public var metaInfoEnabling: MetaInfo.Enabling = .enabled()
-	public var detailsEnabling: StandardRecordDetails.Enabling = .enabled()
+	public var detailsEnabling: StandardRecordDetails.Enabling = .defaultEnabling
 	public var levelPadding: Bool = true
 	public var componentsSeparator: String = " | "
 	public var dateFormatter: DateFormatter = defaultDateFormatter

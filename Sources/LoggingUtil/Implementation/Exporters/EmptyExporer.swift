@@ -1,5 +1,5 @@
-struct EmptyExporter <Message: Codable>: Exporter {
+public struct EmptyExporter <Message: Codable>: Exporter {
 	public init () { }
 	
-	func export (metaInfo: MetaInfo, message: Message) { }
+	public func export (metaInfo: MetaInfo, message: Message) { }
 }
