@@ -13,11 +13,11 @@ public class IntermediateHandler <H: Handler>: ConfigurableHandler {
 	
 	public init (
 		_ handler: H,
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.handler = handler
 	}
 	

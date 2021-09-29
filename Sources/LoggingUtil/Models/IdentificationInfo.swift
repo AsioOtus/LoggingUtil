@@ -5,11 +5,11 @@ public struct IdentificationInfo: Codable, CustomStringConvertible {
 	public let type: String
 	public let definition: String
 	public let instance: String
-	public let alias: String?
+	public let label: String?
 	public let extra: String?
 	
 	public var description: String {
-		"\(module.flatMap{ "\($0)." } ?? "")\(type) – \(definition) – alias: \(alias.flatMap{ "\($0)." } ?? "") – \(instance) – \(extra)"
+		"\(module.flatMap{ "\($0)." } ?? "")\(type) – \(definition) – label: \(label.flatMap{ "\($0)." } ?? "") – \(instance) – \(extra)"
 	}
 	
 	public var compactDescription: String {
@@ -20,12 +20,12 @@ public struct IdentificationInfo: Codable, CustomStringConvertible {
 		"\(module.flatMap{ "\($0)." } ?? "")\(type)"
 	}
 	
-	init (_ module: String? = nil, type: String, file: String, line: Int, alias: String? = nil, extra: String? = nil) {
+	init (_ module: String? = nil, type: String, file: String, line: Int, label: String? = nil, extra: String? = nil) {
 		self.module = module
 		self.type = type
 		self.definition = "\(file):\(line)"
 		self.instance = UUID().uuidString
-		self.alias = alias
+		self.label = label
 		self.extra = extra
 	}
 }

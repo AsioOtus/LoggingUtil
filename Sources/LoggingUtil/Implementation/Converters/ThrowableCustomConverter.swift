@@ -4,12 +4,12 @@ public struct ThrowableCustomConverter <InputMessage: Codable, InputDetails: Rec
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line,
 		_ conversion: @escaping (Record<InputMessage, InputDetails>) throws -> OutputMessage
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.conversion = conversion
 	}
 	

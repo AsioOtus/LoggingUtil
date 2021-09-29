@@ -7,11 +7,11 @@ public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector
 	public init (
 		converter: Converter,
 		exporter: E,
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		
 		self.converter = converter
 		self.exporter = exporter

@@ -17,7 +17,7 @@ public extension AnyConnector {
 	static func plain <Converter: PlainConverter, E: Exporter> (
 		_ converter: Converter,
 		_ exporter: E,
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) -> AnyConnector<Converter.InputMessage, Converter.InputDetails>
@@ -26,7 +26,7 @@ public extension AnyConnector {
 		PlainConnector(
 			converter: converter,
 			exporter: exporter,
-			alias: alias,
+			label: label,
 			file: file,
 			line: line
 		)
@@ -35,12 +35,12 @@ public extension AnyConnector {
 	
 	static func custom (
 		_ connection: @escaping (Record<Message, Details>) -> Void,
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) -> AnyConnector<Message, Details> {
 		CustomConnector(
-			alias: alias,
+			label: label,
 			file: file,
 			line: line,
 			connection
@@ -51,7 +51,7 @@ public extension AnyConnector {
 	static func supressError <Converter: ThrowableConverter, E: Exporter> (
 		_ converter: Converter,
 		_ exporter: E,
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) -> AnyConnector<Converter.InputMessage, Converter.InputDetails>
@@ -60,7 +60,7 @@ public extension AnyConnector {
 		ErrorSuppressingConnector(
 			converter: converter,
 			exporter: exporter,
-			alias: alias,
+			label: label,
 			file: file,
 			line: line
 		)
@@ -69,7 +69,7 @@ public extension AnyConnector {
 	
 	static func transparent <Message: Codable, Details: RecordDetails, E: Exporter> (
 		_ exporter: E,
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) -> AnyConnector<Message, Details>
@@ -77,7 +77,7 @@ public extension AnyConnector {
 	{
 		TransparentConnector(
 			exporter,
-			alias: alias,
+			label: label,
 			file: file,
 			line: line
 		)

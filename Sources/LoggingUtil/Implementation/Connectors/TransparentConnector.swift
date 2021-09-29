@@ -5,11 +5,11 @@ public struct TransparentConnector <Message: Codable, Details: RecordDetails, E:
 	
 	public init (
 		_ exporter: E,
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		
 		self.exporter = exporter
 	}

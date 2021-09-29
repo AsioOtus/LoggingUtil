@@ -10,11 +10,11 @@ public class MultiplexCustomHandler <Message: Codable, Details: RecordDetails>: 
 	
 	public init (
 		_ handlings: [(Record<Message, Details>) -> ()] = [],
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.handlings = handlings
 	}
 

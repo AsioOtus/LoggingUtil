@@ -3,19 +3,19 @@ import XCTest
 
 final class CommonFlowTests: XCTestCase {
 	func testStd () {
-		let singleLineConverter = SingleLineConverter(alias: "SingleLine.Converter")
+		let singleLineConverter = SingleLineConverter(label: "SingleLine.Converter")
 			.metaInfoEnabling(.enabled(timestamp: true))
 		
-		let printExporter = PrintExporter(alias: "Print.Exporter")
+		let printExporter = PrintExporter(label: "Print.Exporter")
 		
-		let standardHandler = MultipleConnectorsHandler<String, StandardRecordDetails>(alias: "Standard.Handler")
+		let standardHandler = MultipleConnectorsHandler<String, StandardRecordDetails>(label: "Standard.Handler")
 			.connector(
 				.plain(
-					CustomConverter(alias: "Custom.Converter") { record in
-						record.metaInfo.stack.compactMap{ $0.alias }.joined(separator: " | ")
+					CustomConverter(label: "Custom.Converter") { record in
+						record.metaInfo.stack.compactMap{ $0.label }.joined(separator: " | ")
 					},
 					printExporter,
-					alias: "Plain.Connector"
+					label: "Plain.Connector"
 				)
 			)
 			.connector(.plain(singleLineConverter, printExporter))
@@ -23,15 +23,15 @@ final class CommonFlowTests: XCTestCase {
 		let uiHandler = MultiplexCustomHandler<String, StandardRecordDetails>()
 		
 		
-		let centralHandler = MultiplexHandler<String, StandardRecordDetails>(alias: "Central.Handler")
+		let centralHandler = MultiplexHandler<String, StandardRecordDetails>(label: "Central.Handler")
 			.details(.init(source: ["App"]))
 			.handler(standardHandler)
 			.handler(uiHandler)
 		
-		let globalLogger = StandardLogger(centralHandler, alias: "Global.Logger")
+		let globalLogger = StandardLogger(centralHandler, label: "Global.Logger")
 			.details(.init(source: ["Global"], tags: ["Kek"]))
 		
-		let moduleLogger = StandardLogger(centralHandler, alias: "Module.Logger")
+		let moduleLogger = StandardLogger(centralHandler, label: "Module.Logger")
 			.details(.init(source: ["Module"], tags: ["Lol"]))
 		
 		

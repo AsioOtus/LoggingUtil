@@ -7,12 +7,12 @@ public class CustomExporter <Message: Codable>: ConfigurableExporter {
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line,
 		_ exporting: @escaping (MetaInfo, Message) -> Void
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.exporting = exporting
 	}
 	

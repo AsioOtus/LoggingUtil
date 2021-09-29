@@ -10,11 +10,11 @@ public class MultipleConnectorsHandler <Message: Codable, Details: RecordDetails
 	
 	public init (
 		_ connectors: [AnyConnector<Message, Details>] = [],
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.connectors = connectors
 	}
 

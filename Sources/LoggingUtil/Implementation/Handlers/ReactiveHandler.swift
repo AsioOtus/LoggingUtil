@@ -14,11 +14,11 @@ public class ReactiveHandler <Message: Codable, Details: RecordDetails> {
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 	}
 }
 

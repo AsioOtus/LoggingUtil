@@ -9,12 +9,12 @@ public class CustomHandler <Message: Codable, Details: RecordDetails>: Configura
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line,
 		_ handling: @escaping (Record<Message, Details>) -> () = { _ in }
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.handling = handling
 	}
 

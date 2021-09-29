@@ -13,11 +13,11 @@ public class StandardHandler <C: Connector>: ConfigurableHandler {
 	
 	public init (
 		_ connector: C,
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.connector = connector
 	}
 

@@ -4,12 +4,12 @@ public struct CustomConnector <Message: Codable, Details: RecordDetails>: Connec
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		alias: String? = nil,
+		label: String? = nil,
 		file: String = #file,
 		line: Int = #line,
 		_ connection: @escaping (Record<Message, Details>) -> Void
 	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, alias: alias)
+		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.connection = connection
 	}
 	
