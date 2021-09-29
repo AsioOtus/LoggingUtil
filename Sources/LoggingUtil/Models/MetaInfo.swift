@@ -4,6 +4,9 @@ public extension MetaInfo {
 		case enabled(
 			timestamp: Bool = false,
 			level: Bool = true,
+			file: Bool = false,
+			function: Bool = false,
+			line: Bool = false,
 			stack: Bool = false
 		)
 	}
@@ -12,9 +15,11 @@ public extension MetaInfo {
 public struct MetaInfo: Codable {
 	public let timestamp: Double
 	public let level: Level
+	public let file: String
+	public let line: Int
 	public let stack: [IdentificationInfo]
 	
 	public func add (_ identificationInfo: IdentificationInfo) -> Self {
-		.init(timestamp: timestamp, level: level, stack: stack + [identificationInfo])
+		.init(timestamp: timestamp, level: level, file: file, line: line, stack: stack + [identificationInfo])
 	}
 }
