@@ -2,10 +2,7 @@ import XCTest
 @testable import LoggingUtil
 
 final class CommonFlowTests: XCTestCase {
-	func testStd () {
-		let singleLineConverter = SingleLineConverter(label: "SingleLine.Converter")
-			.metaInfoEnabling(.enabled(timestamp: true))
-		
+	func testStd () {		
 		let printExporter = PrintExporter(label: "Print.Exporter")
 		
 		let standardHandler = MultipleConnectorsHandler<String, StandardRecordDetails>(label: "Standard.Handler")
@@ -18,7 +15,13 @@ final class CommonFlowTests: XCTestCase {
 					label: "Plain.Connector"
 				)
 			)
-			.connector(.plain(singleLineConverter, printExporter))
+			.connector(
+				.plain(
+					SingleLineConverter(label: "SingleLine.Converter")
+						.metaInfoEnabling(.enabled(timestamp: true)),
+					printExporter
+				)
+			)
 		
 		let uiHandler = MultiplexCustomHandler<String, StandardRecordDetails>()
 		

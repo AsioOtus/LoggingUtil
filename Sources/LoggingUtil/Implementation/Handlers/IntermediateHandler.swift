@@ -7,7 +7,7 @@ public class IntermediateHandler <H: Handler>: ConfigurableHandler {
 	public var details: Details? = nil
 	public var configuration: Configuration?
 	public var detailsEnabling: Details.Enabling = .fullEnabled
-	public var condition: (Record<Message, Details>) -> Bool
+	public var filter: Filter<Message, Details>
 	
 	public var handler: H
 	
@@ -15,18 +15,18 @@ public class IntermediateHandler <H: Handler>: ConfigurableHandler {
 	
 	public init (
 		_ handler: H,
-		condition: @escaping (Record<Message, Details>) -> Bool = { _ in true },
+		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.handler = handler
-		self.condition = condition
+		self.filter = filter
 	}
 	
 	public func log (record: Record<Message, Details>) {
-		guard isEnabled, record.metaInfo.level >= level, condition(record) else { return }
+		guard isEnabled, record.metaInfo.level >= level, filter(record) else { return }
 		
 		let record = record
 			.add(identificationInfo)
@@ -46,8 +46,8 @@ public extension IntermediateHandler {
 	}
 	
 	@discardableResult
-	func condition (_ condition: @escaping (Record<Message, Details>) -> Bool) -> Self {
-		self.condition = condition
+	func filter (_ filter: @escaping Filter<Message, Details>) -> Self {
+		self.filter = filter
 		return self
 	}
 }

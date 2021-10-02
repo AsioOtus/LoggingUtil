@@ -4,7 +4,7 @@ public class MultiplexHandler <Message: Codable, Details: RecordDetails>: Config
 	public var details: Details? = nil
 	public var configuration: Configuration?
 	public var detailsEnabling: Details.Enabling = .fullEnabled
-	public var condition: (Record<Message, Details>) -> Bool
+	public var filter: Filter<Message, Details>
 	
 	public var handlers: [AnyHandler<Message, Details>]
 	
@@ -12,18 +12,18 @@ public class MultiplexHandler <Message: Codable, Details: RecordDetails>: Config
 	
 	public init (
 		_ handlers: [AnyHandler<Message, Details>] = [],
-		condition: @escaping (Record<Message, Details>) -> Bool = { _ in true },
+		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		self.handlers = handlers
-		self.condition = condition
+		self.filter = filter
 	}
 	
 	public func log (record: Record<Message, Details>) {
-		guard isEnabled, record.metaInfo.level >= level, condition(record) else { return }
+		guard isEnabled, record.metaInfo.level >= level, filter(record) else { return }
 		
 		let record = record
 			.add(identificationInfo)
@@ -49,8 +49,8 @@ public extension MultiplexHandler {
 	}
 	
 	@discardableResult
-	func condition (_ condition: @escaping (Record<Message, Details>) -> Bool) -> Self {
-		self.condition = condition
+	func filter (_ filter: @escaping Filter<Message, Details>) -> Self {
+		self.filter = filter
 		return self
 	}
 }

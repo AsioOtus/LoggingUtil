@@ -2,14 +2,14 @@ public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector
 	public let converter: Converter
 	public let exporter: E
 	
-	public var condition: (Record<Message, Details>) -> Bool
+	public var filter: Filter<Message, Details>
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
 		converter: Converter,
 		exporter: E,
-		condition: @escaping (Record<Message, Details>) -> Bool = { _ in true },
+		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
@@ -19,11 +19,11 @@ public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector
 		self.converter = converter
 		self.exporter = exporter
 		
-		self.condition = condition
+		self.filter = filter
 	}
 	
 	public func log (_ record: Record<Converter.InputMessage, Converter.InputDetails>) {
-		guard condition(record) else { return }
+		guard filter(record) else { return }
 		
 		let record = record
 			.add(identificationInfo)

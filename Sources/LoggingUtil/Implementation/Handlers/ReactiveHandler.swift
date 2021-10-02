@@ -9,27 +9,27 @@ public class ReactiveHandler <Message: Codable, Details: RecordDetails> {
 	public var details: Details? = nil
 	public var configuration: Configuration?
 	public var detailsEnabling: Details.Enabling = .fullEnabled
-	public var condition: (Record<Message, Details>) -> Bool
+	public var filter: Filter<Message, Details>
 	
 	public let stream = PassthroughSubject<Record<Message, Details>, Never>()
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		condition: @escaping (Record<Message, Details>) -> Bool = { _ in true },
+		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
 		file: String = #file,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
-		self.condition = condition
+		self.filter = filter
 	}
 }
 
 @available(iOS 13, macOS 15.0, *)
 extension ReactiveHandler: ConfigurableHandler {
 	public func log (record: Record<Message, Details>) {
-		guard isEnabled, record.metaInfo.level >= level, condition(record) else { return }
+		guard isEnabled, record.metaInfo.level >= level, filter(record) else { return }
 		
 		let record = record
 			.add(identificationInfo)
