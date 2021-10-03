@@ -18,10 +18,11 @@ public enum Filters {
 	public static func sourceContains <Message: Codable> (oneOf values: Set<String>) -> Filter<Message, StandardRecordDetails> {
 		{ record in
 			guard let source = record.details?.source else { return false }
-			let sourceSet = Set(source)
-			let valuesSet = Set(values)
-			
-			return !sourceSet.intersection(values).isEmpty
+			return !Set(source).intersection(values).isEmpty
 		}
+	}
+	
+	public static func invert <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
+		{ record in	!filter(record)	}
 	}
 }
