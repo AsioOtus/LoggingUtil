@@ -19,7 +19,7 @@ public extension AnyConnector {
 		_ exporter: E,
 		filter: @escaping Filter<Converter.InputMessage, Converter.InputDetails> = { _ in true },
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) -> AnyConnector<Converter.InputMessage, Converter.InputDetails>
 	where Converter.OutputMessage == E.Message
@@ -38,7 +38,7 @@ public extension AnyConnector {
 	static func custom (
 		_ connection: @escaping (Record<Message, Details>) -> Void,
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) -> AnyConnector<Message, Details> {
 		CustomConnector(
@@ -54,7 +54,7 @@ public extension AnyConnector {
 		_ converter: Converter,
 		_ exporter: E,
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) -> AnyConnector<Converter.InputMessage, Converter.InputDetails>
 	where Converter.OutputMessage == E.Message
@@ -72,7 +72,7 @@ public extension AnyConnector {
 	static func transparent <Message: Codable, Details: RecordDetails, E: Exporter> (
 		_ exporter: E,
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) -> AnyConnector<Message, Details>
 	where E.Message == Record<Message, Details>

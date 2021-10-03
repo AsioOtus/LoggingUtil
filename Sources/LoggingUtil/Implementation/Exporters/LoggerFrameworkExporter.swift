@@ -11,7 +11,7 @@ public class LoggerFrameworkExporter: ConfigurableExporter {
 	
 	public init (
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)

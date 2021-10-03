@@ -14,7 +14,7 @@ public class MultiplexHandler <Message: Codable, Details: RecordDetails>: Config
 		_ handlers: [AnyHandler<Message, Details>] = [],
 		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)

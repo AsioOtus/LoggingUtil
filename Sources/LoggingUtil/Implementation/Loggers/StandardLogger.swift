@@ -15,7 +15,7 @@ public struct StandardLogger <H: Handler> {
 	public init (
 		_ handler: H,
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)

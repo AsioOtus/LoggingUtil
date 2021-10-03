@@ -11,7 +11,7 @@ public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector
 		exporter: E,
 		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)

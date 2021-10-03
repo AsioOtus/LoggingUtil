@@ -18,7 +18,7 @@ public class ReactiveHandler <Message: Codable, Details: RecordDetails> {
 	public init (
 		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)

@@ -8,7 +8,7 @@ public struct StringToJSONDataConverter: ThrowableConverter {
 	public init (
 		jsonEncoder: JSONEncoder = JSONEncoder(),
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)

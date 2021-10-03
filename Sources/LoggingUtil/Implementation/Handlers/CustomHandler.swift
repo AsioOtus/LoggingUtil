@@ -13,7 +13,7 @@ public class CustomHandler <Message: Codable, Details: RecordDetails>: Configura
 	public init (
 		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line,
 		_ handling: @escaping (Record<Message, Details>) -> () = { _ in }
 	) {

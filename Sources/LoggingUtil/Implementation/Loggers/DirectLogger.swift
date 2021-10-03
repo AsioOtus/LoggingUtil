@@ -15,7 +15,7 @@ public struct DirectLogger <C: Connector> {
 	public init (
 		_ connector: C,
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line
 	) {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)

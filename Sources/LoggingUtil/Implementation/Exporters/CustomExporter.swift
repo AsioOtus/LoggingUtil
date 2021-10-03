@@ -8,7 +8,7 @@ public class CustomExporter <Message: Codable>: ConfigurableExporter {
 	
 	public init (
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line,
 		_ exporting: @escaping (MetaInfo, Message) -> Void
 	) {

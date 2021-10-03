@@ -5,7 +5,7 @@ public struct ThrowableCustomConverter <InputMessage: Codable, InputDetails: Rec
 	
 	public init (
 		label: String? = nil,
-		file: String = #file,
+		file: String = #fileID,
 		line: Int = #line,
 		_ conversion: @escaping (Record<InputMessage, InputDetails>) throws -> OutputMessage
 	) {
