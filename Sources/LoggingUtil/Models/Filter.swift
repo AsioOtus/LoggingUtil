@@ -22,10 +22,6 @@ public enum Filters {
 	public static func maxLevel <Message: Codable, Details: RecordDetails> (_ level: Level) -> Filter<Message, Details> {
 		{ record in record.metaInfo.level <= level }
 	}
-	
-	public static func invert <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
-		{ record in	!filter(record)	}
-	}
 }
 
 public extension Filters {
@@ -42,4 +38,14 @@ public extension Filters {
 			return !tags.intersection(values).isEmpty
 		}
 	}
+}
+
+extension Filters {
+	public static func invert <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
+		{ record in	!filter(record)	}
+	}
+}
+
+prefix func ! <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
+	Filters.invert(filter)
 }
