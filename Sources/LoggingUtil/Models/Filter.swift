@@ -14,4 +14,14 @@ public enum Filters {
 			return false
 		}
 	}
+	
+	public static func sourceContains <Message: Codable> (oneOf values: Set<String>) -> Filter<Message, StandardRecordDetails> {
+		{ record in
+			guard let source = record.details?.source else { return false }
+			let sourceSet = Set(source)
+			let valuesSet = Set(values)
+			
+			return !sourceSet.intersection(values).isEmpty
+		}
+	}
 }
