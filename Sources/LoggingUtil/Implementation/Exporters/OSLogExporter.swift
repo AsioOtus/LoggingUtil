@@ -2,7 +2,7 @@ import os.log
 import Foundation
 
 @available(iOS 12.0, macOS 12.0, *)
-public class OSLogExporter: ConfigurableExporter {
+public class OSLogExporter: CustomizableExporter {
 	public var isEnabled = true
 	public var level: Level = .trace
 	

@@ -24,7 +24,7 @@ public struct StandardLogger <H: Handler> {
 	}
 }
 
-extension StandardLogger: ConfigurableLogger {
+extension StandardLogger: CustomizableLogger {
 	public func log (level: Level, message: Message, details: Details? = nil, configuration: Configuration? = nil, label: String? = nil, file: String = #fileID, line: Int = #line) {
 		let metaInfo = MetaInfo(timestamp: Date().timeIntervalSince1970, level: level, label: label, file: file, line: line, stack: [])
 		let record = Record(metaInfo: metaInfo, message: message, details: details, configuration: configuration)

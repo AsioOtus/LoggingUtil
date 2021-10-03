@@ -24,7 +24,7 @@ public struct DirectLogger <C: Connector> {
 	}
 }
 
-extension DirectLogger: ConfigurableLogger {
+extension DirectLogger: CustomizableLogger {
 	public func log (level: Level, message: Message, details: Details? = nil, configuration: Configuration? = nil, label: String?, file: String = #fileID, line: Int = #line) {
 		let metaInfo = MetaInfo(timestamp: Date().timeIntervalSince1970, level: level, label: label, file: file, line: line, stack: [])
 		let record = Record(metaInfo: metaInfo, message: message, details: details, configuration: configuration)

@@ -22,6 +22,14 @@ public enum Filters {
 		}
 	}
 	
+	public static func minLevel <Message: Codable, Details: RecordDetails> (_ level: Level) -> Filter<Message, Details> {
+		{ record in record.metaInfo.level >= level }
+	}
+	
+	public static func maxLevel <Message: Codable, Details: RecordDetails> (_ level: Level) -> Filter<Message, Details> {
+		{ record in record.metaInfo.level <= level }
+	}
+	
 	public static func invert <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
 		{ record in	!filter(record)	}
 	}

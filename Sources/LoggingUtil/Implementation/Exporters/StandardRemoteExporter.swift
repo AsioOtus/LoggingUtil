@@ -1,6 +1,6 @@
 import Foundation
 
-public class StandardRemoteExporter: ConfigurableExporter {
+public class StandardRemoteExporter: CustomizableExporter {
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var url: URL

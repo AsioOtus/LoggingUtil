@@ -1,7 +1,7 @@
 import os.log
 
 @available(iOS 14.0, macOS 11.0, *)
-public class LoggerFrameworkExporter: ConfigurableExporter {
+public class LoggerFrameworkExporter: CustomizableExporter {
 	public var isEnabled = true
 	public var level: Level = .trace
 	

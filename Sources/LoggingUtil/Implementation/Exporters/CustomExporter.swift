@@ -1,4 +1,4 @@
-public class CustomExporter <Message: Codable>: ConfigurableExporter {
+public class CustomExporter <Message: Codable>: CustomizableExporter {
 	public var isEnabled = true
 	public var level: Level = .trace
 	

@@ -1,15 +1,17 @@
-public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector where Converter.OutputMessage == E.Message {
+public struct PlainConnector <Converter: PlainConverter, E: Exporter>: CustomizableConnector where Converter.OutputMessage == E.Message {
+	public typealias Message = Converter.InputMessage
+	public typealias Details = Converter.InputDetails
+	
 	public let converter: Converter
 	public let exporter: E
 	
-	public var filter: Filter<Message, Details>
+	public var filters = [Filter<Message, Details>]()
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
 		converter: Converter,
 		exporter: E,
-		filter: @escaping Filter<Message, Details> = { _ in true },
 		label: String? = nil,
 		file: String = #fileID,
 		line: Int = #line
@@ -18,12 +20,10 @@ public struct PlainConnector <Converter: PlainConverter, E: Exporter>: Connector
 		
 		self.converter = converter
 		self.exporter = exporter
-		
-		self.filter = filter
 	}
 	
-	public func log (_ record: Record<Converter.InputMessage, Converter.InputDetails>) {
-		guard filter(record) else { return }
+	public func log (_ record: Record<Message, Details>) {
+		guard filters.allSatisfy({ $0(record) }) else { return }
 		
 		let record = record
 			.add(identificationInfo)
