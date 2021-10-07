@@ -50,6 +50,6 @@ public prefix func ! <Message: Codable, Details: RecordDetails> (_ filter: @esca
 	Filters.invert(filter)
 }
 
-public extension Filters {
-	static var filterConfigurationKey: Configuration.Key { "filter" }
+public extension Configuration.Key {
+	static var filterKey: Self { "filter" }
 }
