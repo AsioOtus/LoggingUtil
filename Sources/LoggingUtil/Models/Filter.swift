@@ -40,12 +40,12 @@ public extension Filters {
 	}
 }
 
-extension Filters {
-	public static func invert <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
+public extension Filters {
+	static func invert <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
 		{ record in	!filter(record)	}
 	}
 }
 
-prefix func ! <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
+public prefix func ! <Message: Codable, Details: RecordDetails> (_ filter: @escaping Filter<Message, Details>) -> Filter<Message, Details> {
 	Filters.invert(filter)
 }
