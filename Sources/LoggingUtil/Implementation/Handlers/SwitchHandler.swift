@@ -62,7 +62,7 @@ public class SwitchHandler <Message: Codable, Details: RecordDetails>: Customiza
 			.moderateDetails(detailsEnabling)
 			.add(configuration)
 		
-		if let switchValue = record.configuration?.keyValue["switch"] {
+		if let switchValue = record.configuration?.keyValue[Self.switchConfigurationKey] {
 			if let handler = handlers[switchValue] {
 				handler.handle(record: record)
 			} else if defaultForUnknownValue {
@@ -76,13 +76,13 @@ public class SwitchHandler <Message: Codable, Details: RecordDetails>: Customiza
 
 public extension SwitchHandler {
 	@discardableResult
-	func handler <H: Handler> (_ key: String, _ handler: H) -> Self where H.Message == Message, H.Details == Details {
+	func handler <H: Handler> (key: String, _ handler: H) -> Self where H.Message == Message, H.Details == Details {
 		self.handlers[key] = handler.eraseToAnyHandler()
 		return self
 	}
 	
 	@discardableResult
-	func handler (_ key: String, _ handler: AnyHandler<Message, Details>) -> Self {
+	func handler (key: String, _ handler: AnyHandler<Message, Details>) -> Self {
 		self.handlers[key] = handler
 		return self
 	}
@@ -104,4 +104,8 @@ public extension SwitchHandler {
 		self.defaultForUnknownValue = flag
 		return self
 	}
+}
+
+public extension SwitchHandler {
+	static var switchConfigurationKey: Configuration.Key { "switch" }
 }
