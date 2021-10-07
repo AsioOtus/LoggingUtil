@@ -82,3 +82,80 @@ public extension PlainConnector {
 		return self
 	}
 }
+
+public extension AnyHandler {
+	static func plainConnector <Converter: PlainConverter> (
+		converter: Converter,
+		exporters: [AnyExporter<Converter.OutputMessage>],
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	)
+	-> AnyHandler<Converter.InputMessage, Converter.InputDetails>
+	{
+		PlainConnector(
+			converter: converter,
+			exporters: exporters,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+	
+	static func plainConnector <Converter: PlainConverter> (
+		converter: Converter,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	)
+	-> AnyHandler<Converter.InputMessage, Converter.InputDetails>
+	{
+		PlainConnector(
+			converter: converter,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+	
+	static func plainConnector <Converter: PlainConverter, E: Exporter> (
+		converter: Converter,
+		exporter: E,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	)
+	-> AnyHandler<Converter.InputMessage, Converter.InputDetails>
+	where E.Message == Converter.OutputMessage
+	{
+		PlainConnector(
+			converter: converter,
+			exporter: exporter,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+	
+	static func plainConnector <Converter: PlainConverter> (
+		converter: Converter,
+		exporter: AnyExporter<Converter.OutputMessage>,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	)
+	-> AnyHandler<Converter.InputMessage, Converter.InputDetails>
+	{
+		PlainConnector(
+			converter: converter,
+			exporter: exporter,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+}

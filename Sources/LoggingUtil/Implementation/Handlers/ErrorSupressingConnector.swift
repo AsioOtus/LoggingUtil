@@ -25,3 +25,24 @@ public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Expor
 		exporter.export(metaInfo: record.metaInfo, message: message)
 	}
 }
+
+public extension AnyHandler {
+	static func supressErrorConnector <Converter: ThrowableConverter, E: Exporter> (
+		_ converter: Converter,
+		_ exporter: E,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) -> AnyHandler<Converter.InputMessage, Converter.InputDetails>
+	where Converter.OutputMessage == E.Message
+	{
+		ErrorSuppressingConnector(
+			converter: converter,
+			exporter: exporter,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+}

@@ -45,3 +45,19 @@ extension ReactiveHandler {
 		return self
 	}
 }
+
+@available(iOS 13, macOS 15.0, *)
+extension AnyHandler {
+	static func reactive (
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) -> Self {
+		ReactiveHandler(
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+}

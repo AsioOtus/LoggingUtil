@@ -76,3 +76,50 @@ public extension StandardHandler {
 		return self
 	}
 }
+
+public extension AnyHandler {
+	static func standard (
+		_ handlers: [AnyHandler<Message, Details>] = [],
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) -> Self {
+		StandardHandler(
+			handlers,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+	
+	static func standard <H: Handler> (
+		_ handler: H,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) -> Self where H.Message == Message, H.Details == Details {
+		StandardHandler(
+			handler,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+	
+	static func standard (
+		_ handler: AnyHandler<Message, Details>,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) -> Self	{
+		StandardHandler(
+			handler,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+}

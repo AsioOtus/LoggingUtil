@@ -59,3 +59,35 @@ public extension CustomHandler {
 		return self
 	}
 }
+
+public extension AnyHandler {
+	static func custom (
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line,
+		_ handling: @escaping (Record<Message, Details>) -> Void
+	) -> Self {
+		CustomHandler(
+			label: label,
+			file: file,
+			line: line,
+			handling
+		)
+		.eraseToAnyHandler()
+	}
+	
+	static func custom (
+		_ handlings: [(Record<Message, Details>) -> ()] = [],
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) -> Self {
+		CustomHandler(
+			handlings,
+			label: label,
+			file: file,
+			line: line
+		)
+		.eraseToAnyHandler()
+	}
+}
