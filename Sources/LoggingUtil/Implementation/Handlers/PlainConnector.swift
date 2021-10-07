@@ -1,9 +1,10 @@
-public class PlainConnector <Converter: PlainConverter>: Handler {
+public class PlainConnector <Converter: PlainConverter> {
 	public typealias Message = Converter.InputMessage
 	public typealias Details = Converter.InputDetails
+	public typealias ExporterMessage = Converter.OutputMessage
 	
 	public let converter: Converter
-	public var exporters = [AnyExporter<Converter.OutputMessage>]()
+	public var exporters = [AnyExporter<ExporterMessage>]()
 	
 	public var filters = [Filter<Message, Details>]()
 	
@@ -11,6 +12,7 @@ public class PlainConnector <Converter: PlainConverter>: Handler {
 	
 	public init (
 		converter: Converter,
+		exporters: [AnyExporter<ExporterMessage>],
 		label: String? = nil,
 		file: String = #fileID,
 		line: Int = #line
@@ -18,8 +20,42 @@ public class PlainConnector <Converter: PlainConverter>: Handler {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 		
 		self.converter = converter
+		self.exporters = exporters
 	}
 	
+	public convenience init (
+		converter: Converter,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) {
+		self.init(converter: converter, exporters: [], label: label, file: file, line: line)
+	}
+	
+	public convenience init <E: Exporter> (
+		converter: Converter,
+		exporter: E,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	)
+	where E.Message == ExporterMessage
+	{
+		self.init(converter: converter, exporters: [exporter.eraseToAnyExporter()], label: label, file: file, line: line)
+	}
+	
+	public convenience init (
+		converter: Converter,
+		exporter: AnyExporter<ExporterMessage>,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) {
+		self.init(converter: converter, exporters: [exporter], label: label, file: file, line: line)
+	}
+}
+
+extension PlainConnector: Handler {
 	public func handle (record: Record<Message, Details>) {
 		guard filters.allSatisfy({ $0(record) }) else { return }
 		
@@ -35,13 +71,13 @@ public class PlainConnector <Converter: PlainConverter>: Handler {
 
 public extension PlainConnector {
 	@discardableResult
-	func exporter <E: Exporter> (_ exporter: E) -> Self where E.Message == Converter.OutputMessage {
+	func exporter <E: Exporter> (_ exporter: E) -> Self where E.Message == ExporterMessage {
 		self.exporters.append(exporter.eraseToAnyExporter())
 		return self
 	}
 	
 	@discardableResult
-	func exporter (_ exporter: AnyExporter<Converter.OutputMessage>) -> Self {
+	func exporter (_ exporter: AnyExporter<ExporterMessage>) -> Self {
 		self.exporters.append(exporter)
 		return self
 	}
