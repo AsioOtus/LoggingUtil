@@ -112,7 +112,7 @@ public extension AnyHandler {
 	-> AnyHandler<Converter.InputMessage, Converter.InputDetails>
 	{
 		PlainConnector(
-			converter: converter,
+			converter,
 			label: label,
 			file: file,
 			line: line
