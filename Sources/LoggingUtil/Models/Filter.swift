@@ -51,5 +51,5 @@ public prefix func ! <Message: Codable, Details: RecordDetails> (_ filter: @esca
 }
 
 public extension Configuration.Key {
-	static var filterKey: Self { "filter" }
+	static var filter: Self { "filter" }
 }

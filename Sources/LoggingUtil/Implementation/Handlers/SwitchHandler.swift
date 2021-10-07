@@ -107,5 +107,5 @@ public extension SwitchHandler {
 }
 
 public extension Configuration.Key {
-	static var switchHandlerKey: Self { "switch" }
+	static var switchHandler: Self { "switch" }
 }
