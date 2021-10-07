@@ -42,7 +42,7 @@ public class StandardHandler <Message: Codable, Details: RecordDetails> {
 }
 
 extension StandardHandler: CustomizableHandler {
-	public func log (record: Record<Message, Details>) {
+	public func handle (record: Record<Message, Details>) {
 		guard isEnabled, record.metaInfo.level >= level, filters.allSatisfy({ $0(record) }) else { return }
 		
 		let record = record
@@ -51,7 +51,7 @@ extension StandardHandler: CustomizableHandler {
 			.moderateDetails(detailsEnabling)
 			.add(configuration)
 		
-		handlers.forEach{ $0.log(record: record) }
+		handlers.forEach{ $0.handle(record: record) }
 	}
 }
 

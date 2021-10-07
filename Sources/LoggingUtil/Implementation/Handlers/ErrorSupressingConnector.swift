@@ -17,7 +17,7 @@ public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Expor
 		self.exporter = exporter
 	}
 	
-	public func log (record: Record<Converter.InputMessage, Converter.InputDetails>) {
+	public func handle (record: Record<Converter.InputMessage, Converter.InputDetails>) {
 		let record = record
 			.add(identificationInfo)
 		

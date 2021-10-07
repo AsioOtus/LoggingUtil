@@ -29,12 +29,12 @@ extension StandardLogger: CustomizableLogger {
 		let metaInfo = MetaInfo(timestamp: Date().timeIntervalSince1970, level: level, label: label, file: file, line: line, stack: [])
 		let record = Record(metaInfo: metaInfo, message: message, details: details, configuration: configuration)
 		
-		log(record: record)
+		handle(record: record)
 	}
 }
 
 extension StandardLogger: Handler {
-	public func log (record: Record<Message, Details>) {
+	public func handle (record: Record<Message, Details>) {
 		guard isEnabled, record.metaInfo.level >= level else { return }
 		
 		let record = record
@@ -42,6 +42,6 @@ extension StandardLogger: Handler {
 			.add(details)
 			.add(configuration)
 		
-		handler.log(record: record)
+		handler.handle(record: record)
 	}
 }

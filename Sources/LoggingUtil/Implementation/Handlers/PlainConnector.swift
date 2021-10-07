@@ -20,7 +20,7 @@ public class PlainConnector <Converter: PlainConverter>: Handler {
 		self.converter = converter
 	}
 	
-	public func log (record: Record<Message, Details>) {
+	public func handle (record: Record<Message, Details>) {
 		guard filters.allSatisfy({ $0(record) }) else { return }
 		
 		let record = record

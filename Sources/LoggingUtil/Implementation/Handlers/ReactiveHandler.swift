@@ -24,7 +24,7 @@ public class ReactiveHandler <Message: Codable, Details: RecordDetails> {
 
 @available(iOS 13, macOS 15.0, *)
 extension ReactiveHandler: CustomizableHandler {
-	public func log (record: Record<Message, Details>) {
+	public func handle (record: Record<Message, Details>) {
 		guard isEnabled, record.metaInfo.level >= level, filters.allSatisfy({ $0(record) }) else { return }
 		
 		let record = record

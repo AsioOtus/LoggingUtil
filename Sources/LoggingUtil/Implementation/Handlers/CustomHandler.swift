@@ -31,7 +31,7 @@ public class CustomHandler <Message: Codable, Details: RecordDetails> {
 }
 
 extension CustomHandler: CustomizableHandler {
-	public func log (record: Record<Message, Details>) {
+	public func handle (record: Record<Message, Details>) {
 		guard isEnabled, record.metaInfo.level >= level, filters.allSatisfy({ $0(record) }) else { return }
 		
 		let record = record

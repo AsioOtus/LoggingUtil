@@ -5,10 +5,10 @@ public struct AnyHandler <Message: Codable, Details: RecordDetails>: Handler {
 	
 	public init <H: Handler> (_ handler: H) where H.Message == Message, H.Details == Details {
 		self.identificationInfo = handler.identificationInfo
-		self.logging = handler.log
+		self.logging = handler.handle
 	}
 	
-	public func log (record: Record<Message, Details>) {
+	public func handle (record: Record<Message, Details>) {
 		logging(record)
 	}
 }

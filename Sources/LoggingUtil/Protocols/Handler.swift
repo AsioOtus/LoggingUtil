@@ -4,5 +4,5 @@ public protocol Handler {
 	
 	var identificationInfo: IdentificationInfo { get }
 	
-	func log (record: Record<Message, Details>)
+	func handle (record: Record<Message, Details>)
 }
