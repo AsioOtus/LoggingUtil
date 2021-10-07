@@ -24,7 +24,7 @@ public class PlainConnector <Converter: PlainConverter>: FiltersCustomizable {
 	}
 	
 	public convenience init (
-		converter: Converter,
+		_ converter: Converter,
 		label: String? = nil,
 		file: String = #fileID,
 		line: Int = #line
@@ -104,7 +104,7 @@ public extension AnyHandler {
 	}
 	
 	static func plainConnector <Converter: PlainConverter> (
-		converter: Converter,
+		_ converter: Converter,
 		label: String? = nil,
 		file: String = #fileID,
 		line: Int = #line
