@@ -23,6 +23,14 @@ public class CustomHandler <Message: Codable, Details: RecordDetails> {
 	public convenience init (
 		label: String? = nil,
 		file: String = #fileID,
+		line: Int = #line
+	) {
+		self.init([], label: label, file: file, line: line)
+	}
+	
+	public convenience init (
+		label: String? = nil,
+		file: String = #fileID,
 		line: Int = #line,
 		_ handling: @escaping (Record<Message, Details>) -> ()
 	) {

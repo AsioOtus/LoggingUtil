@@ -20,6 +20,14 @@ public class StandardHandler <Message: Codable, Details: RecordDetails> {
 		self.handlers = handlers
 	}
 	
+	public convenience init (
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line
+	) {
+		self.init([], label: label, file: file, line: line)
+	}
+	
 	public convenience init <H: Handler> (
 		_ handler: H,
 		label: String? = nil,
