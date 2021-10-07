@@ -88,13 +88,13 @@ public extension SwitchHandler {
 	}
 	
 	@discardableResult
-	func defaultHandler <H: Handler> (_ key: String, _ handler: H) -> Self where H.Message == Message, H.Details == Details {
+	func defaultHandler <H: Handler> (_ handler: H) -> Self where H.Message == Message, H.Details == Details {
 		self.defaultHandler = handler.eraseToAnyHandler()
 		return self
 	}
 	
 	@discardableResult
-	func defaultHandler (_ key: String, _ handler: AnyHandler<Message, Details>) -> Self {
+	func defaultHandler (_ handler: AnyHandler<Message, Details>) -> Self {
 		self.defaultHandler = handler
 		return self
 	}
