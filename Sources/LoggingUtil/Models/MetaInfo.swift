@@ -24,4 +24,8 @@ public struct MetaInfo: Codable {
 	public func add (_ identificationInfo: IdentificationInfo) -> Self {
 		.init(timestamp: timestamp, level: level, label: label, file: file, line: line, stack: stack + [identificationInfo])
 	}
+	
+	public func add (_ identificationInfo: [IdentificationInfo]) -> Self {
+		.init(timestamp: timestamp, level: level, label: label, file: file, line: line, stack: stack + identificationInfo)
+	}
 }

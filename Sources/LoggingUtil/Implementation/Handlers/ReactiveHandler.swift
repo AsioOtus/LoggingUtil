@@ -1,5 +1,3 @@
-#if canImport(Combine)
-
 import Combine
 
 @available(iOS 13, macOS 15.0, *)
@@ -47,5 +45,3 @@ extension ReactiveHandler {
 		return self
 	}
 }
-
-#endif

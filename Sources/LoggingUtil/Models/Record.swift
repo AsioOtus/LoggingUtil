@@ -8,6 +8,10 @@ public struct Record <Message: Codable, Details: RecordDetails>: Codable {
 		.init(metaInfo: metaInfo.add(identificationInfo), message: message, details: details, configuration: configuration)
 	}
 	
+	public func add (_ identificationInfo: [IdentificationInfo]) -> Self {
+		.init(metaInfo: metaInfo.add(identificationInfo), message: message, details: details, configuration: configuration)
+	}
+	
 	public func add (_ details: Details?) -> Self {
 		.init(metaInfo: metaInfo, message: message, details: self.details?.combined(with: details) ?? self.details, configuration: configuration)
 	}
