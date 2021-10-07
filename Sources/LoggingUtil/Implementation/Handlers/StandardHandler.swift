@@ -11,7 +11,7 @@ public class StandardHandler <Message: Codable, Details: RecordDetails> {
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		_ handlers: [AnyHandler<Message, Details>] = [],
+		_ handlers: [AnyHandler<Message, Details>],
 		label: String? = nil,
 		file: String = #fileID,
 		line: Int = #line
