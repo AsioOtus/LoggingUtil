@@ -1,4 +1,11 @@
-public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Exporter>: Handler where Converter.OutputMessage == E.Message {
+public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Exporter>: FiltersCustomizable
+where Converter.OutputMessage == E.Message
+{
+	public typealias Message = Converter.InputMessage
+	public typealias Details = Converter.InputDetails
+	
+	public var filters = [Filter<Converter.InputMessage, Converter.InputDetails>]()
+	
 	public let converter: Converter
 	public let exporter: E
 	
@@ -16,7 +23,9 @@ public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Expor
 		self.converter = converter
 		self.exporter = exporter
 	}
-	
+}
+
+extension ErrorSuppressingConnector: Handler {
 	public func handle (record: Record<Converter.InputMessage, Converter.InputDetails>) {
 		let record = record
 			.add(identificationInfo)

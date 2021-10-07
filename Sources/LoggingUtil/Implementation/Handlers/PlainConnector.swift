@@ -1,4 +1,4 @@
-public class PlainConnector <Converter: PlainConverter> {
+public class PlainConnector <Converter: PlainConverter>: FiltersCustomizable {
 	public typealias Message = Converter.InputMessage
 	public typealias Details = Converter.InputDetails
 	public typealias ExporterMessage = Converter.OutputMessage
