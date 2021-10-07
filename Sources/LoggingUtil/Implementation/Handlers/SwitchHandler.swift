@@ -62,7 +62,7 @@ public class SwitchHandler <Message: Codable, Details: RecordDetails>: Customiza
 			.moderateDetails(detailsEnabling)
 			.add(configuration)
 		
-		if let switchValue = record.configuration?.keyValue[Self.switchConfigurationKey] {
+		if let switchValue = record.configuration?.keyValue[.switchHandlerKey] {
 			if let handler = handlers[switchValue] {
 				handler.handle(record: record)
 			} else if defaultForUnknownValue {

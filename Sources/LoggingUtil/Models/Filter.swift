@@ -3,14 +3,14 @@ public typealias Filter<Message: Codable, Details: RecordDetails> = (Record<Mess
 public enum Filters {
 	public static func whitelist <Message: Codable, Details: RecordDetails> (_ allowedValues: Set<String>) -> Filter<Message, Details> {
 		{ record in
-			guard let filterValue = record.configuration?.keyValue[Self.filterConfigurationKey], allowedValues.contains(filterValue) else { return false }
+			guard let filterValue = record.configuration?.keyValue[.filterKey], allowedValues.contains(filterValue) else { return false }
 			return true
 		}
 	}
 	
 	public static func blacklist <Message: Codable, Details: RecordDetails> (_ deniedValues: Set<String>) -> Filter<Message, Details> {
 		{ record in
-			guard let filterValue = record.configuration?.keyValue[Self.filterConfigurationKey], deniedValues.contains(filterValue) else { return true }
+			guard let filterValue = record.configuration?.keyValue[.filterKey], deniedValues.contains(filterValue) else { return true }
 			return false
 		}
 	}
