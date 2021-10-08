@@ -1,4 +1,4 @@
-public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Exporter>: FiltersCustomizable
+public struct ErrorSuppressingConnector <Converter: ThrowableConverter, E: Exporter>: IsEnabledCustomizable, FiltersCustomizable
 where Converter.OutputMessage == E.Message
 {
 	public typealias Message = Converter.InputMessage
