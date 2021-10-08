@@ -1,6 +1,6 @@
 @resultBuilder
-struct ArrayBuilder {
-	static func buildBlock <T> (_ components: T...) -> [T] {
+public struct ArrayBuilder {
+	public static func buildBlock <T> (_ components: T...) -> [T] {
 		components
 	}
 }
