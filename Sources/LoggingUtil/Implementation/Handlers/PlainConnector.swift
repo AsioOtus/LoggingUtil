@@ -1,12 +1,13 @@
-public class PlainConnector <Converter: PlainConverter>: FiltersCustomizable {
+public class PlainConnector <Converter: PlainConverter>: FiltersCustomizable, IsEnabledCustomizable {
 	public typealias Message = Converter.InputMessage
 	public typealias Details = Converter.InputDetails
 	public typealias ExporterMessage = Converter.OutputMessage
 	
+	public var isEnabled = true
+	public var filters = [Filter<Message, Details>]()
+	
 	public let converter: Converter
 	public var exporters = [AnyExporter<ExporterMessage>]()
-	
-	public var filters = [Filter<Message, Details>]()
 	
 	public let identificationInfo: IdentificationInfo
 	
