@@ -4,6 +4,7 @@ where Converter.OutputMessage == E.Message
 	public typealias Message = Converter.InputMessage
 	public typealias Details = Converter.InputDetails
 	
+	public var isEnabled = true
 	public var filters = [Filter<Converter.InputMessage, Converter.InputDetails>]()
 	
 	public let converter: Converter

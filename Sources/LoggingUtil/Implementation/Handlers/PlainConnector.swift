@@ -25,6 +25,16 @@ public class PlainConnector <Converter: PlainConverter>: FiltersCustomizable, Is
 	}
 	
 	public convenience init (
+		converter: Converter,
+		label: String? = nil,
+		file: String = #fileID,
+		line: Int = #line,
+		@ArrayBuilder _ exporters: () -> [AnyExporter<ExporterMessage>]
+	) {
+		self.init(converter: converter, exporters: exporters(), label: label, file: file, line: line)
+	}
+	
+	public convenience init (
 		_ converter: Converter,
 		label: String? = nil,
 		file: String = #fileID,
@@ -58,7 +68,7 @@ public class PlainConnector <Converter: PlainConverter>: FiltersCustomizable, Is
 
 extension PlainConnector: Handler {
 	public func handle (record: Record<Message, Details>) {
-		guard filters.allSatisfy({ $0(record) }) else { return }
+		guard isEnabled, filters.allSatisfy({ $0(record) }) else { return }
 		
 		let record = record
 			.add(identificationInfo)
@@ -84,6 +94,12 @@ public extension PlainConnector {
 	@discardableResult
 	func exporter (_ exporter: AnyExporter<ExporterMessage>) -> Self {
 		self.exporters.append(exporter)
+		return self
+	}
+	
+	@discardableResult
+	func exporters (@ArrayBuilder _ exporters: () -> [AnyExporter<ExporterMessage>]) -> Self {
+		self.exporters.append(contentsOf: exporters())
 		return self
 	}
 }

@@ -23,6 +23,15 @@ public class StandardHandler <Message: Codable, Details: RecordDetails> {
 	public convenience init (
 		label: String? = nil,
 		file: String = #fileID,
+		line: Int = #line,
+		@ArrayBuilder _ handlers: () -> [AnyHandler<Message, Details>]
+	) {
+		self.init(handlers(), label: label, file: file, line: line)
+	}
+	
+	public convenience init (
+		label: String? = nil,
+		file: String = #fileID,
 		line: Int = #line
 	) {
 		self.init([], label: label, file: file, line: line)
@@ -73,6 +82,12 @@ public extension StandardHandler {
 	@discardableResult
 	func handler (_ handler: AnyHandler<Message, Details>) -> Self {
 		self.handlers.append(handler)
+		return self
+	}
+	
+	@discardableResult
+	func handlers (@ArrayBuilder _ handlers: () -> [AnyHandler<Message, Details>]) -> Self {
+		self.handlers.append(contentsOf: handlers())
 		return self
 	}
 }

@@ -1,6 +1,5 @@
 public protocol CustomizableHandler:
 	Handler,
-	IsEnabledCustomizable,
 	LevelCustomizable,
 	DetailsCustomizable,
 	DetailsEnablingCustomization,

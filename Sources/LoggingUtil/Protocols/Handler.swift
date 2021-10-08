@@ -1,4 +1,4 @@
-public protocol Handler {
+public protocol Handler: IsEnabledCustomizable {
 	associatedtype Message: Codable
 	associatedtype Details: RecordDetails
 	

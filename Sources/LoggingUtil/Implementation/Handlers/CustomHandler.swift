@@ -1,4 +1,6 @@
 public class CustomHandler <Message: Codable, Details: RecordDetails> {
+	public typealias Handling = (Record<Message, Details>) -> Void
+	
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
@@ -6,12 +8,12 @@ public class CustomHandler <Message: Codable, Details: RecordDetails> {
 	public var configuration: Configuration?
 	public var filters = [Filter<Message, Details>]()
 	
-	public var handlings: [(Record<Message, Details>) -> ()]
+	public var handlings: [Handling]
 	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
-		_ handlings: [(Record<Message, Details>) -> ()] = [],
+		_ handlings: [Handling] = [],
 		label: String? = nil,
 		file: String = #fileID,
 		line: Int = #line
@@ -54,7 +56,7 @@ extension CustomHandler: CustomizableHandler {
 
 public extension CustomHandler {
 	@discardableResult
-	func handling (_ handling: @escaping (Record<Message, Details>) -> ()) -> Self {
+	func handling (_ handling: @escaping Handling) -> Self {
 		self.handlings.append(handling)
 		return self
 	}
@@ -65,7 +67,7 @@ public extension AnyHandler {
 		label: String? = nil,
 		file: String = #fileID,
 		line: Int = #line,
-		_ handling: @escaping (Record<Message, Details>) -> Void
+		_ handling: @escaping (Record<Message, Details>) -> ()
 	) -> Self {
 		CustomHandler(
 			label: label,
