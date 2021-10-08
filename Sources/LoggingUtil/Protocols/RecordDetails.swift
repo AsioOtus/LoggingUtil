@@ -1,7 +1,7 @@
 public protocol RecordDetails: Codable {
 	associatedtype Enabling: RecordDetailsEnabling
 	
-	func combined (with: Self?) -> Self
+	func combined (with: Self) -> Self
 	func moderated (_: Enabling) -> Self?
 }
 

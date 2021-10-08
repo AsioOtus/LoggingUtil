@@ -12,10 +12,10 @@ public struct CompactRecordDetails: RecordDetails {
 	public let source: [String]?
 	public let tags: Set<String>?
 	
-	public func combined (with another: Self?) -> Self {
+	public func combined (with another: Self) -> Self {
 		Self(
-			source: (another?.source ?? []) + (source ?? []),
-			tags: (another?.tags ?? []).union(tags ?? [])
+			source: combine(source, another.source) { $1 + $0 },
+			tags: combine(tags, another.tags) { $0.union($1) }
 		)
 	}
 	

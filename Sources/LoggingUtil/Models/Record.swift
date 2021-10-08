@@ -13,7 +13,7 @@ public struct Record <Message: Codable, Details: RecordDetails>: Codable {
 	}
 	
 	public func add (_ details: Details?) -> Self {
-		.init(metaInfo: metaInfo, message: message, details: self.details?.combined(with: details) ?? self.details, configuration: configuration)
+		.init(metaInfo: metaInfo, message: message, details: combine(self.details, details) { $0.combined(with: $1) }, configuration: configuration)
 	}
 
 	public func moderateDetails (_ detailsEnabling: Details.Enabling) -> Self {
@@ -21,6 +21,6 @@ public struct Record <Message: Codable, Details: RecordDetails>: Codable {
 	}
 	
 	public func add (_ configuration: Configuration?) -> Self {
-		.init(metaInfo: metaInfo, message: message, details: details, configuration: self.configuration?.combine(with: configuration))
+		.init(metaInfo: metaInfo, message: message, details: details, configuration: combine(self.configuration, configuration) { $0.combined(with: $1) })
 	}
 }

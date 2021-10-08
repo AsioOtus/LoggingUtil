@@ -5,9 +5,7 @@ public extension MetaInfo {
 			timestamp: Bool = false,
 			level: Bool = true,
 			label: Bool = false,
-			file: Bool = false,
-			function: Bool = false,
-			line: Bool = false,
+			codeInfo: Bool = false,
 			stack: Bool = false
 		)
 	}

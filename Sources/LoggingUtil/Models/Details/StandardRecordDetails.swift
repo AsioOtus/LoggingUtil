@@ -37,19 +37,13 @@ public struct StandardRecordDetails: RecordDetails {
 		self.comment = comment
 	}
 	
-	public func combined (with another: Self?) -> Self {
-		let comment = self.comment != nil && self.comment?.isEmpty == false
-			? self.comment
-			: nil
-		
-		let details = Self(
-			source: (another?.source ?? []) + (source ?? []),
-			tags: (another?.tags ?? []).union(tags ?? []),
-			keyValue: (another?.keyValue ?? [:]).merging(keyValue ?? [:], uniquingKeysWith: { _, detail in detail }),
-			comment: comment ?? another?.comment
+	public func combined (with another: Self) -> Self {		
+		Self(
+			source: combine(source, another.source) { $1 + $0 },
+			tags: combine(tags, another.tags) { $0.union($1) },
+			keyValue: combine(keyValue, another.keyValue) { $0.merging($1) { value, _ in value } },
+			comment: comment ?? another.comment
 		)
-		
-		return details
 	}
 	
 	public func moderated (_ enabling: Enabling) -> Self? {

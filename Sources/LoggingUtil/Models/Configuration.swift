@@ -5,8 +5,8 @@ public struct Configuration: Codable {
 		self.keyValue = keyValue
 	}
 	
-	public func combine (with another: Self?) -> Self {
-		Self(keyValue.merging(another?.keyValue ?? [:]) { valueA, _ in valueA })
+	public func combined (with another: Self) -> Self {
+		Self(keyValue.merging(another.keyValue) { value, _ in value })
 	}
 }
 
