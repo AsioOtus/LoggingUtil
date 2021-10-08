@@ -12,6 +12,8 @@ public struct AnyHandler <Message: Codable, Details: RecordDetails>: Handler {
 	}
 	
 	public func handle (record: Record<Message, Details>) {
+		guard isEnabled else { return }
+		
 		logging(record)
 	}
 }
