@@ -3,43 +3,34 @@ import XCTest
 
 final class CommonFlowTests: XCTestCase {
 	func testStd () {		
-		let printExporter = PrintExporter(label: "Print.Exporter")
+		let defaultExporter = PrintExporter(label: "Exporter.Default")
 		
-		let standardHandler = MultipleConnectorsHandler<String, StandardRecordDetails>(label: "Standard.Handler")
-			.connector(
-				.plain(
-					CustomConverter(label: "Custom.Converter") { record in
-						record.metaInfo.stack.compactMap{ $0.label }.joined(separator: " | ")
-					},
-					printExporter,
-					label: "Plain.Connector"
+		let centralHandler = SwitchHandler(label: "Handler.Central")
+			.handler(
+				key: "UserDefaultsUtil",
+				PlainConnector(
+					converter: SingleLineConverter(label: "Converter.SingleLine")
+						.detailsEnabling(.enabled(tags: false))
+						.metaInfoEnabling(.enabled(level: false)),
+					exporter: defaultExporter
 				)
 			)
-			.connector(
-				.plain(
-					SingleLineConverter(label: "SingleLine.Converter")
-						.metaInfoEnabling(.enabled(timestamp: true)),
-					printExporter
-				)
+			.handler(
+				key: "BaseNetworkUtil",
+				StandardHandler {
+					PlainConnector(MultilineConverter())
+						.exporter(defaultExporter)
+						.isEnabled(false)
+						.eraseToAnyHandler()
+					
+					PlainConnector(SingleLineConverter())
+						.exporter(defaultExporter)
+						.eraseToAnyHandler()
+				}
 			)
-		
-		let uiHandler = MultiplexCustomHandler<String, StandardRecordDetails>()
-		
-		
-		let centralHandler = MultiplexHandler<String, StandardRecordDetails>(label: "Central.Handler")
-			.details(.init(source: ["App"]))
-			.handler(standardHandler)
-			.handler(uiHandler)
-		
-		let globalLogger = StandardLogger(centralHandler, label: "Global.Logger")
-			.details(.init(source: ["Global"], tags: ["Kek"]))
-		
-		let moduleLogger = StandardLogger(centralHandler, label: "Module.Logger")
-			.details(.init(source: ["Module"], tags: ["Lol"]))
-		
-		
-		
-		globalLogger.info("ABC")
-		moduleLogger.notice("qwerty")
+			.defaultHandler(
+				PlainConnector(MultilineConverter(label: "Converter.Multiline"))
+					.exporter(defaultExporter)
+			)
 	}
 }
