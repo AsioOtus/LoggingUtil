@@ -1,6 +1,10 @@
 import Foundation
 
 public struct MultilineConverter: PlainConverter {
+	public typealias InputMessage = String
+	public typealias InputDetails = StandardRecordDetails
+	public typealias OutputMessage = String
+	
 	public static var defaultDateFormatter: DateFormatter {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "dd.MM.yyyy HH:mm:ss"
@@ -23,7 +27,7 @@ public struct MultilineConverter: PlainConverter {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 	}
 	
-	public func convert (_ record: Record<String, StandardRecordDetails>) -> String {
+	public func convert (_ record: Record<InputMessage, InputDetails>) -> OutputMessage {
 		let recordDetails = record.details?.moderated(detailsEnabling)
 		
 		var messageHeaderComponents = [String]()

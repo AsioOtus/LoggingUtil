@@ -13,5 +13,5 @@ public struct ThrowableCustomConverter <InputMessage: Codable, InputDetails: Rec
 		self.conversion = conversion
 	}
 	
-	public func convert (_ record: Record<InputMessage, InputDetails>) throws -> OutputMessage { try conversion(record)	}
+	public func tryConvert (_ record: Record<InputMessage, InputDetails>) throws -> OutputMessage { try conversion(record)	}
 }

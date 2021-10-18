@@ -1,4 +1,8 @@
 public struct TransparentConverter <Message: Codable, Details: RecordDetails>: PlainConverter {
+	public typealias InputMessage = Message
+	public typealias InputDetails = Details
+	public typealias OutputMessage = Record<Message, Details>
+	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (

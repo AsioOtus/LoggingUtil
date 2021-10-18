@@ -31,7 +31,7 @@ extension ErrorSuppressingConnector: Handler {
 		let record = record
 			.add(identificationInfo)
 		
-		guard let message = try? converter.convert(record) else { return }
+		guard let message = try? converter.tryConvert(record) else { return }
 		exporter.export(metaInfo: record.metaInfo, message: message)
 	}
 }

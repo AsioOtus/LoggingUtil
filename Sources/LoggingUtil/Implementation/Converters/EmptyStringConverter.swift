@@ -1,4 +1,8 @@
 public struct EmptyStringConverter: PlainConverter {
+	public typealias InputMessage = String
+	public typealias InputDetails = StandardRecordDetails
+	public typealias OutputMessage = String
+	
 	public let identificationInfo: IdentificationInfo
 	
 	public init (
@@ -9,5 +13,5 @@ public struct EmptyStringConverter: PlainConverter {
 		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
 	}
 	
-	public func convert (_ record: Record<String, StandardRecordDetails>) -> String { "" }
+	public func convert (_ record: Record<InputMessage, InputDetails>) -> OutputMessage { "" }
 }

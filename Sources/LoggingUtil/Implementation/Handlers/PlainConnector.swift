@@ -76,7 +76,7 @@ extension PlainConnector: Handler {
 		
 		for exporter in exporters {
 			let record = record
-				.add(exporters.map(\.identificationInfo))
+				.add(exporter.identificationInfo)
 			
 			let message = converter.convert(record)
 			exporter.export(metaInfo: record.metaInfo, message: message)
