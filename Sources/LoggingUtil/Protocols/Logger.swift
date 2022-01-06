@@ -2,8 +2,6 @@ public protocol Logger {
 	associatedtype Message: Codable
 	associatedtype Details: RecordDetails
 	
-	var identificationInfo: IdentificationInfo { get }
-	
 	func log (level: Level, message: Message, details: Details?, configuration: Configuration?, label: String?, file: String, line: Int)
 	
 	func trace    (_ message: Message, details: Details?, configuration: Configuration?, label: String?, file: String, line: Int)

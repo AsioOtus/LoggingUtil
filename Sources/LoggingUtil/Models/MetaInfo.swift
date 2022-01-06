@@ -1,3 +1,5 @@
+import Foundation
+
 public extension MetaInfo {
 	enum Enabling {
 		case disable
@@ -17,13 +19,10 @@ public struct MetaInfo: Codable {
 	public let label: String?
 	public let file: String
 	public let line: Int
-	public let stack: [IdentificationInfo]
-	
-	public func add (_ identificationInfo: IdentificationInfo) -> Self {
-		.init(timestamp: timestamp, level: level, label: label, file: file, line: line, stack: stack + [identificationInfo])
-	}
-	
-	public func add (_ identificationInfo: [IdentificationInfo]) -> Self {
-		.init(timestamp: timestamp, level: level, label: label, file: file, line: line, stack: stack + identificationInfo)
-	}
+}
+
+public extension MetaInfo {
+    static func now (level: Level, label: String?, file: String, line: Int) -> Self {
+        .init(timestamp: Date().timeIntervalSince1970, level: level, label: label, file: file, line: line)
+    }
 }

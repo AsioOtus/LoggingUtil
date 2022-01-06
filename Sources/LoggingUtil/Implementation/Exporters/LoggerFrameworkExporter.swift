@@ -1,25 +1,13 @@
 import os.log
+import Combine
 
 @available(iOS 14.0, macOS 11.0, *)
-public class LoggerFrameworkExporter: CustomizableExporter {
-	public var isEnabled = true
-	public var level: Level = .trace
-	
+public class LoggerFrameworkExporter: Exporter {
 	public var logger = os.Logger()
 	
-	public let identificationInfo: IdentificationInfo
-	
-	public init (
-		label: String? = nil,
-		file: String = #fileID,
-		line: Int = #line
-	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
-	}
+    public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
-		guard isEnabled, metaInfo.level >= level else { return }
-		
 		switch metaInfo.level {
 		case .trace:
 			logger.trace("\(message)")
@@ -40,3 +28,28 @@ public class LoggerFrameworkExporter: CustomizableExporter {
 		}
 	}
 }
+
+@available(iOS 14.0, macOS 11.0, *)
+extension LoggerFrameworkExporter: Subscriber {
+    public typealias Input = (metaInfo: MetaInfo, message: String)
+    public typealias Failure = Never
+    
+    public func receive (subscription: Subscription) {
+        subscription.request(.unlimited)
+    }
+    
+    public func receive (_ input: Input) -> Subscribers.Demand {
+        export(metaInfo: input.metaInfo, message: input.message)
+        return .none
+    }
+    
+    public func receive (completion: Subscribers.Completion<Never>) { }
+}
+
+@available(iOS 14.0, macOS 11.0, *)
+public extension Publisher {
+    func loggerFrameworkExport () where Output == LoggerFrameworkExporter.Input, Failure == LoggerFrameworkExporter.Failure {
+        receive(subscriber: LoggerFrameworkExporter())
+    }
+}
+

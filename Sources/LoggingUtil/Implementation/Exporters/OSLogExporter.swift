@@ -1,24 +1,12 @@
 import os.log
 import Foundation
+import Combine
 
 @available(iOS 12.0, macOS 12.0, *)
-public class OSLogExporter: CustomizableExporter {
-	public var isEnabled = true
-	public var level: Level = .trace
-	
-	public let identificationInfo: IdentificationInfo
-	
-	public init (
-		label: String? = nil,
-		file: String = #fileID,
-		line: Int = #line
-	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
-	}
+public class OSLogExporter: Exporter {
+	public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
-		guard isEnabled, metaInfo.level >= level else { return }
-		
 		let osLogType = levelToOsLogType(metaInfo.level)
 		os_log(osLogType, "%@", message as NSString)
 	}
@@ -47,4 +35,26 @@ public class OSLogExporter: CustomizableExporter {
 		
 		return osLogType
 	}
+}
+
+extension OSLogExporter: Subscriber {
+    public typealias Input = (metaInfo: MetaInfo, message: String)
+    public typealias Failure = Never
+    
+    public func receive (subscription: Subscription) {
+        subscription.request(.unlimited)
+    }
+    
+    public func receive (_ input: Input) -> Subscribers.Demand {
+        export(metaInfo: input.metaInfo, message: input.message)
+        return .none
+    }
+    
+    public func receive (completion: Subscribers.Completion<Never>) { }
+}
+
+public extension Publisher {
+    func osLogExport () where Output == OSLogExporter.Input, Failure == OSLogExporter.Failure {
+        receive(subscriber: OSLogExporter())
+    }
 }

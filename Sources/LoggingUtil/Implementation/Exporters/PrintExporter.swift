@@ -1,19 +1,32 @@
-public class PrintExporter: CustomizableExporter {
-	public var isEnabled = true
-	public var level: Level = .trace
-	
-	public let identificationInfo: IdentificationInfo
-	
-	public init (
-		label: String? = nil,
-		file: String = #fileID,
-		line: Int = #line
-	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
-	}
+import Combine
+
+public class PrintExporter: Exporter {
+    public init () { }
 	
 	public func export (metaInfo: MetaInfo, message: String) {
-		guard isEnabled, metaInfo.level >= level else { return }
 		print(message)
 	}
 }
+
+extension PrintExporter: Subscriber {
+    public typealias Input = (metaInfo: MetaInfo, message: String)
+    public typealias Failure = Never
+    
+    public func receive (subscription: Subscription) {
+        subscription.request(.unlimited)
+    }
+    
+    public func receive (_ input: Input) -> Subscribers.Demand {
+        export(metaInfo: input.metaInfo, message: input.message)
+        return .none
+    }
+    
+    public func receive (completion: Subscribers.Completion<Never>) { }
+}
+
+public extension Publisher {
+    func printExport () where Output == PrintExporter.Input, Failure == PrintExporter.Failure {
+        receive(subscriber: PrintExporter())
+    }
+}
+

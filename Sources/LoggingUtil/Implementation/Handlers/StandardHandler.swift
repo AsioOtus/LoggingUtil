@@ -2,11 +2,7 @@ public class StandardHandler <Message: Codable, Details: RecordDetails> {
 	public var isEnabled = true
 	public var level: Level = .trace
 	public var details: Details? = nil
-	public var detailsEnabling: Details.Enabling = .fullEnabled
 	public var configuration: Configuration?
-	public var filters = [Filter<Message, Details>]()
-	
-	public var handlers: [AnyHandler<Message, Details>]
 	
 	public let identificationInfo: IdentificationInfo
 	
