@@ -2,7 +2,7 @@ import Foundation
 
 public struct MultilineConverter: PlainConverter {
 	public typealias InputMessage = String
-	public typealias InputDetails = StandardRecordDetails
+	public typealias InputDetails = CompactRecordDetails
 	public typealias OutputMessage = String
 	
 	public static var defaultDateFormatter: DateFormatter {
@@ -12,14 +12,14 @@ public struct MultilineConverter: PlainConverter {
 	}
 	
 	public var metaInfoEnabling: MetaInfo.Enabling = .enabled()
-	public var detailsEnabling: StandardRecordDetails.Enabling = .defaultEnabling
+	public var detailsEnabling: InputDetails.Enabling = .defaultEnabling
 	public var levelPadding: Bool = true
 	public var componentsSeparator: String = " | "
 	public var dateFormatter: DateFormatter = defaultDateFormatter
 	
     public init () { }
 	
-	public func convert (_ record: Record<String, StandardRecordDetails>) -> OutputMessage {
+	public func convert (_ record: Record<String, InputDetails>) -> OutputMessage {
 		let recordDetails = record.details?.moderated(detailsEnabling)
 		
 		var messageHeaderComponents = [String]()
@@ -51,14 +51,6 @@ public struct MultilineConverter: PlainConverter {
 		messageComponents.append(messageHeader)
 		messageComponents.append(record.message)
 		
-		if let keyValue = recordDetails?.keyValue, !keyValue.isEmpty {
-			messageComponents.append("\(keyValue)")
-		}
-		
-		if let comment = recordDetails?.comment, !comment.isEmpty {
-			messageComponents.append(comment)
-		}
-		
 		let finalMessage = messageComponents.combine(with: "\n") + "\n"
 		return finalMessage
 	}
@@ -73,7 +65,7 @@ extension MultilineConverter {
 	}
 	
 	@discardableResult
-	public func detailsEnabling (_ detailsEnabling: StandardRecordDetails.Enabling) -> Self {
+	public func detailsEnabling (_ detailsEnabling: InputDetails.Enabling) -> Self {
 		var selfCopy = self
 		selfCopy.detailsEnabling = detailsEnabling
 		return selfCopy
