@@ -2,7 +2,7 @@ import Combine
 
 public extension Publisher {
 	@discardableResult
-	func `switchMap` <Message, Details, MapMessage> (_ switchMap: SwitchMap<Message, Details, MapMessage>) -> AnyPublisher<MapMessage, Failure>
+	func `switchMap` <Message, Details, MapMessage> (_ switchMap: SwitchMap<Message, Details, MapMessage>) -> AnyPublisher<(metaInfo: MetaInfo, message: MapMessage), Failure>
 	where Output == Record<Message, Details>, Failure == Never
 	{
 		map { switchMap.map($0) }.eraseToAnyPublisher()
@@ -22,7 +22,7 @@ public final class SwitchMap <Message: RecordMessage, Details: RecordDetails, Ou
 		self.unknown = unknown ?? `default`
 	}
 	
-	public func map (_ record: Record<Message, Details>) -> Output {
+	public func map (_ record: Record<Message, Details>) -> (MetaInfo, Output) {
 		let key = record.configuration?.keyValue[.switchMap]
 		
 		let output: Output
@@ -34,7 +34,7 @@ public final class SwitchMap <Message: RecordMessage, Details: RecordDetails, Ou
 			output = unknown(record)
 		}
 		
-		return output
+		return (record.metaInfo, output)
 	}
 	
 	@discardableResult
