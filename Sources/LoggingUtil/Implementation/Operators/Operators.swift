@@ -13,17 +13,17 @@ public extension Publisher {
         map { $0.add(details) }.eraseToAnyPublisher()
     }
     
-    func isDetailsEnabled <Message, Details: RecordDetails> (_ isEnabled: Bool = true) -> AnyPublisher<Output, Failure>
-    where Output == Record<Message, Details>, Failure == Never
-    {
-        map { $0.moderateDetails(isEnabled ? .fullEnabled : .fullDisabled) }.eraseToAnyPublisher()
-    }
-    
     func detailsEnabling <Message, Details: RecordDetails> (_ enabling: Details.Enabling) -> AnyPublisher<Output, Failure>
     where Output == Record<Message, Details>, Failure == Never
     {
         map { $0.moderateDetails(enabling) }.eraseToAnyPublisher()
     }
+	
+	func clearDetails <Message, Details: RecordDetails> (_ isEnabled: Bool = true) -> AnyPublisher<Output, Failure>
+	where Output == Record<Message, Details>, Failure == Never
+	{
+		map { isEnabled ? $0 : $0.details(nil) }.eraseToAnyPublisher()
+	}
     
     func addConfiguration <Message, Details> (_ configuration: Configuration) -> AnyPublisher<Output, Failure>
     where Output == Record<Message, Details>, Failure == Never
@@ -62,4 +62,18 @@ public extension Publisher {
     {
         tryMap { ($0.metaInfo, try converter.tryConvert($0)) }.eraseToAnyPublisher()
     }
+	
+	@discardableResult
+	func convertMessage <InputMessage, OutputMessage, Details> (_ mapping: @escaping (InputMessage) -> OutputMessage) -> AnyPublisher<Record<OutputMessage, Details>, Failure>
+	where Output == Record<InputMessage, Details>, Failure == Never
+	{
+		map { $0.message(mapping($0.message)) }.eraseToAnyPublisher()
+	}
+	
+	@discardableResult
+	func convertDetails <InputDetails, OutputDetails, Message> (_ mapping: @escaping (InputDetails?) -> OutputDetails?) -> AnyPublisher<Record<Message, OutputDetails>, Failure>
+	where Output == Record<Message, InputDetails>, Failure == Never
+	{
+		map { $0.details(mapping($0.details)) }.eraseToAnyPublisher()
+	}
 }

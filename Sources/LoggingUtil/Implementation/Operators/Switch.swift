@@ -19,20 +19,22 @@ public final class Switch <P: Publisher, Message: Codable, Details: RecordDetail
     
     @discardableResult
     public func `case` (_ key: String, _ handler: (AnyPublisher<Record<Message, Details>, Never>) -> Void) -> Self {
-        let p = publisher
+        let casePublisher = publisher
             .filter { $0.configuration?.keyValue[.switch] == key }
             .eraseToAnyPublisher()
-        handler(p)
+		
+        handler(casePublisher)
         
         return self
     }
     
     @discardableResult
     public func `default` (_ handler: (AnyPublisher<Record<Message, Details>, Never>) -> Void) -> Self {
-        let p = publisher
+        let defaultPublisher = publisher
             .filter { $0.configuration?.keyValue[.switch] == nil }
             .eraseToAnyPublisher()
-        handler(p)
+		
+        handler(defaultPublisher)
         
         return self
     }

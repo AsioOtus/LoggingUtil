@@ -21,4 +21,12 @@ public struct Record <Message: Codable, Details: RecordDetails>: Codable {
 	public func add (_ configuration: Configuration?) -> Self {
 		.init(metaInfo: metaInfo, message: message, details: details, configuration: combine(self.configuration, configuration) { $0.combined(with: $1) })
 	}
+	
+	public func message <NewMessage: Codable> (_ message: NewMessage) -> Record<NewMessage, Details> {
+		.init(metaInfo: metaInfo, message: message, details: details, configuration: configuration)
+	}
+	
+	public func details <NewDetails: RecordDetails> (_ details: NewDetails?) -> Record<Message, NewDetails> {
+		.init(metaInfo: metaInfo, message: message, details: details, configuration: configuration)
+	}
 }

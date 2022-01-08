@@ -7,8 +7,7 @@ public extension MetaInfo {
 			timestamp: Bool = false,
 			level: Bool = true,
 			label: Bool = false,
-			codeInfo: Bool = false,
-			stack: Bool = false
+			codeInfo: Bool = false
 		)
 	}
 }

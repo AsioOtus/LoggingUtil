@@ -16,7 +16,7 @@ public protocol RecordDetailsEnabling {
 
 
 extension Bool: RecordDetailsEnabling {
-    public static var defaultEnabling: Bool { true }
-    public static var fullEnabled: Bool { true }
-    public static var fullDisabled: Bool { false }
+    public static var defaultEnabling: Self { true }
+    public static var fullEnabled: Self { true }
+    public static var fullDisabled: Self { false }
 }
