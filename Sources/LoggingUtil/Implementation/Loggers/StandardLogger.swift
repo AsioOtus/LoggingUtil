@@ -3,6 +3,7 @@ import Combine
 
 public class StandardLogger <Message: RecordMessage, Details: RecordDetails> {
     private let subject = PassthroughSubject<Record<Message, Details>, Never>()
+	public var records: AnyPublisher<Record<Message, Details>, Never> { subject.eraseToAnyPublisher() }
     
     public init () { }
 }
