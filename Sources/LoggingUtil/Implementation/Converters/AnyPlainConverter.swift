@@ -1,4 +1,4 @@
-public struct AnyPlainConverter <Message: Codable, Details: RecordDetails, OutputMessage>: PlainConverter {
+public struct AnyPlainConverter <Message: RecordMessage, Details: RecordDetails, OutputMessage>: PlainConverter {
     public typealias InputMessage = Message
     public typealias InputDetails = Details
     

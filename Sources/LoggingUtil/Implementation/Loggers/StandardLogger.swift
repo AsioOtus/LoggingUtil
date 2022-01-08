@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-public class StandardLogger <Message: Codable, Details: RecordDetails> {
+public class StandardLogger <Message: RecordMessage, Details: RecordDetails> {
     private let subject = PassthroughSubject<Record<Message, Details>, Never>()
     
     public init () { }

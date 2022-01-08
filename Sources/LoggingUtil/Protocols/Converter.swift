@@ -3,7 +3,7 @@ public protocol Converter { }
 
 
 public protocol OptionalConverter: Converter {
-	associatedtype InputMessage: Codable
+	associatedtype InputMessage: RecordMessage
 	associatedtype InputDetails: RecordDetails
 	associatedtype OutputMessage
 	

@@ -1,4 +1,4 @@
-public struct Record <Message: Codable, Details: RecordDetails>: Codable {
+public struct Record <Message: RecordMessage, Details: RecordDetails>: Codable {
 	public let metaInfo: MetaInfo
 	public let message: Message
 	public let details: Details?

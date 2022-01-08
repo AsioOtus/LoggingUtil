@@ -1,4 +1,4 @@
-public struct EmptyStringConverter <Message: Codable, Details: RecordDetails>: PlainConverter {
+public struct EmptyStringConverter <Message: RecordMessage, Details: RecordDetails>: PlainConverter {
     public typealias InputMessage = Message
     public typealias InputDetails = Details
     public typealias OutputMessage = String

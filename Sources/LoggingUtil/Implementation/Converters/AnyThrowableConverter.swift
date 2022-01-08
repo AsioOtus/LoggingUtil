@@ -1,4 +1,4 @@
-public struct AnyThrowableConverter <Message: Codable, Details: RecordDetails, OutputMessage>: ThrowableConverter {
+public struct AnyThrowableConverter <Message: RecordMessage, Details: RecordDetails, OutputMessage>: ThrowableConverter {
     public typealias InputMessage = Message
     public typealias InputDetails = Details
     

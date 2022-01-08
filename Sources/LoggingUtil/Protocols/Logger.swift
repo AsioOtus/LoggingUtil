@@ -1,5 +1,5 @@
 public protocol Logger {
-	associatedtype Message: Codable
+	associatedtype Message: RecordMessage
 	associatedtype Details: RecordDetails
 	
 	func log (level: Level, message: Message, details: Details?, configuration: Configuration?, label: String?, file: String, line: Int)

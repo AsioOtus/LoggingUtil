@@ -10,7 +10,7 @@ public extension Publisher {
     }
 }
 
-public final class Switch <P: Publisher, Message: Codable, Details: RecordDetails> where P.Output == Record<Message, Details>, P.Failure == Never {
+public final class Switch <P: Publisher, Message: RecordMessage, Details: RecordDetails> where P.Output == Record<Message, Details>, P.Failure == Never {
     private let publisher: AnyPublisher<Record<Message, Details>, Never>
     
     init (_ publisher: AnyPublisher<Record<Message, Details>, Never>) {
