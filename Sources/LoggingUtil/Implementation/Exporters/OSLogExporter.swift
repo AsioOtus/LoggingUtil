@@ -37,6 +37,7 @@ public class OSLogExporter: Exporter {
 	}
 }
 
+@available(iOS 12.0, macOS 12.0, *)
 extension OSLogExporter: Subscriber {
     public typealias Input = (metaInfo: MetaInfo, message: String)
     public typealias Failure = Never
@@ -53,6 +54,7 @@ extension OSLogExporter: Subscriber {
     public func receive (completion: Subscribers.Completion<Never>) { }
 }
 
+@available(iOS 12.0, macOS 12.0, *)
 public extension Publisher {
     func osLogExport () where Output == OSLogExporter.Input, Failure == OSLogExporter.Failure {
         receive(subscriber: OSLogExporter())

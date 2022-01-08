@@ -1,6 +1,6 @@
 public extension StandardRecordDetails {
-	enum Enabling: RecordDetailsEnabling {
-		case disable
+    enum Enabling: RecordDetailsEnabling {
+		case disabled
 		case enabled(
 			source: Bool = true,
 			tags: Bool = true,
@@ -16,6 +16,8 @@ public extension StandardRecordDetails {
 			keyValue: true,
 			comment: true
 		)
+        
+        public static let fullDisabled = disabled
 	}
 }
 

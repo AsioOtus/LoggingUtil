@@ -22,9 +22,7 @@ public enum Filters {
 	public static func maxLevel <Message: Codable, Details: RecordDetails> (_ level: Level) -> Filter<Message, Details> {
 		{ record in record.metaInfo.level <= level }
 	}
-}
 
-public extension Filters {
 	static func sourceContains <Message: Codable> (oneOf values: Set<String>) -> Filter<Message, StandardRecordDetails> {
 		{ record in
 			guard let source = record.details?.source else { return false }

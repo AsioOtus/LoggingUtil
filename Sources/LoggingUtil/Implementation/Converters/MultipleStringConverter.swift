@@ -17,17 +17,9 @@ public struct MultilineConverter: PlainConverter {
 	public var componentsSeparator: String = " | "
 	public var dateFormatter: DateFormatter = defaultDateFormatter
 	
-	public let identificationInfo: IdentificationInfo
+    public init () { }
 	
-	public init (
-		label: String? = nil,
-		file: String = #fileID,
-		line: Int = #line
-	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
-	}
-	
-	public func convert (_ record: Record<InputMessage, InputDetails>) -> OutputMessage {
+	public func convert (_ record: Record<String, StandardRecordDetails>) -> OutputMessage {
 		let recordDetails = record.details?.moderated(detailsEnabling)
 		
 		var messageHeaderComponents = [String]()
@@ -113,6 +105,14 @@ extension MultilineConverter {
 		dateFormatterUpdating(dateFormatter)
 		return self
 	}
+}
+
+
+
+public extension AnyPlainConverter {
+    static var multilineConverter: AnyPlainConverter<MultilineConverter.InputMessage, MultilineConverter.InputDetails, MultilineConverter.OutputMessage> {
+        MultilineConverter().eraseToAnyPlainConverter()
+    }
 }
 
 

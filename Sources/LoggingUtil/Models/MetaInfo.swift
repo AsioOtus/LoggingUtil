@@ -26,3 +26,7 @@ public extension MetaInfo {
         .init(timestamp: Date().timeIntervalSince1970, level: level, label: label, file: file, line: line)
     }
 }
+
+internal extension MetaInfo {
+    static var empty: Self { .init(timestamp: 0, level: .trace, label: nil, file: "", line: 0) }
+}

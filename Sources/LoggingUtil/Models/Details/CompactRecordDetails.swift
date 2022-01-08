@@ -1,10 +1,11 @@
 public extension CompactRecordDetails {
-	enum Enabling: RecordDetailsEnabling {
+    enum Enabling: RecordDetailsEnabling {
 		case disabled
 		case enabled(source: Bool = true, tags: Bool = true)
 		
 		public static let defaultEnabling = enabled()
 		public static let fullEnabled = enabled()
+        public static let fullDisabled = disabled
 	}
 }
 
@@ -12,6 +13,11 @@ public struct CompactRecordDetails: RecordDetails {
 	public let source: [String]?
 	public let tags: Set<String>?
 	
+    public init (source: [String]? = nil, tags: Set<String>? = nil) {
+        self.source = source
+        self.tags = tags
+    }
+    
 	public func combined (with another: Self) -> Self {
 		Self(
 			source: combine(source, another.source) { $1 + $0 },

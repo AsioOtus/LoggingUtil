@@ -1,17 +1,15 @@
-public struct EmptyStringConverter: PlainConverter {
-	public typealias InputMessage = String
-	public typealias InputDetails = StandardRecordDetails
-	public typealias OutputMessage = String
+public struct EmptyStringConverter <Message: Codable, Details: RecordDetails>: PlainConverter {
+    public typealias InputMessage = Message
+    public typealias InputDetails = Details
+    public typealias OutputMessage = String
 	
-	public let identificationInfo: IdentificationInfo
-	
-	public init (
-		label: String? = nil,
-		file: String = #fileID,
-		line: Int = #line
-	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
-	}
+    public init () { }
 	
 	public func convert (_ record: Record<InputMessage, InputDetails>) -> OutputMessage { "" }
+}
+
+public extension AnyPlainConverter {
+    static var emptyStringConverter: AnyPlainConverter<InputMessage, InputDetails, String> {
+        EmptyStringConverter().eraseToAnyPlainConverter()
+    }
 }

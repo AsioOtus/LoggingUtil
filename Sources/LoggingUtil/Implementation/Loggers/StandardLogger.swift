@@ -30,17 +30,16 @@ extension StandardLogger: Subject {
 
 extension StandardLogger: Logger {
 	public func log (level: Level, message: Message, details: Details? = nil, configuration: Configuration? = nil, label: String? = nil, file: String = #fileID, line: Int = #line) {
-        let metaInfo = MetaInfo.now(level: level, label: label, file: file, line: line)
-		let record = Record(metaInfo: metaInfo, message: message, details: details, configuration: configuration)
-		
+        let record = Record.now(
+            level: level,
+            message: message,
+            details: details,
+            configuration: configuration,
+            label: label,
+            file: file,
+            line: line
+        )
+        
         subject.send(record)
 	}
-}
-
-
-
-
-
-public class StandardHandler <Message: Codable, Details: RecordDetails> {
-    
 }

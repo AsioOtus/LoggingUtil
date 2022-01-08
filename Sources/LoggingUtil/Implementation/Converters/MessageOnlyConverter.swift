@@ -3,15 +3,13 @@ public struct MessageOnlyConverter <Message: Codable, Details: RecordDetails>: P
 	public typealias InputDetails = Details
 	public typealias OutputMessage = Message
 	
-	public let identificationInfo: IdentificationInfo
+    public init () { }
 	
-	public init (
-		label: String? = nil,
-		file: String = #fileID,
-		line: Int = #line
-	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
-	}
-	
-	public func convert (_ record: Record<InputMessage, InputDetails>) -> OutputMessage { record.message }
+	public func convert (_ record: Record<InputMessage, InputDetails>) -> InputMessage { record.message }
+}
+
+public extension AnyPlainConverter {
+    static var messageOnlyConverter: AnyPlainConverter<InputMessage, InputDetails, InputMessage> {
+        MessageOnlyConverter().eraseToAnyPlainConverter()
+    }
 }

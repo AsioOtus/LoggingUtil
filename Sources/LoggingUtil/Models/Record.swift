@@ -4,14 +4,12 @@ public struct Record <Message: Codable, Details: RecordDetails>: Codable {
 	public let details: Details?
 	public let configuration: Configuration?
 	
-	public func add (_ identificationInfo: IdentificationInfo) -> Self {
-		.init(metaInfo: metaInfo.add(identificationInfo), message: message, details: details, configuration: configuration)
-	}
-	
-	public func add (_ identificationInfo: [IdentificationInfo]) -> Self {
-		.init(metaInfo: metaInfo.add(identificationInfo), message: message, details: details, configuration: configuration)
-	}
-	
+    public static func now (level: Level, message: Message, details: Details? = nil, configuration: Configuration? = nil, label: String? = nil, file: String, line: Int) -> Self {
+        let metaInfo = MetaInfo.now(level: level, label: label, file: file, line: line)
+        let record = Record(metaInfo: metaInfo, message: message, details: details, configuration: configuration)
+        return record
+    }
+    
 	public func add (_ details: Details?) -> Self {
 		.init(metaInfo: metaInfo, message: message, details: combine(self.details, details) { $0.combined(with: $1) }, configuration: configuration)
 	}

@@ -1,6 +1,4 @@
-public protocol Converter {
-	var identificationInfo: IdentificationInfo { get }
-}
+public protocol Converter { }
 
 
 

@@ -2,7 +2,7 @@ import Foundation
 
 public struct SingleLineConverter: PlainConverter {
 	public typealias InputMessage = String
-	public typealias InputDetails = StandardRecordDetails
+	public typealias InputDetails = CompactRecordDetails
 	public typealias OutputMessage = String
 	
 	public static var defaultDateFormatter: DateFormatter {
@@ -12,20 +12,12 @@ public struct SingleLineConverter: PlainConverter {
 	}
 	
 	public var metaInfoEnabling = MetaInfo.Enabling.enabled()
-	public var detailsEnabling = StandardRecordDetails.Enabling.defaultEnabling
+	public var detailsEnabling = InputDetails.Enabling.defaultEnabling
 	public var levelPadding = true
 	public var componentsSeparator = " | "
 	public var dateFormatter: DateFormatter = defaultDateFormatter
 	
-	public let identificationInfo: IdentificationInfo
-	
-	public init (
-		label: String? = nil,
-		file: String = #fileID,
-		line: Int = #line
-	) {
-		self.identificationInfo = .init(type: String(describing: Self.self), file: file, line: line, label: label)
-	}
+    public init () { }
 	
 	public func convert (_ record: Record<InputMessage, InputDetails>) -> OutputMessage {
 		let recordDetails = record.details?.moderated(detailsEnabling)
@@ -54,14 +46,6 @@ public struct SingleLineConverter: PlainConverter {
 		
 		messageComponents.append(record.message)
 		
-		if let keyValue = recordDetails?.keyValue, !keyValue.isEmpty {
-			messageComponents.append("\(keyValue)")
-		}
-		
-		if let comment = recordDetails?.comment, !comment.isEmpty {
-			messageComponents.append(comment)
-		}
-		
 		let finalMessage = messageComponents.combine(with: componentsSeparator)
 		return finalMessage
 	}
@@ -76,7 +60,7 @@ extension SingleLineConverter {
 	}
 	
 	@discardableResult
-	public func detailsEnabling (_ detailsEnabling: StandardRecordDetails.Enabling) -> Self {
+	public func detailsEnabling (_ detailsEnabling: InputDetails.Enabling) -> Self {
 		var selfCopy = self
 		selfCopy.detailsEnabling = detailsEnabling
 		return selfCopy
@@ -99,11 +83,17 @@ extension SingleLineConverter {
 
 
 
-fileprivate extension Level {
-	var logDescription: String { self.rawValue.uppercased() }
+public extension AnyPlainConverter {
+    static var singleLineConverter: AnyPlainConverter<SingleLineConverter.InputMessage, SingleLineConverter.InputDetails, SingleLineConverter.OutputMessage> {
+        SingleLineConverter().eraseToAnyPlainConverter()
+    }
 }
 
 
+
+fileprivate extension Level {
+	var logDescription: String { self.rawValue.uppercased() }
+}
 
 fileprivate extension Array where Element == String {
 	func combine (with separator: String) -> String {
