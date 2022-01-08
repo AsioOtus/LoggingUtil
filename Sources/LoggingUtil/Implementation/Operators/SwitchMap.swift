@@ -44,6 +44,18 @@ public final class SwitchMap <Message: RecordMessage, Details: RecordDetails, Ou
 	}
 }
 
+public extension SwitchMap {
+	convenience init (default defaultConverter: AnyPlainConverter<Message, Details, Output>, unknown unknownConverter: AnyPlainConverter<Message, Details, Output>? = nil) {
+		self.init(default: defaultConverter.convert(_:), unknown: unknownConverter?.convert(_:))
+	}
+	
+	@discardableResult
+	func `case` (_ key: String, _ mapping: AnyPlainConverter<Message, Details, Output>) -> Self {
+		cases[key] = mapping.convert(_:)
+		return self
+	}
+}
+
 public extension Configuration.Key {
 	static var `switchMap`: Self { "switchMap" }
 }
