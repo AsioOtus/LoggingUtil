@@ -1,79 +1,79 @@
 import Combine
 
 public extension Publisher {
-    func isEnabled <Message, Details> (_ isEnabled: Bool = true) -> AnyPublisher<Output, Failure>
+    func isEnabled <Message, Details> (_ isEnabled: Bool = true) -> Publishers.Filter<Self>
     where Output == Record<Message, Details>, Failure == Never
     {
-        filter { _ in isEnabled }.eraseToAnyPublisher()
+		filter { _ in isEnabled }
     }
     
-    func addDetails <Message, Details: RecordDetails> (_ details: Details) -> AnyPublisher<Output, Failure>
+    func addDetails <Message, Details: RecordDetails> (_ details: Details) -> Publishers.Map<Self, Record<Message, Details>>
     where Output == Record<Message, Details>, Failure == Never
     {
-        map { $0.add(details) }.eraseToAnyPublisher()
+        map { $0.add(details) }
     }
     
-    func detailsEnabling <Message, Details: RecordDetails> (_ enabling: Details.Enabling) -> AnyPublisher<Output, Failure>
+    func detailsEnabling <Message, Details: RecordDetails> (_ enabling: Details.Enabling) -> Publishers.Map<Self, Record<Message, Details>>
     where Output == Record<Message, Details>, Failure == Never
     {
-        map { $0.moderateDetails(enabling) }.eraseToAnyPublisher()
+        map { $0.moderateDetails(enabling) }
     }
 	
-	func clearDetails <Message, Details: RecordDetails> (_ isEnabled: Bool = true) -> AnyPublisher<Output, Failure>
+	func clearDetails <Message, Details: RecordDetails> (_ isEnabled: Bool = true) -> Publishers.Map<Self, Record<Message, Details>>
 	where Output == Record<Message, Details>, Failure == Never
 	{
-		map { isEnabled ? $0 : $0.details(nil) }.eraseToAnyPublisher()
+		map { isEnabled ? $0 : $0.details(nil) }
 	}
     
-    func addConfiguration <Message, Details> (_ configuration: Configuration) -> AnyPublisher<Output, Failure>
+    func addConfiguration <Message, Details> (_ configuration: Configuration) -> Publishers.Map<Self, Record<Message, Details>>
     where Output == Record<Message, Details>, Failure == Never
     {
-        map { $0.add(configuration) }.eraseToAnyPublisher()
+        map { $0.add(configuration) }
     }
     
-    func filterLevel <Message, Details> (_ level: Level) -> AnyPublisher<Output, Failure>
+    func filterLevel <Message, Details> (_ level: Level) -> Publishers.Filter<Self>
     where Output == Record<Message, Details>, Failure == Never
     {
-        filter { $0.metaInfo.level >= level }.eraseToAnyPublisher()
+        filter { $0.metaInfo.level >= level }
     }
     
-    func filter <Message, Details> (_ predicate: @escaping Filter<Message, Details>) -> AnyPublisher<Output, Failure>
+    func filter <Message, Details> (_ predicate: @escaping Filter<Message, Details>) -> Publishers.Filter<Self>
     where Output == Record<Message, Details>, Failure == Never
     {
-        filter { predicate($0) }.eraseToAnyPublisher()
+        filter { predicate($0) }
     }
     
-    func filter <Message, Details> (_ predicates: [Filter<Message, Details>]) -> AnyPublisher<Output, Failure>
+    func filter <Message, Details> (_ predicates: [Filter<Message, Details>]) -> Publishers.Filter<Self>
     where Output == Record<Message, Details>, Failure == Never
     {
-        filter { record in predicates.allSatisfy{ $0(record) } }.eraseToAnyPublisher()
+        filter { record in predicates.allSatisfy{ $0(record) } }
     }
     
-    func convert <Message, Details, OutputMessage> (_ converter: AnyPlainConverter<Message, Details, OutputMessage>) -> AnyPublisher<(metaInfo: MetaInfo, message: OutputMessage), Never>
+    func convert <Message, Details, OutputMessage> (_ converter: AnyPlainConverter<Message, Details, OutputMessage>) -> Publishers.Map<Self, (metaInfo: MetaInfo, message: OutputMessage)>
     where
     Output == Record<Message, Details>,
     Failure == Never
     {
-        map { ($0.metaInfo, converter.convert($0)) }.eraseToAnyPublisher()
+        map { ($0.metaInfo, converter.convert($0)) }
     }
     
-    func tryConvert <Message, Details, OutputMessage> (_ converter: AnyThrowableConverter<Message, Details, OutputMessage>) -> AnyPublisher<(metaInfo: MetaInfo, message: OutputMessage), Error>
+    func tryConvert <Message, Details, OutputMessage> (_ converter: AnyThrowableConverter<Message, Details, OutputMessage>) -> Publishers.TryMap<Self, (metaInfo: MetaInfo, message: OutputMessage)>
     where Output == Record<Message, Details>
     {
-        tryMap { ($0.metaInfo, try converter.tryConvert($0)) }.eraseToAnyPublisher()
+        tryMap { ($0.metaInfo, try converter.tryConvert($0)) }
     }
 	
 	@discardableResult
-	func convertMessage <InputMessage, OutputMessage, Details> (_ mapping: @escaping (InputMessage) -> OutputMessage) -> AnyPublisher<Record<OutputMessage, Details>, Failure>
+	func convertMessage <InputMessage, OutputMessage, Details> (_ mapping: @escaping (InputMessage) -> OutputMessage) -> Publishers.Map<Self, Record<OutputMessage, Details>>
 	where Output == Record<InputMessage, Details>, Failure == Never
 	{
-		map { $0.message(mapping($0.message)) }.eraseToAnyPublisher()
+		map { $0.message(mapping($0.message)) }
 	}
 	
 	@discardableResult
-	func convertDetails <InputDetails, OutputDetails, Message> (_ mapping: @escaping (InputDetails?) -> OutputDetails?) -> AnyPublisher<Record<Message, OutputDetails>, Failure>
+	func convertDetails <InputDetails, OutputDetails, Message> (_ mapping: @escaping (InputDetails?) -> OutputDetails?) -> Publishers.Map<Self, Record<Message, OutputDetails>>
 	where Output == Record<Message, InputDetails>, Failure == Never
 	{
-		map { $0.details(mapping($0.details)) }.eraseToAnyPublisher()
+		map { $0.details(mapping($0.details)) }
 	}
 }

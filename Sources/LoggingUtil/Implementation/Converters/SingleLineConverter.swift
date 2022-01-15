@@ -84,8 +84,8 @@ extension SingleLineConverter {
 
 
 public extension AnyPlainConverter {
-    static var singleLineConverter: AnyPlainConverter<SingleLineConverter.InputMessage, SingleLineConverter.InputDetails, SingleLineConverter.OutputMessage> {
-        SingleLineConverter().eraseToAnyPlainConverter()
+    static var singleLineConverter: SingleLineConverter {
+		.init()
     }
 }
 

@@ -2,10 +2,10 @@ import Combine
 
 public extension Publisher {
 	@discardableResult
-	func `switchMap` <Message, Details, MapMessage> (_ switchMap: SwitchMap<Message, Details, MapMessage>) -> AnyPublisher<(metaInfo: MetaInfo, message: MapMessage), Failure>
+	func `switchMap` <Message, Details, MapMessage> (_ switchMap: SwitchMap<Message, Details, MapMessage>) -> Publishers.Map<Self, (metaInfo: MetaInfo, message: MapMessage)>
 	where Output == Record<Message, Details>, Failure == Never
 	{
-		map { switchMap.map($0) }.eraseToAnyPublisher()
+		map { switchMap.map($0) }
 	}
 }
 

@@ -2,11 +2,11 @@ import Combine
 
 public extension Publisher {
     @discardableResult
-    func `switch` <Message, Details> (_ cases: (Switch<Self, Message, Details>) -> Void) -> AnyPublisher<Output, Failure>
+    func `switch` <Message, Details> (_ cases: (Switch<Self, Message, Details>) -> Void) -> Self
     where Output == Record<Message, Details>, Failure == Never
     {
         cases(Switch<Self, Message, Details>(self.eraseToAnyPublisher()))
-        return self.eraseToAnyPublisher()
+        return self
     }
 }
 

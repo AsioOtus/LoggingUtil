@@ -15,7 +15,7 @@ public struct StringToJSONDataConverter: ThrowableConverter {
 }
 
 public extension AnyThrowableConverter {
-    static func stringToJsonDataConverter (jsonEncoder: JSONEncoder = .init()) -> AnyThrowableConverter<StringToJSONDataConverter.InputMessage, StringToJSONDataConverter.InputDetails, StringToJSONDataConverter.OutputMessage> {
-        StringToJSONDataConverter(jsonEncoder: jsonEncoder).eraseToAnyThrowableConverter()
+    static func stringToJsonDataConverter (jsonEncoder: JSONEncoder = .init()) -> StringToJSONDataConverter {
+		.init(jsonEncoder: jsonEncoder)
     }
 }

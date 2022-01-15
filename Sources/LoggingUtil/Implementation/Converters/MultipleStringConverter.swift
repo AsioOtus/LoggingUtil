@@ -102,8 +102,8 @@ extension MultilineConverter {
 
 
 public extension AnyPlainConverter {
-    static var multilineConverter: AnyPlainConverter<MultilineConverter.InputMessage, MultilineConverter.InputDetails, MultilineConverter.OutputMessage> {
-        MultilineConverter().eraseToAnyPlainConverter()
+    static var multilineConverter: MultilineConverter {
+		.init()
     }
 }
 
