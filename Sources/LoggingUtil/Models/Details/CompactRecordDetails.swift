@@ -17,6 +17,11 @@ public struct CompactRecordDetails: RecordDetails {
         self.source = source
         self.tags = tags
     }
+	
+	public init (source: String? = nil, tag: String? = nil) {
+		self.source = source.map{ [$0] } ?? []
+		self.tags =  tag.map{ [$0] } ?? []
+	}
     
 	public func combined (with another: Self) -> Self {
 		Self(
