@@ -7,31 +7,31 @@ public class LoggerFrameworkExporter: Exporter {
 	
     public init () { }
 	
-	public func export (metaInfo: MetaInfo, message: String) {
-		switch metaInfo.level {
+	public func export (_ record: ExportRecord<String>) {
+		switch record.metaInfo.level {
 		case .trace:
-			logger.trace("\(message)")
+			logger.trace("\(record.message)")
 		case .debug:
-			logger.debug("\(message)")
+			logger.debug("\(record.message)")
 		case .info:
-			logger.info("\(message)")
+			logger.info("\(record.message)")
 		case .notice:
-			logger.notice("\(message)")
+			logger.notice("\(record.message)")
 		case .warning:
-			logger.warning("\(message)")
+			logger.warning("\(record.message)")
 		case .error:
-			logger.error("\(message)")
+			logger.error("\(record.message)")
 		case .critical:
-			logger.critical("\(message)")
+			logger.critical("\(record.message)")
 		case .fault:
-			logger.fault("\(message)")
+			logger.fault("\(record.message)")
 		}
 	}
 }
 
 @available(iOS 14.0, macOS 11.0, *)
 extension LoggerFrameworkExporter: Subscriber {
-    public typealias Input = (metaInfo: MetaInfo, message: String)
+    public typealias Input = ExportRecord<String>
     public typealias Failure = Never
     
     public func receive (subscription: Subscription) {
@@ -39,7 +39,7 @@ extension LoggerFrameworkExporter: Subscriber {
     }
     
     public func receive (_ input: Input) -> Subscribers.Demand {
-        export(metaInfo: input.metaInfo, message: input.message)
+        export(input)
         return .none
     }
     

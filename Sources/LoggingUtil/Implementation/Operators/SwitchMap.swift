@@ -23,7 +23,7 @@ public final class SwitchMap <Message: RecordMessage, Details: RecordDetails, Ou
 	}
 	
 	public func map (_ record: Record<Message, Details>) -> (MetaInfo, Output) {
-		let key = record.configuration?.keyValue[.switchMap]
+		let key = record.configuration?.keyValue[.switchMap] as? String
 		
 		let output: Output
 		if let mapping = cases.first(where: { $0.key == key })?.value {

@@ -11,10 +11,10 @@ public class PlainRemoteExporter: Exporter {
 		self.url = url
 	}
 	
-	public func export (metaInfo: MetaInfo, message: Data) {
+	public func export (_ record: ExportRecord<Data>) {
 		var urlRequest = URLRequest(url: url)
 		urlRequest.httpMethod = "POST"
-		urlRequest.httpBody = message
+		urlRequest.httpBody = record.message
 		
 		urlSession.dataTask(with: urlRequest) { (data, urlResponse, error) in
 			if let error = error {
@@ -39,7 +39,7 @@ public extension PlainRemoteExporter {
 }
 
 extension PlainRemoteExporter: Subscriber {
-    public typealias Input = (metaInfo: MetaInfo, message: Data)
+    public typealias Input = ExportRecord<Data>
     public typealias Failure = Never
     
     public func receive (subscription: Subscription) {
@@ -47,7 +47,7 @@ extension PlainRemoteExporter: Subscriber {
     }
     
     public func receive (_ input: Input) -> Subscribers.Demand {
-        export(metaInfo: input.metaInfo, message: input.message)
+        export(input)
         return .none
     }
     

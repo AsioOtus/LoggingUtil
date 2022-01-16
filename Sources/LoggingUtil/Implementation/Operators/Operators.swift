@@ -49,18 +49,18 @@ public extension Publisher {
         filter { record in predicates.allSatisfy{ $0(record) } }
     }
     
-    func convert <Message, Details, OutputMessage> (_ converter: AnyPlainConverter<Message, Details, OutputMessage>) -> Publishers.Map<Self, (metaInfo: MetaInfo, message: OutputMessage)>
+    func convert <Message, Details, OutputMessage> (_ converter: AnyPlainConverter<Message, Details, OutputMessage>) -> Publishers.Map<Self, ExportRecord<OutputMessage>>
     where
     Output == Record<Message, Details>,
     Failure == Never
     {
-        map { ($0.metaInfo, converter.convert($0)) }
+		map { .init(metaInfo: $0.metaInfo, message: converter.convert($0), configuration: $0.configuration) }
     }
     
-    func tryConvert <Message, Details, OutputMessage> (_ converter: AnyThrowableConverter<Message, Details, OutputMessage>) -> Publishers.TryMap<Self, (metaInfo: MetaInfo, message: OutputMessage)>
+    func tryConvert <Message, Details, OutputMessage> (_ converter: AnyThrowableConverter<Message, Details, OutputMessage>) -> Publishers.TryMap<Self, ExportRecord<OutputMessage>>
     where Output == Record<Message, Details>
     {
-        tryMap { ($0.metaInfo, try converter.tryConvert($0)) }
+		tryMap { .init(metaInfo: $0.metaInfo, message: try converter.tryConvert($0), configuration: $0.configuration) }
     }
 	
 	@discardableResult

@@ -20,7 +20,7 @@ public final class Switch <P: Publisher, Message: RecordMessage, Details: Record
     @discardableResult
     public func `case` (_ key: String, _ handler: (AnyPublisher<Record<Message, Details>, Never>) -> Void) -> Self {
         let casePublisher = publisher
-            .filter { $0.configuration?.keyValue[.switch] == key }
+            .filter { ($0.configuration?.keyValue[.switch] as? String) == key }
             .eraseToAnyPublisher()
 		
         handler(casePublisher)

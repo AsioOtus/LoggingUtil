@@ -3,13 +3,13 @@ import Combine
 public class PrintExporter: Exporter {
     public init () { }
 	
-	public func export (metaInfo: MetaInfo, message: String) {
-		print(message)
+	public func export (_ record: ExportRecord<String>) {
+		print(record.message)
 	}
 }
 
 extension PrintExporter: Subscriber {
-    public typealias Input = (metaInfo: MetaInfo, message: String)
+    public typealias Input = ExportRecord<String>
     public typealias Failure = Never
     
     public func receive (subscription: Subscription) {
@@ -17,7 +17,7 @@ extension PrintExporter: Subscriber {
     }
     
     public func receive (_ input: Input) -> Subscribers.Demand {
-        export(metaInfo: input.metaInfo, message: input.message)
+        export(input)
         return .none
     }
     

@@ -6,9 +6,9 @@ import Combine
 public class OSLogExporter: Exporter {
 	public init () { }
 	
-	public func export (metaInfo: MetaInfo, message: String) {
-		let osLogType = levelToOsLogType(metaInfo.level)
-		os_log(osLogType, "%@", message as NSString)
+	public func export (_ record: ExportRecord<String>) {
+		let osLogType = levelToOsLogType(record.metaInfo.level)
+		os_log(osLogType, "%@", record.message as NSString)
 	}
 	
 	private func levelToOsLogType (_ level: Level) -> OSLogType {
@@ -39,7 +39,7 @@ public class OSLogExporter: Exporter {
 
 @available(iOS 12.0, macOS 12.0, *)
 extension OSLogExporter: Subscriber {
-    public typealias Input = (metaInfo: MetaInfo, message: String)
+    public typealias Input = ExportRecord<String>
     public typealias Failure = Never
     
     public func receive (subscription: Subscription) {
@@ -47,7 +47,7 @@ extension OSLogExporter: Subscriber {
     }
     
     public func receive (_ input: Input) -> Subscribers.Demand {
-        export(metaInfo: input.metaInfo, message: input.message)
+        export(input)
         return .none
     }
     

@@ -1,7 +1,7 @@
-public struct Configuration: Codable {
-	public let keyValue: [Key: String]
+public struct Configuration {
+	public let keyValue: [Key: Any]
 	
-	public init (_ keyValue: [Key: String]) {
+	public init (_ keyValue: [Key: Any]) {
 		self.keyValue = keyValue
 	}
 	

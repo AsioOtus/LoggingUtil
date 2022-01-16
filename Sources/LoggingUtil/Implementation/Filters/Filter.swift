@@ -3,14 +3,24 @@ public typealias Filter<Message: RecordMessage, Details: RecordDetails> = (Recor
 public enum Filters {
 	public static func whitelist <Message: RecordMessage, Details: RecordDetails> (_ allowedValues: Set<String>) -> Filter<Message, Details> {
 		{ record in
-			guard let filterValue = record.configuration?.keyValue[.filter], allowedValues.contains(filterValue) else { return false }
+			guard
+				let filterValue = record.configuration?.keyValue[.filter],
+				let filterValueString = filterValue as? String,
+				allowedValues.contains(filterValueString)
+			else { return false }
+			
 			return true
 		}
 	}
 	
 	public static func blacklist <Message: RecordMessage, Details: RecordDetails> (_ deniedValues: Set<String>) -> Filter<Message, Details> {
 		{ record in
-			guard let filterValue = record.configuration?.keyValue[.filter], deniedValues.contains(filterValue) else { return true }
+			guard
+				let filterValue = record.configuration?.keyValue[.filter],
+				let filterValueString = filterValue as? String,
+				deniedValues.contains(filterValueString)
+			else { return true }
+			
 			return false
 		}
 	}
