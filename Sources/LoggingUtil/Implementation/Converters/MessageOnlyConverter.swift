@@ -9,7 +9,7 @@ public struct MessageOnlyConverter <Message: RecordMessage, Details: RecordDetai
 }
 
 public extension AnyPlainConverter {
-    static var messageOnlyConverter: MessageOnlyConverter<InputMessage, InputDetails> {
-		.init()
-    }
+	static var messageOnlyConverter: AnyPlainConverter<InputMessage, InputDetails, InputMessage> {
+		MessageOnlyConverter().eraseToAnyPlainConverter()
+	}
 }

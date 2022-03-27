@@ -9,7 +9,7 @@ public struct EmptyStringConverter <Message: RecordMessage, Details: RecordDetai
 }
 
 public extension AnyPlainConverter {
-    static var emptyStringConverter: EmptyStringConverter<InputMessage, InputDetails> {
-		.init()
-    }
+	static var emptyStringConverter: AnyPlainConverter<InputMessage, InputDetails, String> {
+		EmptyStringConverter().eraseToAnyPlainConverter()
+	}
 }
