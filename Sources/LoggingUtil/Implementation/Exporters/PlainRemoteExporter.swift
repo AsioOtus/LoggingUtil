@@ -55,7 +55,13 @@ extension PlainRemoteExporter: Subscriber {
 }
 
 public extension Publisher {
-    func osLogExport (url: URL, urlSession: URLSession = .shared) where Output == PlainRemoteExporter.Input, Failure == PlainRemoteExporter.Failure {
-        receive(subscriber: PlainRemoteExporter(url: url))
+    func plainRemoteExport (url: URL, urlSession: URLSession = .shared) where Output == PlainRemoteExporter.Input, Failure == PlainRemoteExporter.Failure {
+		receive(subscriber: PlainRemoteExporter(url: url).urlSession(urlSession))
     }
+}
+
+public extension AnyExporter {
+	static func plainRemote (url: URL, urlSession: URLSession = .shared) -> AnyExporter<PlainRemoteExporter.Message> {
+		PlainRemoteExporter(url: url).urlSession(urlSession).eraseToAnyExporter()
+	}
 }

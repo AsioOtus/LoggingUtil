@@ -47,10 +47,12 @@ final class CommonFlowTests: XCTestCase {
 		l.info("test")
 	}
 	
+	@available(macOS 12.0, *)
 	func test3 () {
 		let logger = StandardLogger<String, EmptyRecordDetails>()
 		logger
 			.convert(.emptyStringConverter)
-			.printExport()
+			.export(to: .printExporter)
+//			.export(to: .plainRemote(url: URL(string: "")!))
 	}
 }

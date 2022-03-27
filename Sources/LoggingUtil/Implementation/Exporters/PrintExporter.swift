@@ -29,3 +29,9 @@ public extension Publisher {
         receive(subscriber: PrintExporter())
     }
 }
+
+public extension AnyExporter {
+	static var printExporter: AnyExporter<PrintExporter.Message> {
+		PrintExporter().eraseToAnyExporter()
+	}
+}

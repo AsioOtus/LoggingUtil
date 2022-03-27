@@ -60,3 +60,10 @@ public extension Publisher {
         receive(subscriber: OSLogExporter())
     }
 }
+
+@available(iOS 12.0, macOS 12.0, *)
+public extension AnyExporter {
+	static var osLog: AnyExporter<OSLogExporter.Message> {
+		OSLogExporter().eraseToAnyExporter()
+	}
+}

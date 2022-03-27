@@ -50,13 +50,11 @@ public extension Publisher {
     }
     
     func convert <Message, Details, OutputMessage> (_ converter: AnyPlainConverter<Message, Details, OutputMessage>) -> Publishers.Map<Self, ExportRecord<OutputMessage>>
-    where
-    Output == Record<Message, Details>,
-    Failure == Never
+    where Output == Record<Message, Details>, Failure == Never
     {
 		map { .init(metaInfo: $0.metaInfo, message: converter.convert($0), configuration: $0.configuration) }
     }
-    
+	
     func tryConvert <Message, Details, OutputMessage> (_ converter: AnyThrowableConverter<Message, Details, OutputMessage>) -> Publishers.TryMap<Self, ExportRecord<OutputMessage>>
     where Output == Record<Message, Details>
     {
@@ -75,5 +73,11 @@ public extension Publisher {
 	where Output == Record<Message, InputDetails>, Failure == Never
 	{
 		map { $0.details(mapping($0.details)) }
+	}
+	
+	func export <Message> (to exporter: AnyExporter<Message>)
+	where Output == ExportRecord<Message>, Failure == Never
+	{
+		receive(subscriber: exporter)
 	}
 }

@@ -53,3 +53,9 @@ public extension Publisher {
     }
 }
 
+@available(iOS 14.0, macOS 11.0, *)
+public extension AnyExporter {
+	static var loggerFramework: AnyExporter<LoggerFrameworkExporter.Message> {
+		LoggerFrameworkExporter().eraseToAnyExporter()
+	}
+}
