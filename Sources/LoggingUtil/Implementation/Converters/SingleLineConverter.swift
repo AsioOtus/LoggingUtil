@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 public struct SingleLineConverter: PlainConverter {
 	public typealias InputMessage = String
@@ -86,6 +87,16 @@ extension SingleLineConverter {
 public extension AnyPlainConverter {
 	static var singleLineConverter: AnyPlainConverter<SingleLineConverter.InputMessage, SingleLineConverter.InputDetails, SingleLineConverter.OutputMessage> {
 		SingleLineConverter().eraseToAnyPlainConverter()
+	}
+}
+
+public extension Publisher {
+	func singleLine () -> Publishers.Map<Self, ExportRecord<String>>
+	where
+	Output == Record<String, CompactRecordDetails>,
+	Failure == Never
+	{
+		convert(.singleLineConverter)
 	}
 }
 

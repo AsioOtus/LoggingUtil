@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 public struct MultilineConverter: PlainConverter {
 	public typealias InputMessage = String
@@ -104,6 +105,16 @@ extension MultilineConverter {
 public extension AnyPlainConverter {
 	static var multilineConverter: AnyPlainConverter<MultilineConverter.InputMessage, MultilineConverter.InputDetails, MultilineConverter.OutputMessage> {
 		MultilineConverter().eraseToAnyPlainConverter()
+	}
+}
+
+public extension Publisher {
+	func multiline () -> Publishers.Map<Self, ExportRecord<String>>
+	where
+	Output == Record<String, CompactRecordDetails>,
+	Failure == Never
+	{
+		convert(.multilineConverter)
 	}
 }
 

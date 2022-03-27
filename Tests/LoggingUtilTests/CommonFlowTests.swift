@@ -50,7 +50,7 @@ final class CommonFlowTests: XCTestCase {
 	func test3 () {
 		let logger = StandardLogger<String, EmptyRecordDetails>()
 		logger
-			.convert(.messageOnlyConverter)
+			.convert(.emptyStringConverter)
 			.printExport()
 	}
 }

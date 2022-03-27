@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 public struct StringToJSONDataConverter: ThrowableConverter {
 	public typealias InputMessage = String
@@ -17,5 +18,15 @@ public struct StringToJSONDataConverter: ThrowableConverter {
 public extension AnyThrowableConverter {
 	static func stringToJsonDataConverter (jsonEncoder: JSONEncoder = .init()) -> AnyThrowableConverter<StringToJSONDataConverter.InputMessage, StringToJSONDataConverter.InputDetails, StringToJSONDataConverter.OutputMessage> {
 		StringToJSONDataConverter(jsonEncoder: jsonEncoder).eraseToAnyThrowableConverter()
+	}
+}
+
+public extension Publisher {
+	func stringToJsonData (jsonEncoder: JSONEncoder = .init()) -> Publishers.TryMap<Self, ExportRecord<Data>>
+	where
+	Output == Record<String, StandardRecordDetails>,
+	Failure == Never
+	{
+		tryConvert(.stringToJsonDataConverter(jsonEncoder: jsonEncoder))
 	}
 }
