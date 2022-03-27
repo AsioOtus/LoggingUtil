@@ -30,7 +30,9 @@ public extension Publisher {
     {
         map { $0.add(configuration) }
     }
-    
+}
+
+public extension Publisher {
     func filterLevel <Message, Details> (_ level: Level) -> Publishers.Filter<Self>
     where Output == Record<Message, Details>, Failure == Never
     {
@@ -48,12 +50,26 @@ public extension Publisher {
     {
         filter { record in predicates.allSatisfy{ $0(record) } }
     }
-    
+}
+
+public extension Publisher {
+	func convert <C: PlainConverter> (_ converter: C) -> Publishers.Map<Self, ExportRecord<C.OutputMessage>>
+	where Output == Record<C.InputMessage, C.InputDetails>, Failure == Never
+	{
+		map { .init(metaInfo: $0.metaInfo, message: converter.convert($0), configuration: $0.configuration) }
+	}
+	
     func convert <Message, Details, OutputMessage> (_ converter: AnyPlainConverter<Message, Details, OutputMessage>) -> Publishers.Map<Self, ExportRecord<OutputMessage>>
     where Output == Record<Message, Details>, Failure == Never
     {
 		map { .init(metaInfo: $0.metaInfo, message: converter.convert($0), configuration: $0.configuration) }
     }
+	
+	func tryConvert <C: ThrowableConverter> (_ converter: C) -> Publishers.TryMap<Self, ExportRecord<C.OutputMessage>>
+	where Output == Record<C.InputMessage, C.InputDetails>, Failure == Never
+	{
+		tryMap { .init(metaInfo: $0.metaInfo, message: try converter.tryConvert($0), configuration: $0.configuration) }
+	}
 	
     func tryConvert <Message, Details, OutputMessage> (_ converter: AnyThrowableConverter<Message, Details, OutputMessage>) -> Publishers.TryMap<Self, ExportRecord<OutputMessage>>
     where Output == Record<Message, Details>
@@ -61,18 +77,24 @@ public extension Publisher {
 		tryMap { .init(metaInfo: $0.metaInfo, message: try converter.tryConvert($0), configuration: $0.configuration) }
     }
 	
-	@discardableResult
 	func convertMessage <InputMessage, OutputMessage, Details> (_ mapping: @escaping (InputMessage) -> OutputMessage) -> Publishers.Map<Self, Record<OutputMessage, Details>>
 	where Output == Record<InputMessage, Details>, Failure == Never
 	{
 		map { $0.message(mapping($0.message)) }
 	}
 	
-	@discardableResult
 	func convertDetails <InputDetails, OutputDetails, Message> (_ mapping: @escaping (InputDetails?) -> OutputDetails?) -> Publishers.Map<Self, Record<Message, OutputDetails>>
 	where Output == Record<Message, InputDetails>, Failure == Never
 	{
 		map { $0.details(mapping($0.details)) }
+	}
+}
+
+public extension Publisher {
+	func export <E: Exporter> (to exporter: E)
+	where E: Subscriber, Output == E.Input, Failure == E.Failure
+	{
+		receive(subscriber: exporter)
 	}
 	
 	func export <Message> (to exporter: AnyExporter<Message>)
