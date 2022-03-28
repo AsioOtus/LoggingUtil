@@ -6,9 +6,11 @@ public class PlainRemoteExporter: Exporter {
 	public var urlSession = URLSession.shared
 	
 	public init (
-		url: URL
+		url: URL,
+        urlSession: URLSession = .init(configuration: .default)
 	) {
 		self.url = url
+        self.urlSession = urlSession
 	}
 	
 	public func export (_ record: ExportRecord<Data>) {
@@ -54,14 +56,19 @@ extension PlainRemoteExporter: Subscriber {
     public func receive (completion: Subscribers.Completion<Never>) { }
 }
 
-public extension Publisher {
-    func plainRemoteExport (url: URL, urlSession: URLSession = .shared) where Output == PlainRemoteExporter.Input, Failure == PlainRemoteExporter.Failure {
-		receive(subscriber: PlainRemoteExporter(url: url).urlSession(urlSession))
+public extension AnyExporter {
+    static func plainRemote (url: URL, urlSession: URLSession = .init(configuration: .default)) -> AnyExporter<PlainRemoteExporter.Message> {
+        PlainRemoteExporter(url: url, urlSession: urlSession).eraseToAnyExporter()
     }
 }
 
-public extension AnyExporter {
-	static func plainRemote (url: URL, urlSession: URLSession = .shared) -> AnyExporter<PlainRemoteExporter.Message> {
-		PlainRemoteExporter(url: url).urlSession(urlSession).eraseToAnyExporter()
-	}
+public extension Publisher {
+    func plainRemoteExport (url: URL, urlSession: URLSession = .init(configuration: .default))
+    where
+    Output == PlainRemoteExporter.Input,
+    Failure == PlainRemoteExporter.Failure
+    {
+        receive(subscriber: PlainRemoteExporter(url: url, urlSession: urlSession))
+    }
 }
+

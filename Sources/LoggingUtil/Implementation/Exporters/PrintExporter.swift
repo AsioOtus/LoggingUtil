@@ -24,14 +24,18 @@ extension PrintExporter: Subscriber {
     public func receive (completion: Subscribers.Completion<Never>) { }
 }
 
-public extension Publisher {
-    func printExport () where Output == PrintExporter.Input, Failure == PrintExporter.Failure {
-        receive(subscriber: PrintExporter())
+public extension AnyExporter {
+    static var printExporter: AnyExporter<PrintExporter.Message> {
+        PrintExporter().eraseToAnyExporter()
     }
 }
 
-public extension AnyExporter {
-	static var printExporter: AnyExporter<PrintExporter.Message> {
-		PrintExporter().eraseToAnyExporter()
-	}
+public extension Publisher {
+    func printExport ()
+    where
+    Output == PrintExporter.Input,
+    Failure == PrintExporter.Failure
+    {
+        receive(subscriber: PrintExporter())
+    }
 }

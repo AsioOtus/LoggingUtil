@@ -47,15 +47,19 @@ extension LoggerFrameworkExporter: Subscriber {
 }
 
 @available(iOS 14.0, macOS 11.0, *)
-public extension Publisher {
-    func loggerFrameworkExport () where Output == LoggerFrameworkExporter.Input, Failure == LoggerFrameworkExporter.Failure {
-        receive(subscriber: LoggerFrameworkExporter())
+public extension AnyExporter {
+    static var loggerFramework: AnyExporter<LoggerFrameworkExporter.Message> {
+        LoggerFrameworkExporter().eraseToAnyExporter()
     }
 }
 
 @available(iOS 14.0, macOS 11.0, *)
-public extension AnyExporter {
-	static var loggerFramework: AnyExporter<LoggerFrameworkExporter.Message> {
-		LoggerFrameworkExporter().eraseToAnyExporter()
-	}
+public extension Publisher {
+    func loggerFrameworkExport ()
+    where
+    Output == LoggerFrameworkExporter.Input,
+    Failure == LoggerFrameworkExporter.Failure
+    {
+        receive(subscriber: LoggerFrameworkExporter())
+    }
 }

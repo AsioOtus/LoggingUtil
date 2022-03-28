@@ -1,3 +1,5 @@
+public typealias CompactDetails = CompactRecordDetails
+
 public extension CompactRecordDetails {
     enum Enabling: RecordDetailsEnabling {
 		case disabled

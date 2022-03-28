@@ -55,15 +55,19 @@ extension OSLogExporter: Subscriber {
 }
 
 @available(iOS 12.0, macOS 12.0, *)
-public extension Publisher {
-    func osLogExport () where Output == OSLogExporter.Input, Failure == OSLogExporter.Failure {
-        receive(subscriber: OSLogExporter())
+public extension AnyExporter {
+    static var osLog: AnyExporter<OSLogExporter.Message> {
+        OSLogExporter().eraseToAnyExporter()
     }
 }
 
 @available(iOS 12.0, macOS 12.0, *)
-public extension AnyExporter {
-	static var osLog: AnyExporter<OSLogExporter.Message> {
-		OSLogExporter().eraseToAnyExporter()
-	}
+public extension Publisher {
+    func osLogExport ()
+    where
+    Output == OSLogExporter.Input,
+    Failure == OSLogExporter.Failure
+    {
+        receive(subscriber: OSLogExporter())
+    }
 }

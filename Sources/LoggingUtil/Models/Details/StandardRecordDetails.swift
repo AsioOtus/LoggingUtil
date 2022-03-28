@@ -1,3 +1,5 @@
+public typealias StandardDetails = StandardRecordDetails
+
 public extension StandardRecordDetails {
     enum Enabling: RecordDetailsEnabling {
 		case disabled
