@@ -46,6 +46,20 @@ public enum Filters {
 			return !tags.intersection(values).isEmpty
 		}
 	}
+    
+    static func sourceContains <Message: RecordMessage> (oneOf values: Set<String>) -> Filter<Message, CompactRecordDetails> {
+        { record in
+            guard let source = record.details?.source else { return false }
+            return !Set(source).intersection(values).isEmpty
+        }
+    }
+    
+    static func tagsContains <Message: RecordMessage> (oneOf values: Set<String>) -> Filter<Message, CompactRecordDetails> {
+        { record in
+            guard let tags = record.details?.tags else { return false }
+            return !tags.intersection(values).isEmpty
+        }
+    }
 }
 
 public extension Filters {
