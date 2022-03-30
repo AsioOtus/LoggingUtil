@@ -37,6 +37,10 @@ public struct MultilineConverter: PlainConverter {
 			)
 		}
 		
+		if let prefix = recordDetails?.prefix, !prefix.isEmpty {
+			messageHeaderComponents.append(prefix)
+		}
+		
 		if let source = recordDetails?.source, !source.isEmpty {
 			messageHeaderComponents.append(source.combine(with: "."))
 		}
