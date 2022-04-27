@@ -2,6 +2,8 @@ import Foundation
 import Combine
 
 public typealias MessageLogger<Message: RecordMessage> = StandardLogger<Message, EmptyDetails>
+public typealias StringMessageLogger = StandardLogger<String, EmptyDetails>
+public typealias StringLogger<Details: RecordDetails> = StandardLogger<String, Details>
 
 public class StandardLogger <Message: RecordMessage, Details: RecordDetails> {
     private let subject = PassthroughSubject<Record<Message, Details>, Never>()
