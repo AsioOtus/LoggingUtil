@@ -19,13 +19,25 @@ public struct CompactRecordDetails: RecordDetails {
 	public init (prefix: String? = nil, source: [String]? = nil, tags: Set<String>? = nil) {
 		self.prefix = prefix
         self.source = source
-        self.tags = tags
+        self.tags   = tags
     }
 	
-	public init (prefix: String? = nil, source: String? = nil, tag: String? = nil) {
+	public init (prefix: String? = nil, source: String, tag: String) {
 		self.prefix = prefix
-		self.source = source.map{ [$0] } ?? []
-		self.tags =  tag.map{ [$0] } ?? []
+		self.source = [source]
+		self.tags   = [tag]
+	}
+	
+	public init (prefix: String? = nil, source: String) {
+		self.prefix = prefix
+		self.source = [source]
+		self.tags   = []
+	}
+	
+	public init (prefix: String? = nil, tag: String) {
+		self.prefix = prefix
+		self.source = []
+		self.tags   = [tag]
 	}
     
 	public func combined (with another: Self) -> Self {
