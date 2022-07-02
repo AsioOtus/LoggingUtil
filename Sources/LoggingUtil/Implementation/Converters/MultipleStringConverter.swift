@@ -24,7 +24,11 @@ public struct MultilineConverter: PlainConverter {
 		let recordDetails = record.details?.moderated(detailsEnabling)
 		
 		var messageHeaderComponents = [String]()
-		
+
+		if let prefix = recordDetails?.prefix, !prefix.isEmpty {
+			messageHeaderComponents.append(prefix)
+		}
+
 		if case let .enabled(timestamp: isTimestampEnabled, _, _, _) = metaInfoEnabling, isTimestampEnabled {
 			let formattedDate = dateFormatter.string(from: Date(timeIntervalSince1970: record.metaInfo.timestamp))
 			messageHeaderComponents.append(formattedDate)
@@ -35,10 +39,6 @@ public struct MultilineConverter: PlainConverter {
 											? record.metaInfo.level.logDescription.padding(toLength: Level.critical.logDescription.count, withPad: " ", startingAt: 0)
 											: record.metaInfo.level.logDescription
 			)
-		}
-		
-		if let prefix = recordDetails?.prefix, !prefix.isEmpty {
-			messageHeaderComponents.append(prefix)
 		}
 		
 		if let source = recordDetails?.source, !source.isEmpty {

@@ -24,7 +24,11 @@ public struct SingleLineConverter: PlainConverter {
 		let recordDetails = record.details?.moderated(detailsEnabling)
 		
 		var messageComponents = [String]()
-		
+
+		if let prefix = recordDetails?.prefix, !prefix.isEmpty {
+			messageComponents.append(prefix)
+		}
+
 		if case let .enabled(isTimestampEnabled, _, _, _) = metaInfoEnabling, isTimestampEnabled {
 			let formattedDate = dateFormatter.string(from: Date(timeIntervalSince1970: record.metaInfo.timestamp))
 			messageComponents.append(formattedDate)
@@ -35,10 +39,6 @@ public struct SingleLineConverter: PlainConverter {
 										? record.metaInfo.level.logDescription.padding(toLength: Level.critical.logDescription.count, withPad: " ", startingAt: 0)
 										: record.metaInfo.level.logDescription
 			)
-		}
-		
-		if let prefix = recordDetails?.prefix, !prefix.isEmpty {
-			messageComponents.append(prefix)
 		}
 		
 		if let source = recordDetails?.source, !source.isEmpty {
