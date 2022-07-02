@@ -91,7 +91,7 @@ public extension Publisher {
 }
 
 public extension Publisher {
-	func export <E: Exporter> (to exporter: E)
+	func export <E: Exporter> (with exporter: E)
 	where E: Subscriber, Output == E.Input, Failure == E.Failure
 	{
 		receive(subscriber: exporter)

@@ -25,7 +25,7 @@ extension PrintExporter: Subscriber {
 }
 
 public extension AnyExporter {
-    static var printExporter: AnyExporter<PrintExporter.Message> {
+    static var print: AnyExporter<PrintExporter.Message> {
         PrintExporter().eraseToAnyExporter()
     }
 }
